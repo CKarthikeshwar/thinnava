@@ -229,11 +229,31 @@ D7 "Reading this…" sheet with the cat. Target ≤ 3 s, timeout 15 s. On failur
 
 Links open with the system: Android routes them into the app if it's installed, otherwise the browser. The mockups still show Zomato and District buttons; **ignore those in v1**.
 
-### 11.2 Why only these two
-There's no public way to know if or where a place is listed on Zomato or District. Their search links were tested and don't land on results: Zomato opens the app home, and District only opens the app. Only their restaurant share links work, and we can't generate those.
+### 11.2 Why only these two in v1
+Owner phone tests (2026-10-12 to 10-13, restaurant: Meghana Foods, Residency Road):
 
-### 11.3 v2: Zomato and District
-Planned for v2, not built now. When a user shares a Zomato or District restaurant link into Thinnava, the app offers "Add this Zomato link to <place>?". The link is stored for that place, and the button then appears for everyone. Hosts to recognise: `zomato.onelink.me`, `zomato.com`, `link.district.in`, `district.in`.
+| Link | Result |
+|---|---|
+| Swiggy search `swiggy.com/search?query=<name>` | ✅ App opens with results (used in v1) |
+| Zomato search (web `?q=`, `zomato://search?q=`, intent) | ❌ Opens Zomato's search page with an empty search box |
+| Zomato by ID `zomato://restaurant/51639`, `zomato://r/51639` | ✅ Opens the restaurant (only if the Zomato app is installed) |
+| Zomato web page `zomato.com/bangalore/meghana-foods-residency-road` | ✅ Opens the restaurant in the app |
+| District search (web, `edition://`, `district://`) | ❌ Nothing, or a 404 |
+| District web page `district.in/dining/bangalore/meghana-foods-residency-road` (and `/book`) | ✅ Opens the restaurant |
+| Zomato / District share links (`zomato.onelink.me/…`, `link.district.in/…`) | ✅ Open the restaurant |
+
+Neither app can be searched by name, so a Zomato or District button needs that restaurant's own page link. The owners chose to keep this for v2.
+
+### 11.3 v2: Zomato and District buttons
+- **Links are web page URLs**, stored per place in a `place_links` table: `zomato.com/<city>/<slug>` and `district.in/dining/<city>/<slug>`. The slugs can't be guessed (some end in `-bangalore`, some don't), so they must be looked up.
+- **Automatic lookup.** When a place is first added, a backend job searches the web for its Zomato and District pages: Gemini with Google Search grounding, on the free no-billing key (§27.5). It pauses at the free limit. Check that grounding is in the free tier before building.
+  - It keeps a URL only if the host matches, the city matches, and the slug matches the place name and area. Chains have many outlets, and there are look-alike names, such as "Meghana Biryani" next to "Meghana Foods".
+  - No confident match means no button.
+  - It re-checks every 90 days.
+- **Backup:** sharing a Zomato or District restaurant link into Thinnava offers "Add this link to <place>?".
+  - A District share link resolves to `district.in/dining/<city>/<slug>?…link_params={"res_id":"…"}`. District's `res_id` is the same as Zomato's, so one District share can set up both buttons.
+  - Hosts to recognise: `zomato.onelink.me`, `zomato.com`, `link.district.in`, `district.in`.
+- **"Wrong restaurant?"** in the place page ⋮ menu removes a bad link.
 
 ## 12. Notifications
 

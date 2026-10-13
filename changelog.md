@@ -12,6 +12,16 @@ Entry format:
 
 ---
 
+## 2026-10-13 · Zomato/District link tests; stays v2
+- **What:** owner phone tests showed:
+  - Zomato and District can't be searched by name.
+  - Their restaurant **web page URLs** (`zomato.com/<city>/<slug>`, `district.in/dining/<city>/<slug>`) and `zomato://restaurant/<id>` open the exact restaurant in the apps.
+  - District's res_id equals Zomato's.
+
+  A v2 design is recorded: automatic lookup through free Gemini web search, a share-a-link backup, and "Wrong restaurant?". The owners chose to keep it in v2.
+- **Why:** findable automatically, but it adds scope; v1 stays Directions + Swiggy.
+- **Spec:** §11.2, §11.3.
+
 ## 2026-10-13 · Gap review (spec v1.1)
 - **What, decided by the owners:**
   - **Zero-cost guarantee:** no card may ever be charged.
