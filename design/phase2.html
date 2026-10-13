@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinnava Phase 2 UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ---------- Palettes (Material-style roles) ---------- */
+:root, [data-palette="sky"]{
+  --p:#2B58A6; --p-strong:#1D3B78; --on-p:#fff;
+  --pc:#D8E7F8; --on-pc:#15305F;
+  --bg-solid:#CFE1F4; --bg:#EDF3FA; --surface:#FFFFFF; --surface-2:#EAF2FB;
+  --ink:#13213D; --ink-2:#4A5873; --ink-3:#5F6B82; --line:#DCE6F2;
+  --map-land:#EDF2F8; --map-water:#B9D5F0; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D6E0EC;
+  --scrim:rgba(16,30,60,.42);
+}
+[data-palette="cobalt"]{
+  --p:#2350D9; --p-strong:#16348F; --on-p:#fff; --pc:#DBE4FF; --on-pc:#0E2266;
+  --bg-solid:#D5E0FF; --bg:#EEF2FF; --surface:#FFFFFF; --surface-2:#E6ECFF;
+  --ink:#10183A; --ink-2:#46507A; --ink-3:#5C668C; --line:#D9E0F7;
+  --map-land:#EEF1FB; --map-water:#BCCBF5; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D8DEF0; --scrim:rgba(10,20,60,.42);
+}
+[data-palette="cerulean"]{
+  --p:#0B6FA4; --p-strong:#08476B; --on-p:#fff; --pc:#D2EAF7; --on-pc:#06324C;
+  --bg-solid:#CDE6F3; --bg:#EEF7FB; --surface:#FFFFFF; --surface-2:#E3F1F8;
+  --ink:#0E2230; --ink-2:#45606F; --ink-3:#56707E; --line:#D3E6EF;
+  --map-land:#EDF5F9; --map-water:#B5D9EC; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D3E3EB; --scrim:rgba(5,30,45,.42);
+}
+[data-palette="indigo"]{
+  --p:#3B4CC0; --p-strong:#232D78; --on-p:#fff; --pc:#DFE2FA; --on-pc:#1A2160;
+  --bg-solid:#D9DDF6; --bg:#F1F2FC; --surface:#FFFFFF; --surface-2:#E7E9FA;
+  --ink:#14173A; --ink-2:#4B4F7A; --ink-3:#5D618C; --line:#DDE0F3;
+  --map-land:#F0F1FA; --map-water:#C3C9F0; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#DADDF0; --scrim:rgba(15,18,60,.42);
+}
+[data-palette="denim"]{
+  --p:#3D6491; --p-strong:#24405F; --on-p:#fff; --pc:#DCE6F1; --on-pc:#1A3049;
+  --bg-solid:#D6E1EC; --bg:#F0F4F8; --surface:#FFFFFF; --surface-2:#E5ECF3;
+  --ink:#172231; --ink-2:#4C5B6C; --ink-3:#5E6B7A; --line:#DAE2EA;
+  --map-land:#EEF2F6; --map-water:#BFD2E6; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D7DFE8; --scrim:rgba(15,25,40,.42);
+}
+[data-palette="masala"]{
+  --p:#C1532A; --p-strong:#86361A; --on-p:#fff;
+  --pc:#FADFD0; --on-pc:#5A230F;
+  --bg-solid:#F6DCCB; --bg:#FFF6F0; --surface:#FFFFFF; --surface-2:#FCEBE1;
+  --ink:#2A1A13; --ink-2:#6D5146; --ink-3:#7A5F55; --line:#F0DCD0;
+  --map-land:#FAF1EA; --map-water:#BFD9E6; --map-park:#DCEBCF; --map-road:#FFFFFF; --map-road-edge:#EBDACE;
+  --scrim:rgba(50,22,10,.42);
+}
+[data-palette="pista"]{
+  --p:#1E6A56; --p-strong:#124639; --on-p:#fff;
+  --pc:#D1ECE1; --on-pc:#0D3A2E;
+  --bg-solid:#CFE9DC; --bg:#F2FAF6; --surface:#FFFFFF; --surface-2:#E5F3EC;
+  --ink:#11251E; --ink-2:#4A6258; --ink-3:#5A6F67; --line:#D5E8DE;
+  --map-land:#EEF5F0; --map-water:#BCD9E8; --map-park:#CFE8D3; --map-road:#FFFFFF; --map-road-edge:#D7E5DC;
+  --scrim:rgba(10,36,28,.42);
+}
+:root{
+  --good:#17703E; --good-bg:#DDF2E4;
+  --ok:#845300; --ok-bg:#FBEFD2;
+  --bad:#A8301F; --bad-bg:#FADFDB;
+  --display:"Fredoka", system-ui, sans-serif;
+  --body:"Nunito", system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+
+/* ---------- Gallery chrome ---------- */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--body);color:var(--ink);background:#E9EDF2;}
+::selection{background:var(--pc);color:var(--on-pc)}
+.gal-head{position:sticky;top:0;z-index:50;background:rgba(233,237,242,.92);backdrop-filter:blur(10px);border-bottom:1px solid #d9dee6}
+.gal-head .in{max-width:1500px;margin:0 auto;padding:12px 24px;display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap}
+.gal-title{font-family:var(--display);font-weight:600;font-size:22px;margin:0;color:#1b2333;display:flex;align-items:center;gap:10px}
+.gal-title img{width:34px;height:auto}
+.gnd{margin-left:auto}
+.gal-title small{font-family:var(--body);font-weight:600;font-size:13px;color:#5e6878}
+.pal{display:flex;gap:6px;background:#fff;border-radius:999px;padding:4px;border:1px solid #d9dee6}
+.pal button{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px;color:#3b4454}
+.pal button:focus-visible{outline:2px solid #1b2333;outline-offset:2px}
+.pal button[aria-pressed="true"]{background:#1b2333;color:#fff}
+.sw{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+main{max-width:1500px;margin:0 auto;padding:12px 24px 80px}
+.sec{margin-top:36px}
+.sec h2{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 4px;color:#1b2333}
+.sec > p{margin:0 0 18px;color:#5e6878;max-width:70ch;line-height:1.5;font-size:14.5px}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+figure{margin:0;display:flex;flex-direction:column;gap:10px;width:360px}
+figcaption{font-size:13px;line-height:1.45;color:#5e6878}
+figcaption b{color:#1b2333;font-weight:800;margin-right:4px}
+.vs{display:inline-block;font-weight:800;font-size:12px;letter-spacing:.02em;background:#1b2333;color:#fff;border-radius:6px;padding:2px 7px;margin-right:6px}
+
+/* ---------- Phone ---------- */
+.phone{width:360px;height:780px;border-radius:38px;position:relative;overflow:hidden;background:var(--bg);
+  box-shadow:0 0 0 7px #fbfcfd,0 0 0 8px #d5dbe3,0 24px 50px -18px rgba(20,30,50,.35);isolation:isolate}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background-color:var(--bg);isolation:isolate}
+/* Ground: minimal abstract art. Flat, hard-edged tonal shapes (plate, rim, spice dots, steam), no blur, no gradient */
+[data-ground="solid"] .scr:not(.bare){background-color:var(--bg-solid)}
+.art{display:none}
+[data-ground="art"] .art-art,[data-ground="food"] .art-food,[data-ground="rings"] .art-rings,[data-ground="blocks"] .art-blocks,[data-ground="foodline"] .art-foodline,[data-ground="thali"] .art-thali{display:block}
+.art{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.art .a1{fill:color-mix(in srgb,var(--p) 8%,var(--bg))}
+.art .a2{fill:color-mix(in srgb,var(--p) 15%,var(--bg))}
+.art .a3{fill:var(--p);opacity:.55}
+.art .lt{fill:none;stroke:color-mix(in srgb,var(--p) 18%,var(--bg));stroke-width:1.4}
+.art .fl{fill:none;stroke:color-mix(in srgb,var(--p) 26%,var(--bg));stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.art .hole{fill:var(--bg)}
+.art .ln{fill:none;stroke:color-mix(in srgb,var(--p) 30%,var(--bg));stroke-width:1.6;stroke-linecap:round}
+.sb{height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;font-size:13px;font-weight:700;color:var(--ink)}
+.sb .ic{display:flex;gap:5px;align-items:center}
+.sb svg{width:15px;height:15px}
+.gest{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:108px;height:4px;border-radius:4px;background:var(--ink);opacity:.55;z-index:30}
+.body{flex:1;overflow:hidden;position:relative}
+svg.i{width:22px;height:22px;stroke-width:2}
+
+/* type roles */
+.wordmark{font-family:var(--display);font-weight:600;color:var(--p-strong);letter-spacing:.005em}
+.h-lg{font-family:var(--display);font-weight:600;font-size:26px;line-height:1.15;margin:0;color:var(--ink);text-wrap:balance}
+.h-md{font-family:var(--display);font-weight:600;font-size:20px;line-height:1.2;margin:0;color:var(--ink)}
+.t{font-size:15px;line-height:1.45;color:var(--ink-2)}
+.lbl{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+
+/* top app bar */
+.tab{height:56px;display:flex;align-items:center;gap:6px;padding:0 10px 0 18px;flex:none}
+.tab .wordmark{font-size:24px;flex:1}
+.tab .title{font-family:var(--display);font-weight:600;font-size:22px;flex:1;color:var(--ink)}
+.icb{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface);box-shadow:0 1px 2px rgba(20,30,50,.08);position:relative;border:0}
+.icb.ghost{background:transparent;box-shadow:none}
+.dot-badge{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--bad);box-shadow:0 0 0 2px var(--surface)}
+
+/* bottom nav (Material navigation bar) */
+.nav{height:78px;flex:none;background:var(--surface);display:flex;align-items:flex-start;justify-content:space-around;padding:10px 6px 0;border-top:1px solid var(--line);position:relative;z-index:20}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--ink-2);text-decoration:none;width:64px}
+.nav .pill{width:56px;height:30px;border-radius:16px;display:grid;place-items:center}
+.nav a.on{color:var(--ink)}
+.nav a.on .pill{background:var(--pc);color:var(--on-pc)}
+.nav .plus{width:52px;height:52px;border-radius:18px;background:var(--p);color:var(--on-p);display:grid;place-items:center;margin-top:-4px;box-shadow:0 6px 14px -6px var(--p)}
+.nav .plus svg{width:26px;height:26px}
+
+/* buttons, chips */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:999px;font-family:var(--body);font-weight:800;font-size:16px;border:0;width:100%}
+.btn-p{background:var(--p);color:var(--on-p)}
+.btn-tonal{background:var(--pc);color:var(--on-pc)}
+.btn-out{background:transparent;color:var(--p);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-white{background:#fff;color:#1f1f1f}
+.btn-sm{height:40px;font-size:14px;width:auto;padding:0 16px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border-radius:10px;font-size:13.5px;font-weight:700;color:var(--ink-2);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap}
+.chip.on{background:var(--pc);color:var(--on-pc);box-shadow:none}
+.chip svg{width:16px;height:16px}
+.st{width:12px;height:12px;vertical-align:-1px;margin-left:2px;fill:currentColor}
+.chips{display:flex;gap:8px;overflow:hidden;padding:0 18px}
+
+/* review pills */
+.rv{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px 0 7px;border-radius:999px;font-size:13px;font-weight:800}
+.rv svg{width:16px;height:16px}
+.rv.good{background:var(--good-bg);color:var(--good)}
+.rv.ok{background:var(--ok-bg);color:var(--ok)}
+.rv.bad{background:var(--bad-bg);color:var(--bad)}
+
+/* avatars & source marks */
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none;color:#fff}
+.av.sm{width:28px;height:28px;font-size:12px}
+.av.a1{background:#E07A5F}.av.a2{background:#6C8EBF}.av.a3{background:#7FB069}.av.a4{background:#B07AA1}.av.a5{background:#E3A73B}
+.src{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--surface-2);color:var(--p-strong)}
+.src svg{width:20px;height:20px}
+
+/* timeline card */
+.feed{padding:4px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--surface);border-radius:20px;padding:14px 14px 13px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 6px 18px -12px rgba(20,30,50,.22)}
+.card .top{display:flex;gap:11px;align-items:flex-start}
+.card .who{font-size:14px;color:var(--ink-2);line-height:1.35}
+.card .who b{color:var(--ink);font-weight:800}
+.card .place{font-family:var(--display);font-weight:600;font-size:17.5px;color:var(--ink);line-height:1.2;margin-top:1px}
+.card .meta{font-size:12.5px;color:var(--ink-3);font-weight:600;margin-top:2px;display:flex;gap:6px;align-items:center}
+.card .meta svg{width:13px;height:13px}
+.card .lines{margin:10px 0 0 51px;display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--ink-2)}
+.card .lines div{display:flex;gap:7px;align-items:flex-start;line-height:1.35}
+.card .lines svg{width:16px;height:16px;flex:none;margin-top:1px}
+.card .foot{margin:11px 0 0 51px;display:flex;gap:8px;align-items:center}
+.price{font-size:13.5px;font-weight:800;color:var(--ink)}
+.priv{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--ink-3)}
+.priv svg{width:13px;height:13px}
+.time{margin-left:auto;font-size:12px;font-weight:700;color:var(--ink-3)}
+
+/* bottom sheet */
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:24}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:28px 28px 0 0;z-index:25;padding:10px 0 30px;box-shadow:0 -10px 30px -10px rgba(10,20,40,.25)}
+.handle{width:36px;height:4px;border-radius:4px;background:var(--line);margin:4px auto 14px}
+.opt{display:flex;align-items:center;gap:14px;padding:12px 22px;font-size:15.5px;font-weight:700;color:var(--ink)}
+.opt small{display:block;font-weight:600;font-size:13px;color:var(--ink-3);margin-top:1px}
+.opt .src{width:40px;height:40px}
+.radio{margin-left:auto;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--ink-3)}
+.radio.on{box-shadow:inset 0 0 0 2px var(--p),inset 0 0 0 6px var(--surface);background:var(--p)}
+
+/* inputs */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13px;font-weight:800;color:var(--ink-2)}
+.inp{height:54px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line);display:flex;align-items:center;padding:0 16px;font-size:16px;font-weight:600;color:var(--ink);gap:6px}
+.inp.focus{box-shadow:inset 0 0 0 2px var(--p)}
+.inp .muted{color:var(--ink-3)}
+.caret{width:2px;height:20px;background:var(--p);margin-left:-4px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.help{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:5px}
+.help svg{width:15px;height:15px}
+.help.ok{color:var(--good)}.help.no{color:var(--bad)}
+
+/* map */
+.map{position:absolute;inset:0}
+.map svg.base{position:absolute;inset:0;width:100%;height:100%}
+.m-land{fill:var(--map-land)}.m-water{fill:var(--map-water)}.m-park{fill:var(--map-park)}
+.m-road{stroke:var(--map-road);fill:none;stroke-linecap:round}
+.m-edge{stroke:var(--map-road-edge);fill:none;stroke-linecap:round}
+.m-lbl{font-family:var(--body);font-weight:700;font-size:10.5px;fill:var(--ink-3);letter-spacing:.06em}
+.pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;z-index:5}
+.pin .bub{white-space:nowrap;display:flex;align-items:center;gap:5px;background:var(--surface);border-radius:999px;padding:4px 10px 4px 4px;font-size:12.5px;font-weight:800;color:var(--ink);box-shadow:0 4px 12px -4px rgba(10,20,40,.35)}
+.pin .bub .av{width:24px;height:24px;font-size:11px}
+.pin .tail{width:10px;height:10px;background:var(--surface);transform:rotate(45deg);margin-top:-6px;box-shadow:3px 3px 5px -3px rgba(10,20,40,.3)}
+.pin.me .bub{background:var(--p);color:var(--on-p)}
+.pin.me .tail{background:var(--p)}
+.pin .g{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--p-strong)}
+.pin.me .g{background:rgba(255,255,255,.2);color:#fff}
+.pin .g svg{width:14px;height:14px}
+.pin.sel .bub{box-shadow:0 0 0 3px var(--p),0 6px 16px -4px rgba(10,20,40,.4)}
+.cluster{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:var(--p-strong);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;box-shadow:0 0 0 5px rgba(255,255,255,.7);z-index:4}
+.youdot{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--p);box-shadow:0 0 0 4px #fff,0 0 0 14px color-mix(in srgb,var(--p) 18%,transparent);transform:translate(-50%,-50%);z-index:4}
+
+/* misc */
+.seg{display:flex;background:var(--surface-2);border-radius:999px;padding:4px;margin:0 18px}
+.seg span{flex:1;text-align:center;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:14px;color:var(--ink-2)}
+.seg span.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(20,30,50,.12)}
+.seg svg{width:16px;height:16px}
+.search{margin:0 18px;height:52px;border-radius:999px;background:var(--surface);display:flex;align-items:center;gap:10px;padding:0 8px 0 18px;box-shadow:0 1px 2px rgba(20,30,50,.06),0 8px 20px -14px rgba(20,30,50,.3);font-size:15.5px;font-weight:600;color:var(--ink-3)}
+.search svg{color:var(--ink-2)}
+.search .typed{color:var(--ink)}
+.row-item{display:flex;align-items:center;gap:12px;padding:11px 18px}
+.row-item .nm{font-weight:800;font-size:15.5px;color:var(--ink);line-height:1.25}
+.row-item .sub{font-size:13px;color:var(--ink-3);font-weight:600;margin-top:2px}
+.thumb{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--surface-2);color:var(--p-strong);flex:none}
+.stack{display:flex}
+.stack .av{width:24px;height:24px;font-size:10.5px;box-shadow:0 0 0 2px var(--surface);margin-left:-7px}
+.stack .av:first-child{margin-left:0}
+.sec-lbl{font-size:13px;font-weight:800;color:var(--ink-3);padding:14px 18px 4px;letter-spacing:.02em}
+.body.listsurf{background:var(--surface);border-radius:26px 26px 0 0;margin-top:12px}
+.divider{height:1px;background:var(--line);margin:0 18px}
+
+/* onboarding */
+.ob-word{font-family:var(--display);font-weight:600;font-size:42px;color:var(--p-strong);text-align:center;letter-spacing:.01em;margin:0}
+.ob-card{background:var(--p-strong);color:#fff;border-radius:30px;position:relative}
+.ob-card .h-lg{color:#fff}
+.ob-card p{color:rgba(255,255,255,.82);margin:0}
+.share-hint{background:rgba(255,255,255,.1);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;color:#fff}
+.share-hint .k{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.16);border-radius:8px;padding:3px 7px;font-size:12.5px;white-space:nowrap}
+.share-hint .k svg{width:14px;height:14px}
+.share-hint > svg{width:20px;height:20px;flex:none}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:4px;background:var(--line)}
+.dots i.on{width:22px;background:var(--p)}
+.gl{width:20px;height:20px}
+.vals{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.vals li{display:flex;align-items:center;gap:12px;font-size:15.5px;font-weight:700;color:#fff}
+.vals li span{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none}
+.vals li svg{width:18px;height:18px}
+.legal{font-size:11.5px;color:var(--ink-3);text-align:center;line-height:1.4}
+.ob-card .legal{color:rgba(255,255,255,.6)}
+
+/* fab speed dial */
+.dial{position:absolute;left:0;right:0;bottom:96px;z-index:26;display:flex;justify-content:center;gap:22px}
+.dial .d{display:flex;flex-direction:column;align-items:center;gap:8px;width:92px;text-align:center}
+.dial .c{width:62px;height:62px;border-radius:50%;background:var(--surface);color:var(--p-strong);display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.dial .c svg{width:26px;height:26px}
+.dial .d > span:last-child{font-size:13px;font-weight:800;color:var(--ink);line-height:1.25;background:var(--surface);border-radius:12px;padding:5px 9px;box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.dial .d.mid{transform:translateY(-34px)}
+
+@media (prefers-reduced-motion:reduce){.caret{animation:none}}
+@media (max-width:520px){main,.gal-head .in{padding-left:16px;padding-right:16px} figure{width:100%;align-items:center} .pal{margin-left:0}}
+
+/* ---------- Phase 2 components ---------- */
+.muted{color:var(--ink-3)} .sm{font-size:12.5px;font-weight:600}
+.t-good{color:var(--good)} .t-ok{color:var(--ok)}
+.hero-place{padding:0 18px}
+.meta-line{font-size:13.5px;font-weight:700;color:var(--ink-2);margin-top:6px;display:flex;align-items:center;gap:2px}
+.acts{display:flex;gap:8px;padding:16px 14px 14px}
+.act{flex:0 0 78px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--ink-2)}
+.act .c{width:54px;height:54px;border-radius:18px;background:var(--surface);display:grid;place-items:center;color:var(--p);box-shadow:0 1px 2px rgba(20,30,50,.06),0 8px 18px -12px rgba(20,30,50,.35)}
+.act .c svg{width:22px;height:22px}
+.act .c.brand svg{fill:currentColor}
+.act .c.swiggy svg{width:26px;height:26px}
+.act .c.zomato svg{width:40px;height:40px}
+.act .c .dw{font-family:var(--body);font-weight:800;font-size:12.5px;letter-spacing:-.02em;color:currentColor} /* placeholder: swap for the official District logo in the app */
+.panel{background:var(--surface);border-radius:24px;margin:0 14px;padding:4px 0;box-shadow:0 1px 2px rgba(20,30,50,.05),0 6px 18px -12px rgba(20,30,50,.22)}
+.panel h3{font-family:var(--display);font-weight:600;font-size:16px;margin:0;padding:12px 16px 6px;color:var(--ink)}
+.hist{display:flex;gap:8px;padding:2px 16px 12px;flex-wrap:wrap}
+.hist .chip b{margin-left:4px}
+.person{display:flex;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.panel h3 + .person{border-top:0}
+.person .pc{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.pn{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-2)} .pn b{color:var(--ink)} .pn .rv{margin-left:auto}
+.pl{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--ink-2)} .pl svg{width:15px;height:15px;flex:none}
+.pl.muted{color:var(--ink-3);font-size:12.5px;font-weight:700}
+.efab{position:absolute;right:16px;bottom:28px;height:56px;border-radius:18px;background:var(--p);color:var(--on-p);display:flex;align-items:center;gap:10px;padding:0 20px 0 16px;font-weight:800;font-size:15.5px;box-shadow:0 10px 22px -10px var(--p-strong);z-index:10}
+.snack{position:absolute;left:12px;right:12px;bottom:26px;background:var(--ink);color:#fff;border-radius:14px;padding:14px 16px;display:flex;align-items:center;font-size:14px;font-weight:700;z-index:22;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.sa{margin-left:auto;color:var(--pc);font-weight:800;font-size:14px;white-space:nowrap;padding-left:12px}
+.grow{display:flex;align-items:center;gap:14px;padding:13px 16px;font-weight:700;font-size:15px;color:var(--ink);border-top:1px solid var(--line)}
+.grow:first-child{border-top:0}
+.grow .ic{width:38px;height:38px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;color:var(--p-strong);flex:none}
+.grow .ic svg{width:18px;height:18px}
+.grow .chev{width:18px;height:18px;color:var(--ink-3);flex:none}
+.group{background:var(--surface);border-radius:22px;margin:0 16px 12px;overflow:hidden;box-shadow:0 1px 2px rgba(20,30,50,.05),0 6px 18px -12px rgba(20,30,50,.22)}
+.badge{min-width:22px;height:22px;border-radius:11px;background:var(--bad);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;padding:0 6px}
+.closed{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;font-weight:800}
+.closed svg{width:15px;height:15px}
+.placelink{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.placelink .nm,.placebar .nm,.cand .nm{font-weight:800;font-size:15.5px;color:var(--ink)}
+.placelink .sub,.placebar .sub,.cand .sub{font-size:13px;color:var(--ink-3);font-weight:600;margin-top:2px}
+.rv.big{height:32px;font-size:15px;padding:0 14px 0 10px} .rv.big svg{width:19px;height:19px}
+.facts{display:grid;grid-template-columns:96px 1fr;gap:9px 10px;margin:14px 0 0;font-size:14.5px}
+.facts dt{color:var(--ink-3);font-weight:700;font-size:13px;padding-top:1px} .facts dd{margin:0;color:var(--ink);font-weight:700}
+.quote{background:#E5F5DA;border-radius:16px 16px 16px 4px;padding:12px 14px;font-size:14px;line-height:1.45;color:#1f2d1a}
+.wa{max-width:78%;background:#fff;border-radius:4px 14px 14px 14px;padding:9px 12px;font-size:14px;line-height:1.4;color:#1d1d1d;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.reading{width:100%;background:var(--surface-2);border-radius:20px;padding:22px 18px 18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.reading b{font-size:15.5px;color:var(--ink);margin-bottom:4px}
+.sk{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,var(--line) 0%,var(--surface) 50%,var(--line) 100%);background-size:200% 100%;animation:sk 1.4s var(--ease) infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.step{height:30px;padding:0 12px;border-radius:999px;background:var(--pc);color:var(--on-pc);font-size:13px;font-weight:800;display:grid;place-items:center;margin-right:8px}
+.form{padding:2px 18px 0;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.req{font-size:11.5px;font-weight:800;color:var(--bad);background:var(--bad-bg);border-radius:6px;padding:2px 6px;margin-left:6px}
+.optl{font-size:12px;font-weight:600;color:var(--ink-3);margin-left:4px}
+.sugg{display:flex;gap:6px;flex-wrap:wrap}
+.sugg .chip{height:30px;font-size:13px}
+.chg{margin-left:auto;color:var(--p);font-weight:800;font-size:13.5px}
+.inp.warn{box-shadow:inset 0 0 0 2px #E2A417}
+.flag{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:var(--ok)} .flag svg{width:15px;height:15px}
+.revsel{display:flex;gap:8px}
+.revsel span{flex:1;height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:14.5px;color:var(--ink-2);background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line)}
+.revsel span svg{width:19px;height:19px}
+.revsel span.on.good{background:var(--good-bg);color:var(--good);box-shadow:inset 0 0 0 2px var(--good)}
+.chipin{display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:50px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line);padding:8px 10px}
+.ichip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 8px 0 12px;border-radius:10px;background:var(--pc);color:var(--on-pc);font-weight:800;font-size:13.5px}
+.ichip svg{width:15px;height:15px}
+.addc{display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 8px;color:var(--p);font-weight:800;font-size:13.5px} .addc svg{width:16px;height:16px}
+.bar2{display:flex;gap:10px;padding:12px 18px 30px;background:var(--surface);border-top:1px solid var(--line);position:relative;z-index:3}
+.cand{display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line)} .cand:first-child{border-top:0}
+.mthumb{width:64px;height:64px;border-radius:14px;overflow:hidden;position:relative;flex:none}
+.mthumb svg{position:absolute;width:260px;height:400px;left:-90px;top:-150px}
+.mdot{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;background:var(--p);box-shadow:0 0 0 3px #fff;transform:translate(-50%,-50%)}
+.placebar{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:18px;padding:10px 12px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.two{display:grid;grid-template-columns:1fr 1.25fr;gap:10px}
+.aud{display:flex;align-items:center;gap:12px;background:var(--surface-2);border-radius:16px;padding:12px 14px;font-size:13px;color:var(--ink-2);font-weight:700}
+.aud b{display:block;color:var(--ink);font-size:15px} .aud svg{width:20px;height:20px;color:var(--p-strong)}
+.clip{display:flex;align-items:center;gap:12px;margin:0 18px 12px;background:var(--ink);color:#fff;border-radius:16px;padding:11px 14px}
+.clip b{display:block;font-size:14px} .clip span:not(.sa){font-size:12.5px;opacity:.8;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.clip svg{width:20px;height:20px;flex:none}
+.check{width:24px;height:24px;border-radius:8px;box-shadow:inset 0 0 0 2px var(--ink-3);display:grid;place-items:center;flex:none}
+.check.on{background:var(--p);box-shadow:none;color:#fff} .check svg{width:16px;height:16px;stroke-width:3}
+.dialog{position:absolute;left:24px;right:24px;top:50%;transform:translateY(-50%);background:var(--surface);border-radius:28px;padding:24px 24px 14px;z-index:26;box-shadow:0 24px 50px -20px rgba(0,0,0,.45)}
+.dlg-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--pc);color:var(--p-strong);margin-bottom:14px}
+.dlg-ic svg{width:22px;height:22px}
+.dlg-acts{display:flex;justify-content:flex-end;gap:4px;margin-top:18px}
+.tbtn{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 14px;border-radius:999px;font-weight:800;font-size:15px;color:var(--p)}
+.tbtn.danger{color:var(--bad)} .tbtn.strong{background:var(--p);color:#fff;padding:0 20px}
+.mtabs{display:flex;background:var(--surface);border-bottom:1px solid var(--line);margin-top:4px}
+.mtabs span{flex:1;text-align:center;padding:14px 0 12px;font-weight:800;font-size:14.5px;color:var(--ink-2);position:relative}
+.mtabs span.on{color:var(--p)}
+.mtabs span.on::after{content:"";position:absolute;left:24%;right:24%;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--p)}
+.note{display:flex;gap:12px;padding:12px 18px;font-size:14.5px;color:var(--ink-2);line-height:1.4;align-items:flex-start}
+.note b{color:var(--ink)}
+.nacts{display:flex;gap:8px;margin-top:8px}
+.merge{display:flex;align-items:center;gap:12px;margin:0 16px;background:var(--ok-bg);color:var(--ink);border-radius:16px;padding:12px 14px}
+.merge b{display:block;font-size:14.5px} .merge span:not(.sa){font-size:13px;color:var(--ink-2);display:block} .merge svg{width:20px;height:20px;color:var(--ok);flex:none}
+.merge .sa{color:var(--p)}
+.offline{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:9px 18px;position:relative;z-index:4}
+.offline svg{width:16px;height:16px}
+</style>
+</head>
+<body data-palette="cobalt" data-ground="flat">
+<!--
+THESIS: Extends the Phase 1 world (Thinnava?! friendly-kitchen food diary) to every remaining screen: people and what they said first, never ratings.
+OWN-WORLD: Inherited from DESIGN.md: Cobalt role set, flat Mist ground (no Rings on these screens, owner's call), white cards/panels/list surfaces, Fredoka + Nunito, Material 3 structure, fixed Good/Okayish/Bad pills.
+STORY: From a WhatsApp message to a saved entry in seconds; from a place to who's been and how to get there; mutual connections and lists keep sharing intentional.
+FIRST VIEWPORT: Place page: name and meta, four hand-off buttons, your visits, people who've been, extended FAB "Add visit".
+FORM: Extension of an established world (DESIGN.md); no concept roll.
+-->
+<header class="gal-head"><div class="in">
+  <h1 class="gal-title"><img src="assets/cat-peek.png" alt="">Thinnava?! <small>Phase 2 UI · all remaining screens · Cobalt</small></h1>
+  <a href="phase1.html" style="margin-left:auto;font-weight:800;font-size:14px;color:#1b2333">← Phase 1 screens</a>
+</div></header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="g-logo" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></symbol>
+    <symbol id="mapbase" viewBox="0 0 360 700" preserveAspectRatio="xMidYMid slice">
+      <rect class="m-land" width="360" height="700"/>
+      <path class="m-water" d="M228 118c26-14 66-8 80 14s4 52-20 60-48 24-70 10-14-70 10-84z"/>
+      <path class="m-water" d="M-10 560c40-20 90-6 118 18s8 70-30 80-80-4-96-30z"/>
+      <path class="m-park" d="M40 210c22-12 60-6 66 16s-14 44-40 46-46-12-46-30 2-24 20-32z"/>
+      <path class="m-park" d="M250 420c20-8 52 0 54 20s-20 36-44 34-34-20-30-34 6-14 20-20z"/>
+      <path class="m-park" d="M150 640c18-10 46-4 50 12s-12 30-34 30-34-10-34-22 4-12 18-20z"/>
+      <g class="m-edge" stroke-width="13">
+        <path d="M-20 300C80 290 160 330 380 300"/><path d="M120 -20C130 160 110 400 150 720"/><path d="M-20 470C120 480 240 430 380 520"/><path d="M260 -20C250 120 300 260 280 720"/>
+      </g>
+      <g class="m-road" stroke-width="10">
+        <path d="M-20 300C80 290 160 330 380 300"/><path d="M120 -20C130 160 110 400 150 720"/><path d="M-20 470C120 480 240 430 380 520"/><path d="M260 -20C250 120 300 260 280 720"/>
+      </g>
+      <g class="m-road" stroke-width="4">
+        <path d="M-20 140H380"/><path d="M-20 390C100 380 200 400 380 380"/><path d="M60 -20V720"/><path d="M200 -20C190 200 220 450 205 720"/><path d="M-20 600C100 610 220 580 380 620"/><path d="M320 -20V720"/><path d="M-20 60C120 70 220 40 380 70"/><path d="M-20 230C120 240 220 210 380 240"/><path d="M-20 540H380"/>
+      </g>
+      <text class="m-lbl" x="150" y="95">INDIRANAGAR</text>
+      <text class="m-lbl" x="20" y="365">KORAMANGALA</text>
+      <text class="m-lbl" x="210" y="345">DOMLUR</text>
+      <text class="m-lbl" x="196" y="575">HSR LAYOUT</text>
+      <text class="m-lbl" x="236" y="165">ULSOOR LAKE</text>
+    </symbol>
+  </defs>
+</svg>
+<main>
+
+<!-- ================= PLACES & ENTRIES ================= -->
+<section class="sec">
+  <h2>Place page and entry detail</h2>
+  <p>The place page leads with <b>people</b>, not ratings: your own history, then everyone you know who's been, each with what they loved, didn't like and paid. The hand-off buttons (Directions, Swiggy) sit right under the name. Google's rating, hours and price load only on a tap, so we never pay for them.</p>
+  <div class="row">
+
+    <!-- C1 Place page -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb"><i data-lucide="heart" class="i"></i></button><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div class="hero-place">
+            <h1 class="h-lg">Burger Factory</h1>
+            <div class="meta-line">Fast food · Koramangala</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:0 14px;height:40px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);width:max-content;font-size:13.5px;font-weight:800;color:var(--ink-2)"><i data-lucide="star" style="width:16px;height:16px;color:var(--p)"></i>Google info<span style="font-weight:600;color:var(--ink-3)">rating, hours, price</span><i data-lucide="chevron-down" style="width:16px;height:16px;color:var(--ink-3)"></i></div>
+          </div>
+          <div class="acts">
+            <div class="act"><span class="c"><i data-lucide="navigation"></i></span>Directions</div>
+            <div class="act"><span class="c brand swiggy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.034 24c-.376-.411-2.075-2.584-3.95-5.513-.547-.916-.901-1.63-.833-1.814.178-.48 3.355-.743 4.333-.308.298.132.29.307.29.409 0 .44-.022 1.619-.022 1.619a.441.441 0 1 0 .883-.002l-.005-2.939c0-.255-.278-.319-.331-.329-.511-.002-1.548-.006-2.661-.006-2.457 0-3.006.101-3.423-.172-.904-.591-2.383-4.577-2.417-6.819C3.849 4.964 5.723 2.225 8.362.868A8.13 8.13 0 0 1 12.026 0c4.177 0 7.617 3.153 8.075 7.209l.001.011c.084.981-5.321 1.189-6.39.904-.164-.044-.206-.212-.206-.284L13.5 4.996a.442.442 0 0 0-.884.002l.009 3.866a.33.33 0 0 0 .268.32l3.354-.001c1.79 0 2.542.207 3.042.588.333.254.461.739.349 1.37C18.633 16.755 12.273 23.71 12.034 24z"/></svg></span>Swiggy</div>
+          </div>
+          <div class="panel">
+            <h3>Your visits</h3>
+            <div class="hist"><span class="chip">Jan 12 · <b class="t-good">Good</b></span><span class="chip">Sep 3 · <b class="t-ok">Okayish</b></span></div>
+          </div>
+          <div class="panel" style="margin-top:10px">
+            <h3>People who've been</h3>
+            <div class="person"><span class="av a2">A</span><div class="pc"><div class="pn"><b>Ananya</b> · with Arjun <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Peri peri fries</div><div class="pl muted">₹350 / person · Oct 2</div></div></div>
+            <div class="person"><span class="src"><i data-lucide="user-round"></i></span><div class="pc"><div class="pn"><b>Rahul</b> told you <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Chicken burger</div><div class="pl"><i data-lucide="thumbs-down" style="color:var(--ink-3)"></i>Shake</div><div class="pl muted"><i data-lucide="lock"></i>Only you</div></div></div>
+          </div>
+        </div>
+        <div class="efab"><i data-lucide="plus"></i>Add visit</div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>C1 Place page.</b> Heart (top right) adds to your wishlist. Google's rating, hours and price load only when you tap <b>Google info</b> (never automatically, so we stay inside Google's free allowance; when it runs out for the month the row just opens Google Maps). Hand-offs: <b>Directions</b> and a <b>Swiggy</b> search (Zomato and District are v2). Your own visits come first, then people who've been. Private friend entries carry "Only you". One main action: <b>Add visit</b>.</figcaption>
+    </figure>
+
+    <!-- C1a Google only + wishlist snackbar -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb" style="background:var(--p);color:#fff"><i data-lucide="heart" class="i" style="fill:currentColor"></i></button><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div class="hero-place">
+            <h1 class="h-lg">Biryani Zone</h1>
+            <div class="meta-line">Restaurant · HSR Layout</div>
+          </div>
+          <div class="acts">
+            <div class="act"><span class="c"><i data-lucide="navigation"></i></span>Directions</div>
+            <div class="act"><span class="c brand swiggy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.034 24c-.376-.411-2.075-2.584-3.95-5.513-.547-.916-.901-1.63-.833-1.814.178-.48 3.355-.743 4.333-.308.298.132.29.307.29.409 0 .44-.022 1.619-.022 1.619a.441.441 0 1 0 .883-.002l-.005-2.939c0-.255-.278-.319-.331-.329-.511-.002-1.548-.006-2.661-.006-2.457 0-3.006.101-3.423-.172-.904-.591-2.383-4.577-2.417-6.819C3.849 4.964 5.723 2.225 8.362.868A8.13 8.13 0 0 1 12.026 0c4.177 0 7.617 3.153 8.075 7.209l.001.011c.084.981-5.321 1.189-6.39.904-.164-.044-.206-.212-.206-.284L13.5 4.996a.442.442 0 0 0-.884.002l.009 3.866a.33.33 0 0 0 .268.32l3.354-.001c1.79 0 2.542.207 3.042.588.333.254.461.739.349 1.37C18.633 16.755 12.273 23.71 12.034 24z"/></svg></span>Swiggy</div>
+            
+          </div>
+          <div class="panel" style="padding:16px">
+            <div style="display:flex;gap:12px;align-items:center"><span class="src"><i data-lucide="users-round"></i></span><div><b style="font-size:15px">Nobody you know has been yet</b><div class="muted" style="font-size:13px;margin-top:2px">Here's what Google says.</div></div></div>
+          </div>
+          <div class="panel" style="margin-top:10px">
+            <div class="grow"><span class="ic"><i data-lucide="map-pin"></i></span><div>27th Main, Sector 2, HSR Layout</div></div>
+            <div style="margin:8px 0 2px;height:44px;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--line);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:14.5px;color:var(--p)"><i data-lucide="star" style="width:18px;height:18px"></i>Show Google's rating, hours and price</div>
+          </div>
+        </div>
+        <div class="snack">Added to your wishlist<span class="sa">Who sees it</span></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>C1a Nobody you know has been.</b> The address shows straight away; one tap loads Google's rating, hours and price level (tap-only keeps us inside the free allowance). Shown right after tapping the heart: a snackbar confirms "Added to your wishlist" with a shortcut to change who sees it. <i>(Sample data.)</i></figcaption>
+    </figure>
+
+    <!-- C1b closed + C2 entry -->
+    <figure>
+      <div class="phone" style="height:300px"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="hero-place">
+          <span class="closed"><i data-lucide="store"></i>Permanently closed</span>
+          <h1 class="h-lg" style="margin-top:10px;color:var(--ink-2)">Koshy's Café</h1>
+          <div class="meta-line">Café · MG Road</div>
+          <p class="t" style="font-size:14px;margin:12px 0 0">Your 3 visits and what people said are still here. Swiggy is hidden; Directions stays.</p>
+        </div>
+      </div></div>
+      <figcaption><b>C1b Closed.</b> A clear label; history stays, the Swiggy button disappears.</figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Rahul's experience</span><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div class="panel placelink"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Koramangala · Fast food</div></div><i data-lucide="chevron-right" class="i" style="color:var(--ink-3)"></i></div>
+          <div class="panel" style="margin-top:10px;padding:16px">
+            <span class="rv good big"><i data-lucide="smile"></i>Good</span>
+            <dl class="facts">
+              <dt>Loved</dt><dd>Chicken burger</dd>
+              <dt>Didn't like</dt><dd>Shake</dd>
+              <dt>Price</dt><dd>₹300 / person</dd>
+              <dt>Went on</dt><dd>Oct 10</dd>
+            </dl>
+          </div>
+                    <p class="muted" style="margin:12px 18px 0;font-size:12.5px;display:flex;gap:6px;align-items:center"><i data-lucide="lock" style="width:14px;height:14px"></i>Logged by you on Oct 11 · Only you can see this</p>
+        </div>
+        <div style="display:flex;gap:10px;padding:12px 18px 28px"><button class="btn btn-tonal" style="flex:1"><i data-lucide="pencil" class="i"></i>Edit</button><button class="btn btn-p" style="flex:1"><i data-lucide="heart" class="i"></i>Wishlist</button></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>C2 Entry detail.</b> The full entry. The original WhatsApp message is <b>not saved</b>, only what you confirmed. (An internet entry shows its original link here instead.) Never called "Rahul's review", it's his experience, logged by you. ⋮ holds Delete.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= SHARE IMPORT ================= -->
+<section class="sec">
+  <h2>Share import: from WhatsApp to saved</h2>
+  <p>The hero flow. Share a message to Thinnava, wait a second while the cat reads it, check what was found, add who told you, save. Every field can be fixed by hand, and the friend's name is never guessed.</p>
+  <div class="row">
+
+    <!-- D7 Reading -->
+    <figure>
+      <div class="phone"><div class="scr bare" style="background:#EFE7DE">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div style="background:#1F6E5B;color:#fff;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;font-weight:800"><i data-lucide="arrow-left" class="i"></i><span class="av sm a1">R</span>Rahul</div>
+        <div style="padding:18px 14px;display:flex;flex-direction:column;gap:8px">
+          <div class="wa in">Free this weekend?</div>
+          <div class="wa in" style="box-shadow:0 0 0 2px var(--p)">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div>
+        </div>
+        <div class="scrim"></div>
+        <div class="sheet" style="padding-bottom:36px">
+          <div class="handle"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;padding:0 22px">
+            <img src="assets/cat-peek.png" alt="" style="width:120px;margin:0 auto -9px;position:relative;z-index:2">
+            <div class="reading">
+              <b>Reading this message…</b>
+              <span class="sk" style="width:80%"></span><span class="sk" style="width:62%"></span><span class="sk" style="width:70%"></span>
+            </div>
+            <p class="muted" style="font-size:13px;margin:12px 0 0;text-align:center">Looking for the place, dishes and price.</p>
+          </div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D7 Reading.</b> Opens over WhatsApp as a sheet, so you never lose your place in the chat. Takes 1–3 seconds.</figcaption>
+    </figure>
+
+    <!-- D8 Confirmation -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">Check what we found</span><span class="step">1 of 2</span></div>
+        <div class="body form">
+          <div class="seg" style="margin:0"><span class="on"><i data-lucide="user-round"></i>A friend</span><span><i data-lucide="globe"></i>Internet</span></div>
+          <div class="field"><label>Who told you? <span class="req">Required</span></label><div class="inp focus"><span class="muted">Type a name</span><span class="caret"></span></div>
+            <div class="sugg"><span class="chip">Rahul</span><span class="chip">Rahul K <i data-lucide="link"></i></span><span class="chip">Mom</span></div></div>
+          <div class="field"><label>Place</label><div class="inp"><i data-lucide="map-pin" style="width:18px;height:18px;color:var(--p)"></i>Burger Factory, Koramangala<span class="chg">Change</span></div></div>
+          <div class="field"><label>How was it for them?</label><div class="revsel"><span class="on good"><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+          <div class="field"><label>Loved</label><div class="chipin"><span class="ichip">Chicken burger<i data-lucide="x"></i></span><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="field"><label>Didn't like</label><div class="chipin"><span class="ichip">Shake<i data-lucide="x"></i></span><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="field"><label>Price per person</label><div class="inp warn">₹ 300</div><span class="flag"><i data-lucide="circle-alert"></i>Please check this</span></div>
+        </div>
+        <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" style="flex:1;opacity:.45">Save</button></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D8 Confirmation.</b> "1 of 2" because the message named two places. <b>Who told you</b> is empty and required, with quick picks from your names. Save stays off until it's filled (or you switch to Internet). Unsure fields get an amber "please check". Below the fold: the date, and the shared message for reference while checking (it isn't saved).</figcaption>
+    </figure>
+
+    <!-- D8b place candidates -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Which one?</span></div>
+        <div class="body">
+          <p class="t" style="margin:0 18px 12px;font-size:14px">We found 2 places called <b>Burger Factory</b>. Pick the right one.</p>
+          <div class="panel">
+            <div class="cand on"><div class="mthumb"><svg class="base"><use href="#mapbase"/></svg><span class="mdot"></span></div><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">80 Feet Rd, Koramangala · 3.1 km</div></div><span class="radio on"></span></div>
+            <div class="cand"><div class="mthumb"><svg class="base" style="transform:translate(-30px,-40px)"><use href="#mapbase"/></svg><span class="mdot"></span></div><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Indiranagar 100 Ft Rd · 6.4 km</div></div><span class="radio"></span></div>
+          </div>
+          <button class="btn btn-out" style="width:auto;margin:14px 18px 0;padding:0 18px;height:44px;font-size:14px"><i data-lucide="search" style="width:16px;height:16px"></i>Search for a different place</button>
+        </div>
+        <div class="bar2"><button class="btn btn-p">Use this place</button></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D8b Pick the place.</b> Shown only when the name matches more than one Google place.</figcaption>
+    </figure>
+
+    <!-- D8c filled + D7 fail -->
+    <figure>
+      <div class="phone" style="height:360px"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="body form" style="padding-top:12px">
+          <div class="field"><label>Who told you? <span class="req" style="color:var(--good);background:var(--good-bg)">Done</span></label><div class="inp"><span class="av sm a1" style="width:26px;height:26px">R</span>Rahul<span class="chg">Change</span></div></div>
+          <div class="field"><label>Shared message <span class="optl">for checking · not saved</span></label><div class="quote">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div></div>
+        </div>
+        <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" style="flex:1">Save</button></div>
+      </div></div>
+      <figcaption><b>D8 ready to save.</b> Name filled, Save turns on. "Save" then moves to the 2nd place.</figcaption>
+      <div class="phone" style="height:330px"><div class="scr">
+        <div class="body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center">
+          <img src="assets/cat-sitting.png" alt="" style="width:92px;filter:grayscale(.2)">
+          <h2 class="h-md" style="margin-top:10px">Couldn't find a place in that</h2>
+          <p class="t" style="font-size:14px;margin:6px 0 16px">No worries, fill it in yourself.</p>
+          <button class="btn btn-p">Fill it in</button>
+        </div>
+      </div></div>
+      <figcaption><b>D7 failed.</b> AI can't read it (or you're offline): straight to the form, prefilled with anything it did find.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= LOGGING BY HAND ================= -->
+<section class="sec">
+  <h2>Logging by hand</h2>
+  <p>The same fields as the confirmation sheet, so there's one form to learn. Smart defaults (today, nearby places, All connections) mean most visits take a few taps.</p>
+  <div class="row">
+
+    <!-- D1 place picker -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Where did you eat?</span></div>
+        <div style="padding:0 0 10px"><div class="search"><i data-lucide="search" class="i"></i><span>Search places</span></div></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">Near you</div>
+          <div class="row-item"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Bao Story</div><div class="sub">Indiranagar · 120 m</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="coffee"></i></span><div style="flex:1"><div class="nm">Third Wave Coffee</div><div class="sub">Indiranagar · 300 m</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Toit</div><div class="sub">Indiranagar · 450 m</div></div></div>
+          <div class="sec-lbl">Recently used</div>
+          <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">MTR</div><div class="sub">Lalbagh Road</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Koramangala</div></div></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D1 Place picker.</b> Nearby first (if location is allowed), then recently used. Only Google places can be picked.</figcaption>
+    </figure>
+
+    <!-- D2 Add visit -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">Add visit</span></div>
+        <div class="body form">
+          <div class="placebar"><span class="thumb" style="width:40px;height:40px"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Bao Story</div><div class="sub">Indiranagar</div></div><span class="chip" style="height:30px"><i data-lucide="calendar"></i>Today</span></div>
+          <div class="field"><label>How was it?</label><div class="revsel"><span class="on good"><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+          <div class="field"><label>Loved</label><div class="chipin"><span class="ichip">Chicken bao<i data-lucide="x"></i></span><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="field"><label>Didn't like <span class="optl">optional</span></label><div class="chipin"><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="two"><div class="field"><label>Price / person</label><div class="inp">₹ 450</div></div>
+            <div class="field"><label>Went with</label><div class="inp" style="gap:0"><span class="av sm a3" style="width:26px;height:26px;box-shadow:0 0 0 2px #fff">A</span><span class="av sm" style="width:26px;height:26px;margin-left:-6px;background:var(--surface-2);color:var(--p-strong);box-shadow:0 0 0 2px #fff">M</span><span style="margin-left:8px;font-size:14px">Arjun, Mom</span></div></div></div>
+          <div class="field"><label>Notes <span class="optl">optional</span></label><div class="inp"><span class="muted">Anything to remember?</span></div></div>
+          <div class="aud"><i data-lucide="users-round"></i><div style="flex:1">Shared with<b>All connections</b></div><i data-lucide="chevron-right"></i></div>
+        </div>
+        <div class="bar2"><button class="btn btn-p">Save visit</button></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D2 Add visit.</b> Place and date at the top (date defaults to today). Review is three big buttons, dishes are quick chips. "Went with" mixes connections (tagged, they'll get a request) and private names like Mom. Audience defaults to All connections.</figcaption>
+    </figure>
+
+    <!-- D5 manual friend entry -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">A friend told me</span></div>
+        <div class="clip"><i data-lucide="clipboard"></i><div style="flex:1"><b>Use copied text?</b><span>"bro try Meghana's boneless biryani…"</span></div><span class="sa">Use</span></div>
+        <div class="body form">
+          <div class="seg" style="margin:0"><span class="on"><i data-lucide="user-round"></i>A friend</span><span><i data-lucide="globe"></i>Internet</span></div>
+          <div class="field"><label>Who told you? <span class="req">Required</span></label><div class="inp"><span class="muted">Type a name</span></div></div>
+          <div class="field"><label>Place</label><div class="inp"><span class="muted">Search places</span><i data-lucide="search" style="margin-left:auto;width:18px;height:18px;color:var(--ink-3)"></i></div></div>
+          <div class="field"><label>How was it for them?</label><div class="revsel"><span><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+          <div class="field"><label>Loved</label><div class="chipin"><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+        </div>
+        <div class="bar2"><button class="btn btn-p" style="opacity:.45">Save</button></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D5 By hand.</b> Same form, empty, no AI. If you've just copied something, a one-tap "Use copied text?" offers to read it. Switch to <b>Internet</b> and the name field becomes "Link (optional)".</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= PICKERS ================= -->
+<section class="sec">
+  <h2>Pickers and confirmations</h2>
+  <p>Small sheets that slide up from below, each doing one job. They keep the forms short.</p>
+  <div class="row">
+
+    <!-- D6 friend name picker -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:540px">
+          <div class="handle"></div>
+          <h2 class="h-md" style="padding:0 22px 12px">Who told you?</h2>
+          <div class="search" style="box-shadow:inset 0 0 0 2px var(--p)"><span class="typed">Rahu</span><span class="caret" style="margin-left:0"></span></div>
+          <div class="sec-lbl">Your names</div>
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Rahul</div><div class="sub">5 entries</div></div></div>
+          <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <i data-lucide="link" style="width:14px;height:14px;color:var(--p)"></i></div><div class="sub">Linked to @rahulk · 2 entries</div></div></div>
+          <div class="row-item"><span class="thumb" style="width:40px;height:40px;border-radius:50%"><i data-lucide="plus"></i></span><div style="flex:1"><div class="nm" style="color:var(--p)">Add "Rahu" as a new name</div></div></div>
+          <p class="muted" style="font-size:12.5px;margin:10px 22px 0">Names are private to you. Link one to a connection from Settings → Friend names.</p>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D6 Friend name.</b> Autocompletes from your private names; linked ones show a link mark. New names are one tap.</figcaption>
+    </figure>
+
+    <!-- D3 companions -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:560px">
+          <div class="handle"></div>
+          <h2 class="h-md" style="padding:0 22px 12px">Who did you go with?</h2>
+          <div class="search"><i data-lucide="search" class="i"></i><span>Search</span></div>
+          <div class="sec-lbl">Connections <span style="font-weight:600">· they'll be asked to confirm</span></div>
+          <div class="row-item"><span class="av a3">A</span><div style="flex:1"><div class="nm">Arjun</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="av a2">A</span><div style="flex:1"><div class="nm">Ananya</div></div><span class="check"></span></div>
+          <div class="sec-lbl">Private names <span style="font-weight:600">· only you see these</span></div>
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Mom</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="thumb" style="width:40px;height:40px;border-radius:50%"><i data-lucide="plus"></i></span><div style="flex:1"><div class="nm" style="color:var(--p)">Add a private name</div></div></div>
+          <div style="padding:10px 18px 0"><button class="btn btn-p">Done · 2 people</button></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D3 Went with.</b> Two clear groups: connections (tagged, they can accept or reject) and private names (just for you).</figcaption>
+    </figure>
+
+    <!-- D4 audience -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:500px">
+          <div class="handle"></div>
+          <h2 class="h-md" style="padding:0 22px 4px">Who can see this?</h2>
+          <p class="muted" style="font-size:13px;margin:0 22px 8px">Pick one or more lists.</p>
+          <div class="row-item"><span class="src"><i data-lucide="users-round"></i></span><div style="flex:1"><div class="nm">All connections</div><div class="sub">9 people · everyone you connect with</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="heart-handshake"></i></span><div style="flex:1"><div class="nm">Close friends</div><div class="sub">3 people</div></div><span class="check"></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="graduation-cap"></i></span><div style="flex:1"><div class="nm">College</div><div class="sub">5 people</div></div><span class="check"></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="lock"></i></span><div style="flex:1"><div class="nm">Only me</div><div class="sub">An empty list, nobody else sees it</div></div><span class="check"></span></div>
+          <div style="padding:12px 18px 0"><button class="btn btn-p">Done</button></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D4 Audience.</b> Multi-select lists. "Only me" is shown as a ready-made empty list so nobody has to work it out. Built in, next to All connections.</figcaption>
+    </figure>
+
+    <!-- D10 delete dialog -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Your visit</span></div>
+        <div class="body"><div class="panel placelink"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Bao Story</div><div class="sub">Oct 9 · Good</div></div></div></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic"><i data-lucide="trash-2"></i></span>
+          <h2 class="h-md">Delete this visit?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">It'll disappear for everyone you shared it with. Arjun's own review stays on his profile.</p>
+          <div class="dlg-acts"><span class="tbtn">Cancel</span><span class="tbtn danger">Delete</span></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>D10 Delete.</b> A dialog only for things that can't be undone. Says exactly what happens.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= PEOPLE ================= -->
+<section class="sec">
+  <h2>People, connections and lists</h2>
+  <p>Connections are mutual and request-based, and you see nothing about someone until you're connected. "Their map" means a map of the places they've been and wishlisted, limited to what they've shared with you.</p>
+  <div class="row">
+
+    <!-- E1 connection profile -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb"><i data-lucide="bell" class="i"></i></button><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div style="display:flex;gap:14px;align-items:center;padding:0 18px">
+            <span class="av a2" style="width:72px;height:72px;font-size:28px">A</span>
+            <div style="flex:1"><h1 class="h-md">Ananya R</h1><div class="muted" style="font-size:14px;font-weight:700">@ananya.eats</div><div class="t" style="font-size:13.5px;margin-top:2px">Momo hunter. Will travel for bao.</div></div>
+          </div>
+          <div style="display:flex;gap:8px;padding:14px 18px 0"><span class="chip" style="height:38px"><i data-lucide="check"></i>Connected</span><span class="chip" style="height:38px"><i data-lucide="heart-handshake"></i>Close friends</span><span class="muted" style="margin-left:auto;font-size:13px;font-weight:700;align-self:center">24 visited</span></div>
+          <div class="seg" style="margin-top:14px"><span class="on">Visited</span><span>Wishlist</span></div>
+          <div style="margin:12px 18px 0;height:120px;border-radius:20px;overflow:hidden;position:relative">
+            <div class="map"><svg class="base"><use href="#mapbase"/></svg>
+              <div class="pin" style="left:24%;top:50%"><div class="bub" style="padding:3px"><span class="av a2" style="width:22px;height:22px;font-size:10px">A</span></div><div class="tail"></div></div>
+              <div class="pin" style="left:56%;top:40%"><div class="bub" style="padding:3px"><span class="av a2" style="width:22px;height:22px;font-size:10px">A</span></div><div class="tail"></div></div>
+              <div class="pin" style="left:44%;top:92%"><div class="bub" style="padding:3px"><span class="av a2" style="width:22px;height:22px;font-size:10px">A</span></div><div class="tail"></div></div>
+            </div>
+          </div>
+          <div class="panel" style="margin-top:12px">
+            <div class="person"><span class="thumb" style="width:40px;height:40px"><i data-lucide="utensils"></i></span><div class="pc"><div class="pn"><b>Bao Story</b> <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Chicken bao</div></div></div>
+            <div class="person"><span class="thumb" style="width:40px;height:40px"><i data-lucide="utensils"></i></span><div class="pc"><div class="pn"><b>Burger Factory</b> <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Peri peri fries</div></div></div>
+          </div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E1 Connection's profile.</b> Their map shows their visited (or wishlist) places. The bell turns on their visit notifications (off by default). The list chip shows which of your lists they're in; ⋮ has Remove and Block.</figcaption>
+    </figure>
+
+    <!-- E2 not connected -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body" style="display:flex;flex-direction:column;align-items:center;padding:20px 22px 0;text-align:center">
+          <span class="av a5" style="width:96px;height:96px;font-size:36px">A</span>
+          <h1 class="h-md" style="margin-top:12px">Anand K</h1>
+          <div class="muted" style="font-size:14px;font-weight:700">@anandk</div>
+          <img src="assets/cat-peek.png" alt="" style="width:130px;margin:36px auto -10px;position:relative;z-index:2">
+          <div class="panel" style="margin:0;padding:26px 20px 20px;width:100%">
+            <h2 class="h-md" style="font-size:18px">Connect to see where Anand eats</h2>
+            <p class="t" style="font-size:14px;margin:6px 0 16px">Once you both say yes, you'll see each other's visits and wishlist.</p>
+            <button class="btn btn-p"><i data-lucide="user-plus" class="i"></i>Request to connect</button>
+          </div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E2 Not connected.</b> Name, username, photo, and one action. After tapping it reads "Requested". If they asked you, it reads "Accept".</figcaption>
+    </figure>
+
+    <!-- E3 connections / requests -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Connections</span><button class="icb ghost"><i data-lucide="user-plus" class="i"></i></button></div>
+        <div class="mtabs"><span>Connections · 9</span><span class="on">Requests · 2</span></div>
+        <div class="body listsurf" style="margin-top:0;border-radius:0">
+          <div class="sec-lbl">Want to connect with you</div>
+          <div class="row-item"><span class="av a1">A</span><div style="flex:1;min-width:0"><div class="nm">Anu</div><div class="sub">@anu.bites</div></div><button class="btn btn-tonal btn-sm" style="height:36px">Accept</button><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="sec-lbl">You asked</div>
+          <div class="row-item"><span class="av a3">A</span><div style="flex:1;min-width:0"><div class="nm">Anantha S</div><div class="sub">@anantha_s · 2 days ago</div></div><button class="btn btn-out btn-sm" style="height:36px;color:var(--ink-2)">Cancel</button></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E3 Connections.</b> Two tabs. Requests shows incoming (Accept / ×) and the ones you sent (Cancel). The person+ icon opens Search → People.</figcaption>
+    </figure>
+
+    <!-- E5 add to lists -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:470px">
+          <div class="handle"></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:0 22px 4px"><span class="av a1">A</span><h2 class="h-md" style="font-size:18px">You and Anu are connected!</h2></div>
+          <p class="muted" style="font-size:13.5px;margin:0 22px 8px">Add Anu to any of your lists?</p>
+          <div class="row-item"><span class="src"><i data-lucide="users-round"></i></span><div style="flex:1"><div class="nm">All connections</div><div class="sub">Automatic</div></div><span class="check on" style="opacity:.5"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="heart-handshake"></i></span><div style="flex:1"><div class="nm">Close friends</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="graduation-cap"></i></span><div style="flex:1"><div class="nm">College</div></div><span class="check"></span></div>
+          <div style="display:flex;gap:10px;padding:12px 18px 0"><button class="btn btn-out" style="flex:1;color:var(--ink-2)">Skip</button><button class="btn btn-p" style="flex:1">Done</button></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E5 Add to lists.</b> Pops up when a connection is made. All connections is automatic; the rest are optional.</figcaption>
+    </figure>
+
+    <!-- E6 my lists -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">My lists</span></div>
+        <div class="body">
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="users-round"></i></span><div style="flex:1">All connections<div class="muted sm">9 people · automatic</div></div></div>
+            <div class="grow"><span class="ic"><i data-lucide="heart-handshake"></i></span><div style="flex:1">Close friends<div class="muted sm">3 people</div></div><div class="stack"><span class="av a2">A</span><span class="av a3">A</span><span class="av a1">A</span></div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="graduation-cap"></i></span><div style="flex:1">College<div class="muted sm">5 people</div></div><div class="stack"><span class="av a5">J</span><span class="av a4">K</span></div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="lock"></i></span><div style="flex:1">Only me<div class="muted sm">Empty list · just you</div></div></div>
+          </div>
+          <div style="padding:4px 16px"><button class="btn btn-tonal"><i data-lucide="plus" class="i"></i>New list</button></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E6 My lists.</b> Your audience lists, Snapchat-style. Built-in ones can't be edited.</figcaption>
+    </figure>
+
+    <!-- E7 list detail -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Close friends</span><button class="icb ghost"><i data-lucide="pencil" class="i"></i></button></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">3 people</div>
+          <div class="row-item"><span class="av a2">A</span><div style="flex:1"><div class="nm">Ananya R</div><div class="sub">@ananya.eats</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="row-item"><span class="av a3">A</span><div style="flex:1"><div class="nm">Arjun</div><div class="sub">@arjun.m</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="row-item"><span class="av a1">A</span><div style="flex:1"><div class="nm">Anu</div><div class="sub">@anu.bites</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="row-item"><span class="thumb" style="width:40px;height:40px;border-radius:50%"><i data-lucide="plus"></i></span><div class="nm" style="color:var(--p)">Add people</div></div>
+          <div style="padding:20px 18px"><span class="tbtn danger" style="padding:0"><i data-lucide="trash-2" style="width:16px;height:16px"></i> Delete list</span></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E7 List detail.</b> Rename (pencil), remove people (×), add people, delete the list.</figcaption>
+    </figure>
+
+    <!-- E8 tag request -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">You were tagged</span></div>
+        <div class="body">
+          <p class="t" style="margin:0 18px 12px;font-size:15px"><b style="color:var(--ink)">Ananya</b> says you went to <b style="color:var(--ink)">Bao Story</b> together on Oct 9.</p>
+          <div class="panel" style="padding:16px">
+            <div style="display:flex;gap:10px;align-items:center"><span class="av a2">A</span><div style="flex:1"><b>Ananya's review</b><div class="muted sm">Shared with you</div></div><span class="rv good"><i data-lucide="smile"></i>Good</span></div>
+            <dl class="facts" style="margin-top:12px"><dt>Loved</dt><dd>Chicken bao, chilli oil noodles</dd><dt>Didn't like</dt><dd>Iced tea</dd><dt>Price</dt><dd>₹450 / person</dd></dl>
+          </div>
+          <p class="muted" style="font-size:13px;margin:14px 18px 0">To accept, add your own review. It'll be yours, shared with your own lists.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:12px 18px 30px">
+          <button class="btn btn-p"><i data-lucide="pencil" class="i"></i>Write my review</button>
+          <button class="btn btn-tonal"><i data-lucide="copy" class="i"></i>Same as Ananya's</button>
+          <button class="btn" style="background:transparent;color:var(--bad)">Not me, reject</button>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E8 Tag request.</b> Accepting means adding your own review: write it, or one tap copies Ananya's into yours (editable later). Reject removes the tag.</figcaption>
+    </figure>
+
+    <!-- E9 block dialog -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button></div>
+        <div class="body" style="display:flex;flex-direction:column;align-items:center;padding-top:20px"><span class="av a5" style="width:96px;height:96px;font-size:36px">A</span><h1 class="h-md" style="margin-top:12px">Anand K</h1></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic" style="background:var(--bad-bg);color:var(--bad)"><i data-lucide="ban"></i></span>
+          <h2 class="h-md">Block Anand?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">Anand won't be able to find you, send you requests or tag you. If you're connected, you'll be disconnected. They won't be told.</p>
+          <div class="dlg-acts"><span class="tbtn">Cancel</span><span class="tbtn danger">Block</span></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>E9 Block.</b> Remove connection uses the same dialog with softer wording.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= NOTIFICATIONS & SETTINGS ================= -->
+<section class="sec">
+  <h2>Notifications, settings and housekeeping</h2>
+  <p>Settings follows your account reference: grouped white panels with a round icon, a label and a chevron. Housekeeping screens are plain lists.</p>
+  <div class="row">
+
+    <!-- F1 notifications -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Notifications</span></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">Today</div>
+          <div class="note"><span class="av a1">A</span><div style="flex:1"><div><b>Anu</b> wants to connect</div><div class="nacts"><button class="btn btn-p btn-sm" style="height:34px">Accept</button><button class="btn btn-out btn-sm" style="height:34px;color:var(--ink-2)">Decline</button></div></div><span class="time">2m</span></div>
+          <div class="note"><span class="av a2">A</span><div style="flex:1"><div><b>Ananya</b> tagged you at <b>Bao Story</b></div><div class="nacts"><button class="btn btn-tonal btn-sm" style="height:34px">Add your review</button></div></div><span class="time">1h</span></div>
+          <div class="sec-lbl">Earlier</div>
+          <div class="note"><span class="av a3">A</span><div style="flex:1"><div><b>Arjun</b> visited <b>Toit</b>, a place on your wishlist</div></div><span class="time">2d</span></div>
+          <div class="note"><span class="av a5">J</span><div style="flex:1"><div><b>Jay</b> accepted your request</div></div><span class="time">3d</span></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>F1 Notifications.</b> Requests and tags by default, actionable right here. Visit updates only from people whose bell you turned on.</figcaption>
+    </figure>
+
+    <!-- F2 settings -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Settings</span></div>
+        <div class="body">
+          <div style="display:flex;gap:12px;align-items:center;padding:4px 18px 16px"><span class="av a4" style="width:56px;height:56px;font-size:22px">K</span><div style="flex:1"><b style="font-size:16px">Karthik C</b><div class="muted sm">@karthik_eats</div></div><button class="btn btn-tonal btn-sm" style="height:36px">Edit</button></div>
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="users-round"></i></span><div style="flex:1">Connections</div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="list"></i></span><div style="flex:1">My lists</div><i data-lucide="chevron-right" class="chev"></i></div>
+          </div>
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="message-circle"></i></span><div style="flex:1">Friend names</div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="user-round"></i></span><div style="flex:1">Private companion names</div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="cloud-off"></i></span><div style="flex:1">Offline drafts</div><span class="badge">1</span><i data-lucide="chevron-right" class="chev"></i></div>
+          </div>
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="log-out"></i></span><div style="flex:1">Sign out</div></div>
+            <div class="grow" style="color:var(--bad)"><span class="ic" style="background:var(--bad-bg);color:var(--bad)"><i data-lucide="trash-2"></i></span><div style="flex:1">Delete account</div><i data-lucide="chevron-right" class="chev"></i></div>
+          </div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>F2 Settings.</b> Three short groups: people, your private names and drafts, account. The badge flags a draft that needs attention.</figcaption>
+    </figure>
+
+    <!-- F3 edit profile -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title">Edit profile</span></div>
+        <div class="body form">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0 4px"><span class="av a4" style="width:84px;height:84px;font-size:32px">K</span><span class="muted sm">Photo comes from your Google account</span></div>
+          <div class="field"><label>Name</label><div class="inp">Karthik C</div></div>
+          <div class="field"><label>Username</label><div class="inp"><span class="muted">@</span>karthik_eats<span style="margin-left:auto;color:var(--good);display:grid"><i data-lucide="circle-check" class="i"></i></span></div></div>
+          <div class="field"><label>Bio <span class="optl">optional</span></label><div class="inp" style="height:76px;align-items:flex-start;padding-top:14px">Biryani first, questions later.</div></div>
+        </div>
+        <div class="bar2"><button class="btn btn-p">Save</button></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>F3 Edit profile.</b> Same fields and live username check as sign-up.</figcaption>
+    </figure>
+
+    <!-- F4 friend names -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Friend names</span></div>
+        <div class="body">
+          <div class="body listsurf" style="margin-top:4px">
+            <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Rahul</div><div class="sub">5 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <i data-lucide="link" style="width:14px;height:14px;color:var(--p)"></i></div><div class="sub">Linked to @rahulk · 2 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Meera</div><div class="sub">3 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Mom</div><div class="sub">2 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <p class="muted" style="font-size:12.5px;margin:6px 18px 0">⋮ to rename, merge into another name, link to a connection, or delete. Only you see these names.</p>
+          </div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>F4 Friend names.</b> Your private names list. No automatic suggestions: to merge "Rahul" and "Rahul K" yourself, use ⋮ → Merge into… and pick the other name.</figcaption>
+    </figure>
+
+    <!-- F5 companion names -->
+    <figure>
+      <div class="phone" style="height:420px"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Private companion names</span></div>
+        <div class="body listsurf">
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Mom</div><div class="sub">On 4 visits</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Dad</div><div class="sub">On 3 visits</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+          <div class="row-item"><span class="src"><i data-lucide="users-round"></i></span><div style="flex:1"><div class="nm">Hostel gang</div><div class="sub">On 6 visits</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+        </div>
+      </div></div>
+      <figcaption><b>F5 Companion names.</b> People you tag who aren't on the app. Never shown to anyone else.</figcaption>
+    </figure>
+
+    <!-- F6 offline drafts + F8 banner -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="offline"><i data-lucide="cloud-off"></i>You're offline. Changes will sync later.</div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Offline drafts</span></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">Needs a place</div>
+          <div class="row-item" style="align-items:flex-start"><span class="thumb" style="color:var(--ok);background:var(--ok-bg)"><i data-lucide="map-pin-off"></i></span><div style="flex:1"><div class="nm">"that dosa place near office"</div><div class="sub">Your visit · Oct 8 · Good</div><button class="btn btn-tonal btn-sm" style="height:34px;margin-top:8px">Pick the place</button></div></div>
+          <div class="sec-lbl">Waiting to sync</div>
+          <div class="row-item"><span class="thumb"><i data-lucide="refresh-cw"></i></span><div style="flex:1"><div class="nm">Meghana Foods</div><div class="sub">From Rahul · saved offline</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="refresh-cw"></i></span><div style="flex:1"><div class="nm">Toit</div><div class="sub">Added to wishlist · saved offline</div></div></div>
+          <p class="muted" style="font-size:12.5px;margin:10px 18px 0">Drafts without a Google place stay on this phone until you pick one.</p>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>F6 Offline drafts + F8 offline banner.</b> The dark strip appears at the top of any screen while offline. Drafts that never match a Google place stay on the device.</figcaption>
+    </figure>
+
+    <!-- F7 delete account -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Delete account</span></div>
+        <div class="body form">
+          <img src="assets/cat-sitting.png" alt="" style="width:110px;margin:0 auto;filter:grayscale(.35)">
+          <h1 class="h-md" style="text-align:center">Sad to see you go, Karthik</h1>
+          <div class="panel" style="margin:0;padding:6px 0">
+            <div class="grow"><span class="ic"><i data-lucide="utensils"></i></span><div>17 visits and your reviews</div></div>
+            <div class="grow"><span class="ic"><i data-lucide="message-circle"></i></span><div>12 friend and internet entries</div></div>
+            <div class="grow"><span class="ic"><i data-lucide="users-round"></i></span><div>9 connections and your lists</div></div>
+          </div>
+          <p class="t" style="font-size:14px;margin:0">All of this is deleted permanently. Tags on other people's visits are removed.</p>
+          <div class="field"><label>Type <b>karthik_eats</b> to confirm</label><div class="inp"><span class="muted">Your username</span></div></div>
+        </div>
+        <div class="bar2"><button class="btn" style="background:var(--bad);color:#fff;opacity:.45">Delete my account</button></div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>F7 Delete account.</b> The one place we add friction on purpose: shows what will be lost, asks you to type your username.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= PERMISSIONS ================= -->
+<section class="sec">
+  <h2>Permission explainers</h2>
+  <p>Asked only when a feature first needs them, never during onboarding. "Not now" never blocks the app.</p>
+  <div class="row">
+    <figure>
+      <div class="phone"><div class="scr bare" style="background:var(--map-land)">
+        <div class="map"><svg class="base"><use href="#mapbase"/></svg></div>
+        <div class="sb" style="position:relative;z-index:6"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic"><i data-lucide="locate-fixed"></i></span>
+          <h2 class="h-md">Show places near you?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">We use your location only to centre the map and list nearby places first. It's never shared.</p>
+          <div class="dlg-acts"><span class="tbtn">Not now</span><span class="tbtn strong">Allow</span></div>
+        </div>
+      </div></div>
+      <figcaption><b>A7 Location.</b> First time you open the Map or the place picker. Then Android's own prompt follows.</figcaption>
+    </figure>
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="body listsurf" style="margin-top:60px">
+          <div class="row-item"><span class="av a5" style="width:48px;height:48px">A</span><div style="flex:1"><div class="nm">Anand K</div><div class="sub">@anandk</div></div><button class="btn btn-out btn-sm" style="height:36px;color:var(--ink-2)">Requested</button></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic"><i data-lucide="bell-ring"></i></span>
+          <h2 class="h-md">Know when Anand says yes?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">We'll only notify you about requests and tags, unless you turn on more for someone.</p>
+          <div class="dlg-acts"><span class="tbtn">Not now</span><span class="tbtn strong">Turn on</span></div>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>A7 Notifications.</b> First time you send a request or tag someone, the moment it's obviously useful.</figcaption>
+    </figure>
+  </div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script>
+  try { lucide.createIcons({ attrs: { 'stroke-width': 2 } }); } catch (e) {}
+</script>
+</body>
+</html>

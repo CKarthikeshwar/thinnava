@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinnava Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ---------- Palettes (Material-style roles) ---------- */
+:root, [data-palette="sky"]{
+  --p:#2B58A6; --p-strong:#1D3B78; --on-p:#fff;
+  --pc:#D8E7F8; --on-pc:#15305F;
+  --bg-solid:#CFE1F4; --bg:#EDF3FA; --surface:#FFFFFF; --surface-2:#EAF2FB;
+  --ink:#13213D; --ink-2:#4A5873; --ink-3:#5F6B82; --line:#DCE6F2;
+  --map-land:#EDF2F8; --map-water:#B9D5F0; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D6E0EC;
+  --scrim:rgba(16,30,60,.42);
+}
+[data-palette="cobalt"]{
+  --p:#2350D9; --p-strong:#16348F; --on-p:#fff; --pc:#DBE4FF; --on-pc:#0E2266;
+  --bg-solid:#D5E0FF; --bg:#EEF2FF; --surface:#FFFFFF; --surface-2:#E6ECFF;
+  --ink:#10183A; --ink-2:#46507A; --ink-3:#5C668C; --line:#D9E0F7;
+  --map-land:#EEF1FB; --map-water:#BCCBF5; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D8DEF0; --scrim:rgba(10,20,60,.42);
+}
+[data-palette="cerulean"]{
+  --p:#0B6FA4; --p-strong:#08476B; --on-p:#fff; --pc:#D2EAF7; --on-pc:#06324C;
+  --bg-solid:#CDE6F3; --bg:#EEF7FB; --surface:#FFFFFF; --surface-2:#E3F1F8;
+  --ink:#0E2230; --ink-2:#45606F; --ink-3:#56707E; --line:#D3E6EF;
+  --map-land:#EDF5F9; --map-water:#B5D9EC; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D3E3EB; --scrim:rgba(5,30,45,.42);
+}
+[data-palette="indigo"]{
+  --p:#3B4CC0; --p-strong:#232D78; --on-p:#fff; --pc:#DFE2FA; --on-pc:#1A2160;
+  --bg-solid:#D9DDF6; --bg:#F1F2FC; --surface:#FFFFFF; --surface-2:#E7E9FA;
+  --ink:#14173A; --ink-2:#4B4F7A; --ink-3:#5D618C; --line:#DDE0F3;
+  --map-land:#F0F1FA; --map-water:#C3C9F0; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#DADDF0; --scrim:rgba(15,18,60,.42);
+}
+[data-palette="denim"]{
+  --p:#3D6491; --p-strong:#24405F; --on-p:#fff; --pc:#DCE6F1; --on-pc:#1A3049;
+  --bg-solid:#D6E1EC; --bg:#F0F4F8; --surface:#FFFFFF; --surface-2:#E5ECF3;
+  --ink:#172231; --ink-2:#4C5B6C; --ink-3:#5E6B7A; --line:#DAE2EA;
+  --map-land:#EEF2F6; --map-water:#BFD2E6; --map-park:#D3EBD6; --map-road:#FFFFFF; --map-road-edge:#D7DFE8; --scrim:rgba(15,25,40,.42);
+}
+[data-palette="masala"]{
+  --p:#C1532A; --p-strong:#86361A; --on-p:#fff;
+  --pc:#FADFD0; --on-pc:#5A230F;
+  --bg-solid:#F6DCCB; --bg:#FFF6F0; --surface:#FFFFFF; --surface-2:#FCEBE1;
+  --ink:#2A1A13; --ink-2:#6D5146; --ink-3:#7A5F55; --line:#F0DCD0;
+  --map-land:#FAF1EA; --map-water:#BFD9E6; --map-park:#DCEBCF; --map-road:#FFFFFF; --map-road-edge:#EBDACE;
+  --scrim:rgba(50,22,10,.42);
+}
+[data-palette="pista"]{
+  --p:#1E6A56; --p-strong:#124639; --on-p:#fff;
+  --pc:#D1ECE1; --on-pc:#0D3A2E;
+  --bg-solid:#CFE9DC; --bg:#F2FAF6; --surface:#FFFFFF; --surface-2:#E5F3EC;
+  --ink:#11251E; --ink-2:#4A6258; --ink-3:#5A6F67; --line:#D5E8DE;
+  --map-land:#EEF5F0; --map-water:#BCD9E8; --map-park:#CFE8D3; --map-road:#FFFFFF; --map-road-edge:#D7E5DC;
+  --scrim:rgba(10,36,28,.42);
+}
+:root{
+  --good:#17703E; --good-bg:#DDF2E4;
+  --ok:#845300; --ok-bg:#FBEFD2;
+  --bad:#A8301F; --bad-bg:#FADFDB;
+  --display:"Fredoka", system-ui, sans-serif;
+  --body:"Nunito", system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+
+/* ---------- Gallery chrome ---------- */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--body);color:var(--ink);background:#E9EDF2;}
+::selection{background:var(--pc);color:var(--on-pc)}
+.gal-head{position:sticky;top:0;z-index:50;background:rgba(233,237,242,.92);backdrop-filter:blur(10px);border-bottom:1px solid #d9dee6}
+.gal-head .in{max-width:1500px;margin:0 auto;padding:12px 24px;display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap}
+.gal-title{font-family:var(--display);font-weight:600;font-size:22px;margin:0;color:#1b2333;display:flex;align-items:center;gap:10px}
+.gal-title img{width:34px;height:auto}
+.gnd{margin-left:auto}
+.gal-title small{font-family:var(--body);font-weight:600;font-size:13px;color:#5e6878}
+.pal{display:flex;gap:6px;background:#fff;border-radius:999px;padding:4px;border:1px solid #d9dee6}
+.pal button{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px;color:#3b4454}
+.pal button:focus-visible{outline:2px solid #1b2333;outline-offset:2px}
+.pal button[aria-pressed="true"]{background:#1b2333;color:#fff}
+.sw{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+main{max-width:1500px;margin:0 auto;padding:12px 24px 80px}
+.sec{margin-top:36px}
+.sec h2{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 4px;color:#1b2333}
+.sec > p{margin:0 0 18px;color:#5e6878;max-width:70ch;line-height:1.5;font-size:14.5px}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+figure{margin:0;display:flex;flex-direction:column;gap:10px;width:360px}
+figcaption{font-size:13px;line-height:1.45;color:#5e6878}
+figcaption b{color:#1b2333;font-weight:800;margin-right:4px}
+.vs{display:inline-block;font-weight:800;font-size:12px;letter-spacing:.02em;background:#1b2333;color:#fff;border-radius:6px;padding:2px 7px;margin-right:6px}
+
+/* ---------- Phone ---------- */
+.phone{width:360px;height:780px;border-radius:38px;position:relative;overflow:hidden;background:var(--bg);
+  box-shadow:0 0 0 7px #fbfcfd,0 0 0 8px #d5dbe3,0 24px 50px -18px rgba(20,30,50,.35);isolation:isolate}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background-color:var(--bg);isolation:isolate}
+/* Ground: minimal abstract art. Flat, hard-edged tonal shapes (plate, rim, spice dots, steam), no blur, no gradient */
+[data-ground="solid"] .scr:not(.bare){background-color:var(--bg-solid)}
+.art{display:none}
+[data-ground="art"] .art-art,[data-ground="food"] .art-food,[data-ground="rings"] .art-rings,[data-ground="blocks"] .art-blocks,[data-ground="foodline"] .art-foodline,[data-ground="thali"] .art-thali{display:block}
+.art{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.art .a1{fill:color-mix(in srgb,var(--p) 8%,var(--bg))}
+.art .a2{fill:color-mix(in srgb,var(--p) 15%,var(--bg))}
+.art .a3{fill:var(--p);opacity:.55}
+.art .lt{fill:none;stroke:color-mix(in srgb,var(--p) 18%,var(--bg));stroke-width:1.4}
+.art .fl{fill:none;stroke:color-mix(in srgb,var(--p) 26%,var(--bg));stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.art .hole{fill:var(--bg)}
+.art .ln{fill:none;stroke:color-mix(in srgb,var(--p) 30%,var(--bg));stroke-width:1.6;stroke-linecap:round}
+.sb{height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;font-size:13px;font-weight:700;color:var(--ink)}
+.sb .ic{display:flex;gap:5px;align-items:center}
+.sb svg{width:15px;height:15px}
+.gest{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:108px;height:4px;border-radius:4px;background:var(--ink);opacity:.55;z-index:30}
+.body{flex:1;overflow:hidden;position:relative}
+svg.i{width:22px;height:22px;stroke-width:2}
+
+/* type roles */
+.wordmark{font-family:var(--display);font-weight:600;color:var(--p-strong);letter-spacing:.005em}
+.h-lg{font-family:var(--display);font-weight:600;font-size:26px;line-height:1.15;margin:0;color:var(--ink);text-wrap:balance}
+.h-md{font-family:var(--display);font-weight:600;font-size:20px;line-height:1.2;margin:0;color:var(--ink)}
+.t{font-size:15px;line-height:1.45;color:var(--ink-2)}
+.lbl{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+
+/* top app bar */
+.tab{height:56px;display:flex;align-items:center;gap:6px;padding:0 10px 0 18px;flex:none}
+.tab .wordmark{font-size:24px;flex:1}
+.tab .title{font-family:var(--display);font-weight:600;font-size:22px;flex:1;color:var(--ink)}
+.icb{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface);box-shadow:0 1px 2px rgba(20,30,50,.08);position:relative;border:0}
+.icb.ghost{background:transparent;box-shadow:none}
+.dot-badge{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--bad);box-shadow:0 0 0 2px var(--surface)}
+
+/* bottom nav (Material navigation bar) */
+.nav{height:78px;flex:none;background:var(--surface);display:flex;align-items:flex-start;justify-content:space-around;padding:10px 6px 0;border-top:1px solid var(--line);position:relative;z-index:20}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--ink-2);text-decoration:none;width:64px}
+.nav .pill{width:56px;height:30px;border-radius:16px;display:grid;place-items:center}
+.nav a.on{color:var(--ink)}
+.nav a.on .pill{background:var(--pc);color:var(--on-pc)}
+.nav .plus{width:52px;height:52px;border-radius:18px;background:var(--p);color:var(--on-p);display:grid;place-items:center;margin-top:-4px;box-shadow:0 6px 14px -6px var(--p)}
+.nav .plus svg{width:26px;height:26px}
+
+/* buttons, chips */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:999px;font-family:var(--body);font-weight:800;font-size:16px;border:0;width:100%}
+.btn-p{background:var(--p);color:var(--on-p)}
+.btn-tonal{background:var(--pc);color:var(--on-pc)}
+.btn-out{background:transparent;color:var(--p);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-white{background:#fff;color:#1f1f1f}
+.btn-sm{height:40px;font-size:14px;width:auto;padding:0 16px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border-radius:10px;font-size:13.5px;font-weight:700;color:var(--ink-2);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap}
+.chip.on{background:var(--pc);color:var(--on-pc);box-shadow:none}
+.chip svg{width:16px;height:16px}
+.st{width:12px;height:12px;vertical-align:-1px;margin-left:2px;fill:currentColor}
+.chips{display:flex;gap:8px;overflow:hidden;padding:0 18px}
+
+/* review pills */
+.rv{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px 0 7px;border-radius:999px;font-size:13px;font-weight:800}
+.rv svg{width:16px;height:16px}
+.rv.good{background:var(--good-bg);color:var(--good)}
+.rv.ok{background:var(--ok-bg);color:var(--ok)}
+.rv.bad{background:var(--bad-bg);color:var(--bad)}
+
+/* avatars & source marks */
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none;color:#fff}
+.av.sm{width:28px;height:28px;font-size:12px}
+.av.a1{background:#E07A5F}.av.a2{background:#6C8EBF}.av.a3{background:#7FB069}.av.a4{background:#B07AA1}.av.a5{background:#E3A73B}
+.src{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--surface-2);color:var(--p-strong)}
+.src svg{width:20px;height:20px}
+
+/* timeline card */
+.feed{padding:4px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--surface);border-radius:20px;padding:14px 14px 13px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 6px 18px -12px rgba(20,30,50,.22)}
+.card .top{display:flex;gap:11px;align-items:flex-start}
+.card .who{font-size:14px;color:var(--ink-2);line-height:1.35}
+.card .who b{color:var(--ink);font-weight:800}
+.card .place{font-family:var(--display);font-weight:600;font-size:17.5px;color:var(--ink);line-height:1.2;margin-top:1px}
+.card .meta{font-size:12.5px;color:var(--ink-3);font-weight:600;margin-top:2px;display:flex;gap:6px;align-items:center}
+.card .meta svg{width:13px;height:13px}
+.card .lines{margin:10px 0 0 51px;display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--ink-2)}
+.card .lines div{display:flex;gap:7px;align-items:flex-start;line-height:1.35}
+.card .lines svg{width:16px;height:16px;flex:none;margin-top:1px}
+.card .foot{margin:11px 0 0 51px;display:flex;gap:8px;align-items:center}
+.price{font-size:13.5px;font-weight:800;color:var(--ink)}
+.priv{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--ink-3)}
+.priv svg{width:13px;height:13px}
+.time{margin-left:auto;font-size:12px;font-weight:700;color:var(--ink-3)}
+
+/* bottom sheet */
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:24}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:28px 28px 0 0;z-index:25;padding:10px 0 30px;box-shadow:0 -10px 30px -10px rgba(10,20,40,.25)}
+.handle{width:36px;height:4px;border-radius:4px;background:var(--line);margin:4px auto 14px}
+.opt{display:flex;align-items:center;gap:14px;padding:12px 22px;font-size:15.5px;font-weight:700;color:var(--ink)}
+.opt small{display:block;font-weight:600;font-size:13px;color:var(--ink-3);margin-top:1px}
+.opt .src{width:40px;height:40px}
+.radio{margin-left:auto;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--ink-3)}
+.radio.on{box-shadow:inset 0 0 0 2px var(--p),inset 0 0 0 6px var(--surface);background:var(--p)}
+
+/* inputs */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13px;font-weight:800;color:var(--ink-2)}
+.inp{height:54px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line);display:flex;align-items:center;padding:0 16px;font-size:16px;font-weight:600;color:var(--ink);gap:6px}
+.inp.focus{box-shadow:inset 0 0 0 2px var(--p)}
+.inp .muted{color:var(--ink-3)}
+.caret{width:2px;height:20px;background:var(--p);margin-left:-4px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.help{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:5px}
+.help svg{width:15px;height:15px}
+.help.ok{color:var(--good)}.help.no{color:var(--bad)}
+
+/* map */
+.map{position:absolute;inset:0}
+.map svg.base{position:absolute;inset:0;width:100%;height:100%}
+.m-land{fill:var(--map-land)}.m-water{fill:var(--map-water)}.m-park{fill:var(--map-park)}
+.m-road{stroke:var(--map-road);fill:none;stroke-linecap:round}
+.m-edge{stroke:var(--map-road-edge);fill:none;stroke-linecap:round}
+.m-lbl{font-family:var(--body);font-weight:700;font-size:10.5px;fill:var(--ink-3);letter-spacing:.06em}
+.pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;z-index:5}
+.pin .bub{white-space:nowrap;display:flex;align-items:center;gap:5px;background:var(--surface);border-radius:999px;padding:4px 10px 4px 4px;font-size:12.5px;font-weight:800;color:var(--ink);box-shadow:0 4px 12px -4px rgba(10,20,40,.35)}
+.pin .bub .av{width:24px;height:24px;font-size:11px}
+.pin .tail{width:10px;height:10px;background:var(--surface);transform:rotate(45deg);margin-top:-6px;box-shadow:3px 3px 5px -3px rgba(10,20,40,.3)}
+.pin.me .bub{background:var(--p);color:var(--on-p)}
+.pin.me .tail{background:var(--p)}
+.pin .g{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--p-strong)}
+.pin.me .g{background:rgba(255,255,255,.2);color:#fff}
+.pin .g svg{width:14px;height:14px}
+.pin.sel .bub{box-shadow:0 0 0 3px var(--p),0 6px 16px -4px rgba(10,20,40,.4)}
+.cluster{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:var(--p-strong);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;box-shadow:0 0 0 5px rgba(255,255,255,.7);z-index:4}
+.youdot{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--p);box-shadow:0 0 0 4px #fff,0 0 0 14px color-mix(in srgb,var(--p) 18%,transparent);transform:translate(-50%,-50%);z-index:4}
+
+/* misc */
+.seg{display:flex;background:var(--surface-2);border-radius:999px;padding:4px;margin:0 18px}
+.seg span{flex:1;text-align:center;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:14px;color:var(--ink-2)}
+.seg span.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(20,30,50,.12)}
+.seg svg{width:16px;height:16px}
+.search{margin:0 18px;height:52px;border-radius:999px;background:var(--surface);display:flex;align-items:center;gap:10px;padding:0 8px 0 18px;box-shadow:0 1px 2px rgba(20,30,50,.06),0 8px 20px -14px rgba(20,30,50,.3);font-size:15.5px;font-weight:600;color:var(--ink-3)}
+.search svg{color:var(--ink-2)}
+.search .typed{color:var(--ink)}
+.row-item{display:flex;align-items:center;gap:12px;padding:11px 18px}
+.row-item .nm{font-weight:800;font-size:15.5px;color:var(--ink);line-height:1.25}
+.row-item .sub{font-size:13px;color:var(--ink-3);font-weight:600;margin-top:2px}
+.thumb{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--surface-2);color:var(--p-strong);flex:none}
+.stack{display:flex}
+.stack .av{width:24px;height:24px;font-size:10.5px;box-shadow:0 0 0 2px var(--surface);margin-left:-7px}
+.stack .av:first-child{margin-left:0}
+.sec-lbl{font-size:13px;font-weight:800;color:var(--ink-3);padding:14px 18px 4px;letter-spacing:.02em}
+.body.listsurf{background:var(--surface);border-radius:26px 26px 0 0;margin-top:12px}
+.divider{height:1px;background:var(--line);margin:0 18px}
+
+/* onboarding */
+.ob-word{font-family:var(--display);font-weight:600;font-size:42px;color:var(--p-strong);text-align:center;letter-spacing:.01em;margin:0}
+.ob-card{background:var(--p-strong);color:#fff;border-radius:30px;position:relative}
+.ob-card .h-lg{color:#fff}
+.ob-card p{color:rgba(255,255,255,.82);margin:0}
+.share-hint{background:rgba(255,255,255,.1);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;color:#fff}
+.share-hint .k{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.16);border-radius:8px;padding:3px 7px;font-size:12.5px;white-space:nowrap}
+.share-hint .k svg{width:14px;height:14px}
+.share-hint > svg{width:20px;height:20px;flex:none}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:4px;background:var(--line)}
+.dots i.on{width:22px;background:var(--p)}
+.gl{width:20px;height:20px}
+.vals{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.vals li{display:flex;align-items:center;gap:12px;font-size:15.5px;font-weight:700;color:#fff}
+.vals li span{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none}
+.vals li svg{width:18px;height:18px}
+.legal{font-size:11.5px;color:var(--ink-3);text-align:center;line-height:1.4}
+.ob-card .legal{color:rgba(255,255,255,.6)}
+
+/* fab speed dial */
+.dial{position:absolute;left:0;right:0;bottom:96px;z-index:26;display:flex;justify-content:center;gap:22px}
+.dial .d{display:flex;flex-direction:column;align-items:center;gap:8px;width:92px;text-align:center}
+.dial .c{width:62px;height:62px;border-radius:50%;background:var(--surface);color:var(--p-strong);display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+.dial .c svg{width:26px;height:26px}
+.dial .d > span:last-child{font-size:13px;font-weight:800;color:var(--ink);line-height:1.25;background:var(--surface);border-radius:12px;padding:5px 9px;box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.dial .d.mid{transform:translateY(-34px)}
+
+@media (prefers-reduced-motion:reduce){.caret{animation:none}}
+@media (max-width:520px){main,.gal-head .in{padding-left:16px;padding-right:16px} figure{width:100%;align-items:center} .pal{margin-left:0}}
+
+/* ---------- Phase 2 components ---------- */
+.muted{color:var(--ink-3)} .sm{font-size:12.5px;font-weight:600}
+.t-good{color:var(--good)} .t-ok{color:var(--ok)}
+.hero-place{padding:0 18px}
+.meta-line{font-size:13.5px;font-weight:700;color:var(--ink-2);margin-top:6px;display:flex;align-items:center;gap:2px}
+.acts{display:flex;gap:8px;padding:16px 14px 14px}
+.act{flex:0 0 78px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--ink-2)}
+.act .c{width:54px;height:54px;border-radius:18px;background:var(--surface);display:grid;place-items:center;color:var(--p);box-shadow:0 1px 2px rgba(20,30,50,.06),0 8px 18px -12px rgba(20,30,50,.35)}
+.act .c svg{width:22px;height:22px}
+.act .c.brand svg{fill:currentColor}
+.act .c.swiggy svg{width:26px;height:26px}
+.act .c.zomato svg{width:40px;height:40px}
+.act .c .dw{font-family:var(--body);font-weight:800;font-size:12.5px;letter-spacing:-.02em;color:currentColor} /* placeholder: swap for the official District logo in the app */
+.panel{background:var(--surface);border-radius:24px;margin:0 14px;padding:4px 0;box-shadow:0 1px 2px rgba(20,30,50,.05),0 6px 18px -12px rgba(20,30,50,.22)}
+.panel h3{font-family:var(--display);font-weight:600;font-size:16px;margin:0;padding:12px 16px 6px;color:var(--ink)}
+.hist{display:flex;gap:8px;padding:2px 16px 12px;flex-wrap:wrap}
+.hist .chip b{margin-left:4px}
+.person{display:flex;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.panel h3 + .person{border-top:0}
+.person .pc{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.pn{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-2)} .pn b{color:var(--ink)} .pn .rv{margin-left:auto}
+.pl{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--ink-2)} .pl svg{width:15px;height:15px;flex:none}
+.pl.muted{color:var(--ink-3);font-size:12.5px;font-weight:700}
+.efab{position:absolute;right:16px;bottom:28px;height:56px;border-radius:18px;background:var(--p);color:var(--on-p);display:flex;align-items:center;gap:10px;padding:0 20px 0 16px;font-weight:800;font-size:15.5px;box-shadow:0 10px 22px -10px var(--p-strong);z-index:10}
+.snack{position:absolute;left:12px;right:12px;bottom:26px;background:var(--ink);color:#fff;border-radius:14px;padding:14px 16px;display:flex;align-items:center;font-size:14px;font-weight:700;z-index:22;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.sa{margin-left:auto;color:var(--pc);font-weight:800;font-size:14px;white-space:nowrap;padding-left:12px}
+.grow{display:flex;align-items:center;gap:14px;padding:13px 16px;font-weight:700;font-size:15px;color:var(--ink);border-top:1px solid var(--line)}
+.grow:first-child{border-top:0}
+.grow .ic{width:38px;height:38px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;color:var(--p-strong);flex:none}
+.grow .ic svg{width:18px;height:18px}
+.grow .chev{width:18px;height:18px;color:var(--ink-3);flex:none}
+.group{background:var(--surface);border-radius:22px;margin:0 16px 12px;overflow:hidden;box-shadow:0 1px 2px rgba(20,30,50,.05),0 6px 18px -12px rgba(20,30,50,.22)}
+.badge{min-width:22px;height:22px;border-radius:11px;background:var(--bad);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;padding:0 6px}
+.closed{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;font-weight:800}
+.closed svg{width:15px;height:15px}
+.placelink{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.placelink .nm,.placebar .nm,.cand .nm{font-weight:800;font-size:15.5px;color:var(--ink)}
+.placelink .sub,.placebar .sub,.cand .sub{font-size:13px;color:var(--ink-3);font-weight:600;margin-top:2px}
+.rv.big{height:32px;font-size:15px;padding:0 14px 0 10px} .rv.big svg{width:19px;height:19px}
+.facts{display:grid;grid-template-columns:96px 1fr;gap:9px 10px;margin:14px 0 0;font-size:14.5px}
+.facts dt{color:var(--ink-3);font-weight:700;font-size:13px;padding-top:1px} .facts dd{margin:0;color:var(--ink);font-weight:700}
+.quote{background:#E5F5DA;border-radius:16px 16px 16px 4px;padding:12px 14px;font-size:14px;line-height:1.45;color:#1f2d1a}
+.wa{max-width:78%;background:#fff;border-radius:4px 14px 14px 14px;padding:9px 12px;font-size:14px;line-height:1.4;color:#1d1d1d;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.reading{width:100%;background:var(--surface-2);border-radius:20px;padding:22px 18px 18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.reading b{font-size:15.5px;color:var(--ink);margin-bottom:4px}
+.sk{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,var(--line) 0%,var(--surface) 50%,var(--line) 100%);background-size:200% 100%;animation:sk 1.4s var(--ease) infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.step{height:30px;padding:0 12px;border-radius:999px;background:var(--pc);color:var(--on-pc);font-size:13px;font-weight:800;display:grid;place-items:center;margin-right:8px}
+.form{padding:2px 18px 0;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.req{font-size:11.5px;font-weight:800;color:var(--bad);background:var(--bad-bg);border-radius:6px;padding:2px 6px;margin-left:6px}
+.optl{font-size:12px;font-weight:600;color:var(--ink-3);margin-left:4px}
+.sugg{display:flex;gap:6px;flex-wrap:wrap}
+.sugg .chip{height:30px;font-size:13px}
+.chg{margin-left:auto;color:var(--p);font-weight:800;font-size:13.5px}
+.inp.warn{box-shadow:inset 0 0 0 2px #E2A417}
+.flag{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:var(--ok)} .flag svg{width:15px;height:15px}
+.revsel{display:flex;gap:8px}
+.revsel span{flex:1;height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:14.5px;color:var(--ink-2);background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line)}
+.revsel span svg{width:19px;height:19px}
+.revsel span.on.good{background:var(--good-bg);color:var(--good);box-shadow:inset 0 0 0 2px var(--good)}
+.chipin{display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:50px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line);padding:8px 10px}
+.ichip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 8px 0 12px;border-radius:10px;background:var(--pc);color:var(--on-pc);font-weight:800;font-size:13.5px}
+.ichip svg{width:15px;height:15px}
+.addc{display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 8px;color:var(--p);font-weight:800;font-size:13.5px} .addc svg{width:16px;height:16px}
+.bar2{display:flex;gap:10px;padding:12px 18px 30px;background:var(--surface);border-top:1px solid var(--line);position:relative;z-index:3}
+.cand{display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line)} .cand:first-child{border-top:0}
+.mthumb{width:64px;height:64px;border-radius:14px;overflow:hidden;position:relative;flex:none}
+.mthumb svg{position:absolute;width:260px;height:400px;left:-90px;top:-150px}
+.mdot{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;background:var(--p);box-shadow:0 0 0 3px #fff;transform:translate(-50%,-50%)}
+.placebar{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:18px;padding:10px 12px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.two{display:grid;grid-template-columns:1fr 1.25fr;gap:10px}
+.aud{display:flex;align-items:center;gap:12px;background:var(--surface-2);border-radius:16px;padding:12px 14px;font-size:13px;color:var(--ink-2);font-weight:700}
+.aud b{display:block;color:var(--ink);font-size:15px} .aud svg{width:20px;height:20px;color:var(--p-strong)}
+.clip{display:flex;align-items:center;gap:12px;margin:0 18px 12px;background:var(--ink);color:#fff;border-radius:16px;padding:11px 14px}
+.clip b{display:block;font-size:14px} .clip span:not(.sa){font-size:12.5px;opacity:.8;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.clip svg{width:20px;height:20px;flex:none}
+.check{width:24px;height:24px;border-radius:8px;box-shadow:inset 0 0 0 2px var(--ink-3);display:grid;place-items:center;flex:none}
+.check.on{background:var(--p);box-shadow:none;color:#fff} .check svg{width:16px;height:16px;stroke-width:3}
+.dialog{position:absolute;left:24px;right:24px;top:50%;transform:translateY(-50%);background:var(--surface);border-radius:28px;padding:24px 24px 14px;z-index:26;box-shadow:0 24px 50px -20px rgba(0,0,0,.45)}
+.dlg-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--pc);color:var(--p-strong);margin-bottom:14px}
+.dlg-ic svg{width:22px;height:22px}
+.dlg-acts{display:flex;justify-content:flex-end;gap:4px;margin-top:18px}
+.tbtn{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 14px;border-radius:999px;font-weight:800;font-size:15px;color:var(--p)}
+.tbtn.danger{color:var(--bad)} .tbtn.strong{background:var(--p);color:#fff;padding:0 20px}
+.mtabs{display:flex;background:var(--surface);border-bottom:1px solid var(--line);margin-top:4px}
+.mtabs span{flex:1;text-align:center;padding:14px 0 12px;font-weight:800;font-size:14.5px;color:var(--ink-2);position:relative}
+.mtabs span.on{color:var(--p)}
+.mtabs span.on::after{content:"";position:absolute;left:24%;right:24%;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--p)}
+.note{display:flex;gap:12px;padding:12px 18px;font-size:14.5px;color:var(--ink-2);line-height:1.4;align-items:flex-start}
+.note b{color:var(--ink)}
+.nacts{display:flex;gap:8px;margin-top:8px}
+.merge{display:flex;align-items:center;gap:12px;margin:0 16px;background:var(--ok-bg);color:var(--ink);border-radius:16px;padding:12px 14px}
+.merge b{display:block;font-size:14.5px} .merge span:not(.sa){font-size:13px;color:var(--ink-2);display:block} .merge svg{width:20px;height:20px;color:var(--ok);flex:none}
+.merge .sa{color:var(--p)}
+.offline{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:9px 18px;position:relative;z-index:4}
+.offline svg{width:16px;height:16px}
+
+/* ---------- Motion prototype ---------- */
+.mo{max-width:1400px;margin:0 auto;padding:28px 24px 80px;display:grid;grid-template-columns:400px 1fr;gap:48px;align-items:start}
+.mo-stage{position:sticky;top:84px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.stage{position:absolute;inset:0;overflow:hidden}
+.view{display:none}.view.on{display:flex}
+.tabv .body{padding-bottom:78px}
+.phone .nav{position:absolute;left:0;right:0;bottom:0;z-index:20;transition:transform .3s cubic-bezier(.05,.7,.1,1)}
+.phone .nav.hide{transform:translateY(110%);transition-timing-function:cubic-bezier(.3,0,.8,.15);transition-duration:.2s}
+.nav a{cursor:pointer}.nav .pill{transition:background-color .25s cubic-bezier(.2,0,0,1),color .25s}
+.wel{display:flex;flex-direction:column;padding:0 22px 28px}
+.wtop{display:flex;justify-content:space-between;align-items:center;height:48px}
+.gbtn{background:var(--p-strong)}.gwrap{background:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center}
+.mini-share{margin-top:14px;background:var(--surface);border-radius:24px;padding:14px;box-shadow:0 10px 30px -18px rgba(20,30,50,.4)}
+.mini-map{margin-top:14px;height:250px;border-radius:24px;overflow:hidden;position:relative}
+.mini-map svg.base{position:absolute;inset:0;width:100%;height:100%}
+.peekwrap{position:relative;display:flex;justify-content:center;margin:18px 0 -11px;z-index:1}
+.peekwrap.sm{margin:0 0 -9px}
+.setup-card{background:var(--surface);border-radius:30px 30px 0 0;flex:1;padding:36px 22px 26px;display:flex;flex-direction:column;gap:18px;position:relative;z-index:2}
+.reading{position:relative;z-index:2}
+.ustate{margin-left:auto;display:grid;place-items:center;width:24px;height:24px;color:var(--good)}
+.spin{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--p);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tapcard,.tappin,[data-go]{cursor:pointer}
+.sheet-scrim,#wa-scrim,.dial-scrim{opacity:0;pointer-events:none}
+.sheet-scrim.open,#wa-scrim.open,.dial-scrim.open{opacity:1;pointer-events:auto}
+.dial-scrim{z-index:19;background:color-mix(in srgb,var(--p-strong) 84%,transparent)}
+.fsheet,.pincard,#wa-sheet{transform:translateY(110%)}
+.fsheet.open,.pincard.open,#wa-sheet.open{transform:none}
+.pincard{bottom:78px;left:8px;right:8px;border-radius:28px;padding-bottom:18px;z-index:21}
+#dial{pointer-events:none}#dial.open{pointer-events:auto}
+#dial .d{opacity:0}
+#dial .d .c{cursor:pointer}
+.plus svg{transition:none}
+#heart{transition:background-color .2s cubic-bezier(.2,0,0,1),color .2s}
+#heart.liked{background:var(--p);color:#fff}#heart.liked svg{fill:currentColor}
+.snack{transform:translateY(170%)}
+.ghost{position:absolute;margin:0;z-index:40;pointer-events:none}
+.tglide{font-family:var(--display);font-weight:600;color:var(--ink);line-height:1.15;transform-origin:0 0;white-space:nowrap}
+.pin.sel .bub{box-shadow:0 0 0 3px var(--p),0 6px 16px -4px rgba(10,20,40,.4)}
+.mo-ctrl{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13.5px;color:#3b4454}
+.rm{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}.rm small{font-weight:600;color:#6b7383}
+.rm input{width:18px;height:18px;accent-color:#2350D9}
+.mo-reset{all:unset;cursor:pointer;font-weight:800;color:#2350D9;padding:6px 10px;border-radius:8px}
+.mo-reset:focus-visible,.play:focus-visible{outline:2px solid #2350D9;outline-offset:2px}
+.mo-spec{max-width:68ch;color:#1b2333}
+.mo-h{font-family:var(--display);font-weight:600;font-size:30px;margin:4px 0 6px}
+.mo-lede{font-size:15px;line-height:1.55;color:#4a5263;margin:0 0 8px}
+.mo-group{font-family:var(--display);font-weight:600;font-size:19px;margin:30px 0 10px}
+.mo-item{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;background:#fff;border-radius:18px;padding:16px 18px;margin-bottom:10px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 8px 20px -16px rgba(20,30,50,.3)}
+.mo-item.hero{box-shadow:inset 0 0 0 2px #2350D9,0 10px 26px -16px rgba(35,80,217,.5)}
+.mo-item b{font-size:16px}
+.mo-meta{display:block;font-size:12.5px;font-weight:700;color:#2350D9;margin:3px 0 6px}
+.mo-item p,.mo-item li{font-size:14px;line-height:1.5;color:#4a5263;margin:0}
+.mo-item ol{margin:4px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.play{all:unset;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;height:40px;min-width:64px;border-radius:999px;background:#2350D9;color:#fff;font-weight:800;font-size:14px}
+.play[disabled]{opacity:.45;cursor:default}
+.mo-tok{border-collapse:collapse;width:100%;background:#fff;border-radius:16px;overflow:hidden;font-size:14px}
+.mo-tok th,.mo-tok td{text-align:left;padding:10px 14px;border-bottom:1px solid #e6e9ef}
+.mo-tok th{font-size:12.5px;color:#6b7383;background:#f6f7fa}
+.mo-tok code{font-size:12.5px;background:#eef2ff;padding:2px 6px;border-radius:6px;color:#16348F}
+@media (max-height:960px){.mo-stage .phone{transform:scale(.8);transform-origin:top center;margin-bottom:-156px}}
+@media (max-height:800px){.mo-stage{top:66px}.mo-stage .phone{transform:scale(.68);margin-bottom:-250px}}
+@media (max-width:900px){.mo{grid-template-columns:1fr}.mo-stage{position:static}}
+</style>
+</head>
+<body data-palette="cobalt" data-ground="rings">
+<!--
+THESIS: Motion for Thinnava?! that explains, never decorates: fast Material transitions for everyday navigation, one authored moment where a friend's message becomes a saved entry.
+OWN-WORLD: Inherited from DESIGN.md (Cobalt, Mist ground, Rings on main tabs, white cards, Fredoka + Nunito, chef cat). Motion material: Material 3 emphasized curves; the chef cat climbing over card edges is the brand's motion signature.
+STORY: Launch -> welcome -> profile -> Home; card expands into place; share import lifts the message, the cat reads it, fields fill, Save drops a new card into Home.
+FIRST VIEWPORT: Phone prototype (left, sticky) auto-playing launch; motion spec with Play buttons and tokens (right).
+FORM: Extension of the established world; motion thesis per animate.md; no concept roll.
+-->
+<header class="gal-head"><div class="in">
+  <h1 class="gal-title"><img src="assets/cat-peek.png" alt="">Thinnava?! <small>Motion &amp; transitions · clickable prototype</small></h1>
+  <a href="phase1.html" style="margin-left:auto;font-weight:800;font-size:14px;color:#1b2333">Phase 1</a>
+  <a href="phase2.html" style="font-weight:800;font-size:14px;color:#1b2333">Phase 2</a>
+</div></header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="g-logo" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></symbol>
+    <symbol id="mapbase" viewBox="0 0 360 700" preserveAspectRatio="xMidYMid slice">
+      <rect class="m-land" width="360" height="700"/>
+      <path class="m-water" d="M228 118c26-14 66-8 80 14s4 52-20 60-48 24-70 10-14-70 10-84z"/>
+      <path class="m-water" d="M-10 560c40-20 90-6 118 18s8 70-30 80-80-4-96-30z"/>
+      <path class="m-park" d="M40 210c22-12 60-6 66 16s-14 44-40 46-46-12-46-30 2-24 20-32z"/>
+      <path class="m-park" d="M250 420c20-8 52 0 54 20s-20 36-44 34-34-20-30-34 6-14 20-20z"/>
+      <path class="m-park" d="M150 640c18-10 46-4 50 12s-12 30-34 30-34-10-34-22 4-12 18-20z"/>
+      <g class="m-edge" stroke-width="13">
+        <path d="M-20 300C80 290 160 330 380 300"/><path d="M120 -20C130 160 110 400 150 720"/><path d="M-20 470C120 480 240 430 380 520"/><path d="M260 -20C250 120 300 260 280 720"/>
+      </g>
+      <g class="m-road" stroke-width="10">
+        <path d="M-20 300C80 290 160 330 380 300"/><path d="M120 -20C130 160 110 400 150 720"/><path d="M-20 470C120 480 240 430 380 520"/><path d="M260 -20C250 120 300 260 280 720"/>
+      </g>
+      <g class="m-road" stroke-width="4">
+        <path d="M-20 140H380"/><path d="M-20 390C100 380 200 400 380 380"/><path d="M60 -20V720"/><path d="M200 -20C190 200 220 450 205 720"/><path d="M-20 600C100 610 220 580 380 620"/><path d="M320 -20V720"/><path d="M-20 60C120 70 220 40 380 70"/><path d="M-20 230C120 240 220 210 380 240"/><path d="M-20 540H380"/>
+      </g>
+      <text class="m-lbl" x="150" y="95">INDIRANAGAR</text>
+      <text class="m-lbl" x="20" y="365">KORAMANGALA</text>
+      <text class="m-lbl" x="210" y="345">DOMLUR</text>
+      <text class="m-lbl" x="196" y="575">HSR LAYOUT</text>
+      <text class="m-lbl" x="236" y="165">ULSOOR LAKE</text>
+    </symbol>
+  </defs>
+</svg>
+<main class="mo">
+  <div class="mo-stage">
+    <div class="phone" id="phone">
+      <div class="stage" id="stage">
+
+        <!-- Splash -->
+        <section class="view scr rings on" id="v-splash">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding-bottom:60px">
+            <img id="splash-cat" src="assets/cat-sitting.png" alt="" style="width:200px">
+            <p class="ob-word" id="splash-word" style="margin-top:14px">Thinnava?!</p>
+            <p class="t" style="margin:0;font-weight:700" id="splash-sub">Did you eat?</p>
+          </div>
+        </section>
+
+        <!-- Welcome 1..3 -->
+        <section class="view scr rings" id="v-w1">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="body wel">
+            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
+            <img src="assets/cat-sitting.png" alt="" style="width:180px;margin:20px auto 0">
+            <h1 class="h-lg" style="text-align:center;margin-top:22px">Remember every place your friends tell you about</h1>
+            <p class="t" style="text-align:center;margin:10px 0 0">No more scrolling chats to find "that biryani place Rahul said".</p>
+            <div style="flex:1"></div>
+            <div class="dots"><i class="on"></i><i></i><i></i></div>
+            <button class="btn btn-p gbtn" data-go="next"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+          </div>
+        </section>
+        <section class="view scr rings" id="v-w2">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="body wel">
+            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
+            <div class="mini-share">
+              <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><span class="av sm a1">R</span><b style="font-size:14px">Rahul</b><span class="muted" style="font-size:12px;font-weight:700;margin-left:auto">WhatsApp</span></div>
+              <div class="quote" style="box-shadow:inset 0 0 0 2px var(--p)">Went to Burger Factory yesterday. Chicken burger was insane…</div>
+            </div>
+            <h1 class="h-lg" style="text-align:center;margin-top:26px">Share it here. We'll do the typing.</h1>
+            <p class="t" style="text-align:center;margin:10px 0 0">Hold a message → <b>Share</b> → <b>Thinnava</b>.</p>
+            <div style="flex:1"></div>
+            <div class="dots"><i></i><i class="on"></i><i></i></div>
+            <button class="btn btn-p gbtn" data-go="next"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+          </div>
+        </section>
+        <section class="view scr rings" id="v-w3">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="body wel">
+            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span></div>
+            <div class="mini-map"><svg class="base"><use href="#mapbase"/></svg>
+              <div class="pin" style="left:30%;top:42%"><div class="bub"><span class="av a2">A</span>Good</div><div class="tail"></div></div>
+              <div class="pin" style="left:70%;top:62%"><div class="bub"><span class="av a1">R</span>Good</div><div class="tail"></div></div>
+            </div>
+            <h1 class="h-lg" style="text-align:center;margin-top:24px">See where your people ate</h1>
+            <p class="t" style="text-align:center;margin:10px 0 0">Connect with friends and see what they loved, skipped and paid.</p>
+            <div style="flex:1"></div>
+            <div class="dots"><i></i><i></i><i class="on"></i></div>
+            <button class="btn btn-p gbtn" data-go="setup"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+          </div>
+        </section>
+
+        <!-- Set up profile -->
+        <section class="view scr rings" id="v-setup">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="body" style="display:flex;flex-direction:column">
+            <div class="peekwrap"><img id="setup-cat" src="assets/cat-peek.png" alt="" style="width:150px"></div>
+            <div class="setup-card" id="setup-card">
+              <div><h1 class="h-lg">Set up your profile</h1><p class="t" style="margin:6px 0 0">This is how friends find you.</p></div>
+              <div class="field"><label>Name</label><div class="inp">Karthik C</div></div>
+              <div class="field"><label>Username</label><div class="inp focus" id="u-inp"><span class="muted">@</span><span id="u-text">karthik_eats</span><span class="caret"></span><span id="u-state" class="ustate"></span></div><span class="help ok" id="u-help" style="opacity:0"><i data-lucide="check"></i>@karthik_eats is available</span></div>
+              <div style="flex:1"></div>
+              <button class="btn btn-p" data-go="home">Let's eat</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Home -->
+        <section class="view scr rings tabv" id="v-home">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="tab"><span class="wordmark">Thinnava?!</span><button class="icb" data-go="filter"><i data-lucide="sliders-horizontal" class="i"></i></button><button class="icb"><i data-lucide="bell" class="i"></i></button></div>
+          <div class="body"><div class="feed" id="feed">
+            <article class="card tapcard" id="card-bao" data-go="place">
+              <div class="top"><span class="av a2">A</span><div style="flex:1;min-width:0"><div class="who"><b>Ananya</b> went to</div><div class="place">Bao Story</div><div class="meta"><i data-lucide="map-pin"></i>Indiranagar · with Arjun</div></div><span class="time">2h</span></div>
+              <div class="lines"><div><i data-lucide="heart" style="color:var(--p)"></i>Chicken bao, chilli oil noodles</div></div>
+              <div class="foot"><span class="rv good"><i data-lucide="smile"></i>Good</span><span class="price">₹450 / person</span></div>
+            </article>
+            <article class="card tapcard" data-go="place">
+              <div class="top"><span class="src"><i data-lucide="globe"></i></span><div style="flex:1;min-width:0"><div class="who"><b>From a reel</b></div><div class="place">Meghana Foods</div><div class="meta"><i data-lucide="map-pin"></i>Residency Road</div></div><span class="time">1d</span></div>
+              <div class="lines"><div><i data-lucide="heart" style="color:var(--p)"></i>Boneless chicken biryani</div></div>
+              <div class="foot"><span class="rv ok"><i data-lucide="meh"></i>Okayish</span><span class="priv"><i data-lucide="lock"></i>Only you</span></div>
+            </article>
+            <article class="card tapcard" data-go="place">
+              <div class="top"><span class="av a3">M</span><div style="flex:1;min-width:0"><div class="who"><b>Meera</b> went to</div><div class="place">MTR</div><div class="meta"><i data-lucide="map-pin"></i>Lalbagh Road</div></div><span class="time">3d</span></div>
+              <div class="lines"><div><i data-lucide="heart" style="color:var(--p)"></i>Rava idli, filter coffee</div></div>
+              <div class="foot"><span class="rv good"><i data-lucide="smile"></i>Good</span><span class="price">₹200 / person</span></div>
+            </article>
+          </div></div>
+          <div class="scrim sheet-scrim" id="filter-scrim" data-go="filter-close"></div>
+          <div class="sheet fsheet" id="filter-sheet">
+            <div class="handle"></div>
+            <h2 class="h-md" style="padding:0 22px 8px">Show</h2>
+            <div class="opt"><span class="src"><i data-lucide="layers"></i></span><div>Everything</div><span class="radio on"></span></div>
+            <div class="opt"><span class="src"><i data-lucide="users-round"></i></span><div>Connections<small>Reviews they posted</small></div><span class="radio"></span></div>
+            <div class="opt"><span class="src"><i data-lucide="user-round"></i></span><div>From friends<small>What friends told you</small></div><span class="radio"></span></div>
+            <div class="opt"><span class="src"><i data-lucide="utensils"></i></span><div>Mine<small>Places you went</small></div><span class="radio"></span></div>
+          </div>
+        </section>
+
+        <!-- Search -->
+        <section class="view scr rings tabv" id="v-search">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div style="padding:10px 0 12px"><div class="search"><i data-lucide="search" class="i"></i><span>Search places or people</span></div></div>
+          <div class="seg"><span class="on"><i data-lucide="store"></i>Places</span><span><i data-lucide="users-round"></i>People</span></div>
+          <div class="body listsurf" style="padding-top:6px">
+            <div class="sec-lbl">Recent</div>
+            <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">Meghana Foods</div><div class="sub">Residency Road</div></div></div>
+            <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Koramangala</div></div></div>
+          </div>
+        </section>
+
+        <!-- Map -->
+        <section class="view scr bare tabv" id="v-map" style="background:var(--map-land)">
+          <div class="map"><svg class="base"><use href="#mapbase"/></svg>
+            <div class="pin tappin" style="left:24%;top:46%"><div class="bub"><span class="av a2">A</span>Bao Story</div><div class="tail"></div></div>
+            <div class="pin tappin" id="pin-bf" data-go="pin" style="left:64%;top:58%"><div class="bub"><span class="av a1">R</span>Burger Factory</div><div class="tail"></div></div>
+            <div class="pin me" style="left:42%;top:72%"><div class="bub"><span class="g"><i data-lucide="check"></i></span>MTR</div><div class="tail"></div></div>
+          </div>
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div style="position:relative;z-index:6;padding:6px 18px 0"><div class="search" style="margin:0"><i data-lucide="search" class="i"></i>Search places</div></div>
+          <div class="sheet pincard" id="pin-card">
+            <div class="handle"></div>
+            <div style="padding:0 18px">
+              <h2 class="h-md">Burger Factory</h2>
+              <div class="muted" style="font-size:13px;font-weight:700;margin-top:3px">Koramangala · Fast food</div>
+              <div style="display:flex;gap:10px;align-items:center;margin-top:12px"><span class="src" style="width:32px;height:32px"><i data-lucide="user-round"></i></span><div style="flex:1;font-size:14px;color:var(--ink-2)"><b style="color:var(--ink)">Rahul</b> loved the chicken burger</div><span class="rv good"><i data-lucide="smile"></i>Good</span></div>
+              <div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-p btn-sm" style="flex:1" data-go="place">Open place</button><button class="btn btn-tonal btn-sm" style="flex:1">Directions</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Profile -->
+        <section class="view scr rings tabv" id="v-profile">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="tab"><span class="title">Profile</span><button class="icb"><i data-lucide="settings" class="i"></i></button></div>
+          <div class="body" style="display:flex;flex-direction:column;align-items:center">
+            <span class="av a4" style="width:92px;height:92px;font-size:34px">K</span>
+            <h1 class="h-md" style="margin-top:12px">Karthik C</h1>
+            <div class="muted" style="font-size:14px;font-weight:700">@karthik_eats</div>
+            <div class="seg" style="margin-top:18px;width:calc(100% - 36px)"><span class="on">Visited</span><span>Wishlist</span><span>Saved</span></div>
+          </div>
+        </section>
+
+        <!-- Place page (flat ground) -->
+        <section class="view scr" id="v-place">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="tab"><button class="icb ghost" data-go="back"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb" id="heart" data-go="heart"><i data-lucide="heart" class="i"></i></button></div>
+          <div class="body">
+            <div class="hero-place"><h1 class="h-lg">Bao Story</h1><div class="meta-line">Asian · Indiranagar</div></div>
+            <div class="acts">
+              <div class="act"><span class="c"><i data-lucide="navigation"></i></span>Directions</div>
+              <div class="act"><span class="c brand"><svg viewBox="0 0 24 24"><path d="M12.034 24c-.376-.411-2.075-2.584-3.95-5.513-.547-.916-.901-1.63-.833-1.814.178-.48 3.355-.743 4.333-.308.298.132.29.307.29.409 0 .44-.022 1.619-.022 1.619a.441.441 0 1 0 .883-.002l-.005-2.939c0-.255-.278-.319-.331-.329-.511-.002-1.548-.006-2.661-.006-2.457 0-3.006.101-3.423-.172-.904-.591-2.383-4.577-2.417-6.819C3.849 4.964 5.723 2.225 8.362.868A8.13 8.13 0 0 1 12.026 0c4.177 0 7.617 3.153 8.075 7.209l.001.011c.084.981-5.321 1.189-6.39.904-.164-.044-.206-.212-.206-.284L13.5 4.996a.442.442 0 0 0-.884.002l.009 3.866a.33.33 0 0 0 .268.32l3.354-.001c1.79 0 2.542.207 3.042.588.333.254.461.739.349 1.37C18.633 16.755 12.273 23.71 12.034 24z"/></svg></span>Swiggy</div>
+            </div>
+            <div class="panel">
+              <h3>People who've been</h3>
+              <div class="person"><span class="av a2">A</span><div class="pc"><div class="pn"><b>Ananya</b> · with Arjun <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Chicken bao, chilli oil noodles</div><div class="pl muted">₹450 / person · Oct 9</div></div></div>
+            </div>
+          </div>
+          <div class="efab"><i data-lucide="plus"></i>Add visit</div>
+          <div class="snack" id="snack">Added to your wishlist<span class="sa">Who sees it</span></div>
+        </section>
+
+        <!-- WhatsApp (outside app) -->
+        <section class="view scr bare" id="v-wa" style="background:#EFE7DE">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div style="background:#1F6E5B;color:#fff;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;font-weight:800"><i data-lucide="arrow-left" class="i"></i><span class="av sm a1">R</span>Rahul</div>
+          <div style="padding:18px 14px;display:flex;flex-direction:column;gap:8px">
+            <div class="wa in">Free this weekend?</div>
+            <div class="wa in" id="wa-msg">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div>
+          </div>
+          <div class="scrim" id="wa-scrim" style="opacity:0"></div>
+          <div class="sheet" id="wa-sheet" style="padding-bottom:36px">
+            <div class="handle"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:0 22px">
+              <div class="peekwrap sm"><img id="read-cat" src="assets/cat-peek.png" alt="" style="width:120px"></div>
+              <div class="reading" id="reading"><b>Reading this message…</b><span class="sk" style="width:80%"></span><span class="sk" style="width:62%"></span><span class="sk" style="width:70%"></span></div>
+              <p class="muted" style="font-size:13px;margin:12px 0 0;text-align:center">Looking for the place, dishes and price.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Confirmation (flat ground) -->
+        <section class="view scr" id="v-confirm">
+          <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+          <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">Check what we found</span></div>
+          <div class="body form">
+            <div class="field fill"><label>Who told you? <span class="req" id="req">Required</span></label><div class="inp focus" id="who"><span class="muted" id="who-ph">Type a name</span><span id="who-t"></span><span class="caret"></span></div></div>
+            <div class="field fill"><label>Place</label><div class="inp"><i data-lucide="map-pin" style="width:18px;height:18px;color:var(--p)"></i>Burger Factory, Koramangala</div></div>
+            <div class="field fill"><label>How was it for them?</label><div class="revsel"><span class="on good"><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+            <div class="field fill"><label>Loved</label><div class="chipin"><span class="ichip">Chicken burger<i data-lucide="x"></i></span></div></div>
+            <div class="field fill"><label>Didn't like</label><div class="chipin"><span class="ichip">Shake<i data-lucide="x"></i></span></div></div>
+            <div class="field fill"><label>Price per person</label><div class="inp warn" id="price">₹ 300</div><span class="flag"><i data-lucide="circle-alert"></i>Please check this</span></div>
+          </div>
+          <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" id="save" style="flex:1;opacity:.45" data-go="save">Save</button></div>
+        </section>
+
+      </div>
+
+      <!-- persistent navigation bar (fades through only the content above it) -->
+      <nav class="nav" id="nav">
+        <a class="on" data-tab="home"><span class="pill"><i data-lucide="house" class="i"></i></span>Home</a>
+        <a data-tab="search"><span class="pill"><i data-lucide="search" class="i"></i></span>Search</a>
+        <a data-go="dial"><span class="plus" id="plus"><i data-lucide="plus"></i></span></a>
+        <a data-tab="map"><span class="pill"><i data-lucide="map" class="i"></i></span>Map</a>
+        <a data-tab="profile"><span class="pill"><i data-lucide="circle-user-round" class="i"></i></span>Profile</a>
+      </nav>
+      <div class="scrim dial-scrim" id="dial-scrim" data-go="dial"></div>
+      <div class="dial" id="dial">
+        <div class="d"><span class="c"><i data-lucide="utensils"></i></span><span>I went<br>somewhere</span></div>
+        <div class="d mid" data-go="share"><span class="c"><i data-lucide="message-circle"></i></span><span>A friend<br>told me</span></div>
+        <div class="d"><span class="c"><i data-lucide="globe"></i></span><span>Found it<br>online</span></div>
+      </div>
+      <div class="gest"></div>
+    </div>
+    <div class="mo-ctrl">
+      <label class="rm"><input type="checkbox" id="rm"> Remove animations <small>(Android accessibility setting)</small></label>
+      <button class="mo-reset" id="reset">Restart from splash</button>
+    </div>
+  </div>
+
+  <div class="mo-spec">
+    <h2 class="mo-h">Motion</h2>
+    <p class="mo-lede">Fast and quiet for everyday navigation; one authored moment where it matters: a friend's message becoming a saved entry. Tap any <b>Play</b>, or use the phone directly. Every pattern is a Material 3 transition, themed with Thinnava's own curves and the chef cat.</p>
+
+    <h3 class="mo-group">Signature</h3>
+    <div class="mo-item hero" data-play="share">
+      <button class="play">Play</button>
+      <div><b>From WhatsApp to saved</b><span class="mo-meta">≈ 3.5 s end to end · emphasized curves</span>
+        <ol>
+          <li>The shared bubble lights up and lifts; the Thinnava sheet <b>rises</b> from the bottom (400 ms).</li>
+          <li>The chef cat <b>climbs up behind the card</b> and hooks its paws over the edge (500 ms).</li>
+          <li>A copy of the message <b>flies into the reading card</b> while the shimmer runs.</li>
+          <li>The sheet grows into the confirmation screen; fields <b>fill in one by one</b> (40 ms stagger), the price flag pulses once.</li>
+          <li>Typing a friend's name <b>wakes the Save button</b>.</li>
+          <li>Save <b>shrinks the screen into a new card</b> that drops into the top of Home; the other cards slide down to make room.</li>
+        </ol></div>
+    </div>
+    <div class="mo-item" data-play="launch"><button class="play">Play</button><div><b>Launch → welcome</b><span class="mo-meta">Cat lands 500 ms · fade through 300 ms</span><p>The cat settles in, the wordmark follows 100 ms later, then splash fades through to slide 1.</p></div></div>
+    <div class="mo-item" data-play="setup"><button class="play">Play</button><div><b>Peeking cat</b><span class="mo-meta">500 ms · emphasized decelerate</span><p>On Set up profile (and every peeking-cat screen) the cat climbs from behind the card, then its paws come over the edge. The username check spins, then the tick pops in.</p></div></div>
+
+    <h3 class="mo-group">Navigation</h3>
+    <div class="mo-item" data-play="slides"><button class="play">Play</button><div><b>Welcome slides</b><span class="mo-meta">Shared axis X · 300 ms</span><p>Slides move sideways together; the active dot stretches into a pill.</p></div></div>
+    <div class="mo-item" data-play="tabs"><button class="play">Play</button><div><b>Switching tabs</b><span class="mo-meta">Soft crossfade · 280 ms</span><p>The new tab settles in on top (from 98% scale) while the old one fades beneath it, so there is never a blank frame. The bar itself never moves, only its pill indicator.</p></div></div>
+    <div class="mo-item" data-play="card"><button class="play">Play</button><div><b>Card → place page</b><span class="mo-meta">Title glide 460 ms · content rise 320 ms, 45 ms stagger · back 380 ms</span><p>The place name lifts off the card and glides up to become the page title; the card dims, the page settles in, and the buttons and people rise into place. Back fades the content and glides the title down into its card.</p></div></div>
+    <div class="mo-item" data-play="sheet"><button class="play">Play</button><div><b>Bottom sheets</b><span class="mo-meta">Slide up 400 ms · down 250 ms</span><p>Filter, pickers and the map pin card rise from below over a fading scrim; they leave faster than they arrive.</p></div></div>
+    <div class="mo-item" data-play="dial"><button class="play">Play</button><div><b>The + button</b><span class="mo-meta">Fan out 250 ms · 30 ms stagger</span><p>Three circles spring out of the + along an arc; + turns into ×. Closing pulls them back in.</p></div></div>
+    <div class="mo-item" data-play="pin"><button class="play">Play</button><div><b>Map pin</b><span class="mo-meta">Pin 150 ms · card 400 ms</span><p>The tapped pin grows a ring, then its card slides up from below.</p></div></div>
+
+    <h3 class="mo-group">Feedback</h3>
+    <div class="mo-item" data-play="heart"><button class="play">Play</button><div><b>Wishlist heart</b><span class="mo-meta">Pop 200 ms · snackbar 300 ms, stays 3 s</span><p>The heart fills and pops once; a snackbar confirms with a shortcut.</p></div></div>
+
+    <h3 class="mo-group">Tokens</h3>
+    <table class="mo-tok">
+      <tr><th>Token</th><th>Value</th><th>Use</th></tr>
+      <tr><td>short</td><td>100–150 ms</td><td>Presses, ticks, heart pop, chip in/out</td></tr>
+      <tr><td>medium</td><td>250–300 ms</td><td>Tabs, slides, speed dial, toggles</td></tr>
+      <tr><td>long</td><td>400–450 ms</td><td>Sheets, container transform</td></tr>
+      <tr><td>signature</td><td>500–900 ms</td><td>Cat climb, share import steps only</td></tr>
+      <tr><td>standard</td><td><code>cubic-bezier(.2,0,0,1)</code></td><td>Small state changes</td></tr>
+      <tr><td>emphasized decelerate</td><td><code>cubic-bezier(.05,.7,.1,1)</code></td><td>Things arriving</td></tr>
+      <tr><td>emphasized accelerate</td><td><code>cubic-bezier(.3,0,.8,.15)</code></td><td>Things leaving (always faster)</td></tr>
+    </table>
+    <p class="mo-lede" style="margin-top:14px"><b>Remove animations:</b> when the Android setting is on, every movement becomes a short crossfade (≤150 ms). State changes such as Save turning on, the heart filling and the snackbar still show. Tick the box under the phone to preview.</p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const E = { std: 'cubic-bezier(.2,0,0,1)', dec: 'cubic-bezier(.05,.7,.1,1)', acc: 'cubic-bezier(.3,0,.8,.15)' };
+let RM = false, busy = false, cur = $('#v-splash'), from = null, lastCard = null, dialOpen = false;
+try { RM = new URLSearchParams(location.search).get('rm') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+$('#rm').checked = RM;
+$('#rm').addEventListener('change', e => { RM = e.target.checked; });
+const wait = ms => new Promise(r => setTimeout(r, RM ? Math.min(ms, 250) : ms));
+const stage = $('#stage');
+
+// Animate; under "Remove animations" every movement collapses to a short crossfade.
+function A(el, kf, o) {
+  if (!el) return Promise.resolve();
+  if (RM) {
+    const op = kf.filter(k => 'opacity' in k).map(k => ({ opacity: k.opacity }));
+    kf = op.length >= 2 ? [op[0], op[op.length - 1]] : [{}, {}];
+    o = { ...o, duration: Math.min(o.duration || 150, 150), delay: 0, easing: 'linear' };
+  }
+  return el.animate(kf, { fill: 'forwards', ...o }).finished.catch(() => {});
+}
+const clean = (...els) => els.forEach(e => e && e.getAnimations().forEach(a => a.cancel()));
+const K = () => stage.getBoundingClientRect().width / 360;   // phone may be scaled to fit the window
+function rel(el) { const s = stage.getBoundingClientRect(), r = el.getBoundingClientRect(), k = K(); return { t: (r.top - s.top) / k, l: (r.left - s.left) / k, r: (s.right - r.right) / k, b: (s.bottom - r.bottom) / k }; }
+const inset = (r, rad) => `inset(${r.t}px ${r.r}px ${r.b}px ${r.l}px round ${rad}px)`;
+function navFor(v) {
+  const tab = v.classList.contains('tabv');
+  $('#nav').classList.toggle('hide', !tab);
+  if (tab) $$('#nav [data-tab]').forEach(a => a.classList.toggle('on', a.dataset.tab === v.id.slice(2)));
+}
+
+// Card -> place page: the place name lifts off the card and glides into the page title;
+// the card dims, the page settles in underneath, and its content rises in a short stagger.
+const pieces = v => [...v.querySelectorAll('.hero-place .meta-line, .acts, .panel, .efab')];
+function ghostTitle(srcEl, toEl, fromSize, toSize, dur) {
+  const r1 = rel(srcEl), r2 = rel(toEl), sc = toSize / fromSize;
+  const g = document.createElement('div');
+  g.className = 'ghost tglide'; g.textContent = srcEl.textContent;
+  Object.assign(g.style, { left: r1.l + 'px', top: r1.t + 'px', fontSize: fromSize + 'px' });
+  stage.appendChild(g);
+  return A(g, [{ transform: 'translate(0,0) scale(1)' }, { transform: `translate(${r2.l - r1.l}px, ${r2.t - r1.t}px) scale(${sc})` }], { duration: dur, easing: 'cubic-bezier(.2,.8,.2,1)' }).then(() => g.remove());
+}
+async function openPlace(card) {
+  const a = cur, b = $('#v-place'), h1 = b.querySelector('.hero-place h1'), title = card.querySelector('.place');
+  h1.textContent = title.textContent;
+  b.classList.add('on'); a.style.zIndex = 1; b.style.zIndex = 2; navFor(b);
+  b.style.opacity = 0; h1.style.visibility = 'hidden';
+  const ps = pieces(b); ps.forEach(x => x.style.opacity = 0);
+  const glide = ghostTitle(title, h1, 17.5, 26, 460);
+  title.style.visibility = 'hidden';
+  A(card, [{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.97)', opacity: .6 }], { duration: 200, easing: E.std });
+  await A(b, [{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 60, easing: E.std });
+  b.style.opacity = '';
+  await Promise.all([glide, ...ps.map((x, i) => A(x, [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 320, delay: i * 45, easing: E.dec }))]);
+  h1.style.visibility = ''; ps.forEach(x => x.style.opacity = '');
+  title.style.visibility = ''; a.classList.remove('on'); clean(a, b, card, ...ps); a.style.zIndex = b.style.zIndex = ''; cur = b;
+}
+async function closePlace(card) {
+  const a = cur, b = $('#v-home'), h1 = a.querySelector('.hero-place h1'), title = card.querySelector('.place');
+  b.classList.add('on'); b.style.zIndex = 1; a.style.zIndex = 2; navFor(b);
+  title.style.visibility = 'hidden';
+  const ps = pieces(a);
+  await Promise.all(ps.map(x => A(x, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(10px)' }], { duration: 150, easing: E.acc })));
+  const glide = ghostTitle(h1, title, 26, 17.5, 380);
+  h1.style.visibility = 'hidden';
+  A(card, [{ transform: 'scale(.97)', opacity: .6 }, { transform: 'scale(1)', opacity: 1 }], { duration: 320, delay: 80, easing: E.dec });
+  await Promise.all([glide, A(a, [{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: E.std })]);
+  title.style.visibility = ''; h1.style.visibility = '';
+  a.classList.remove('on'); clean(a, b, card, ...ps); a.style.zIndex = b.style.zIndex = ''; cur = b;
+}
+
+async function go(b, how = 'fade', opt = {}) {
+  const a = cur; if (a === b) return;
+  b.classList.add('on'); a.style.zIndex = 1; b.style.zIndex = 2; navFor(b);
+  if (how === 'fade') {            // soft crossfade: new tab settles in on top, old one fades beneath, never a blank frame
+    await Promise.all([
+      A(a, [{ opacity: 1 }, { opacity: 0 }], { duration: 240, easing: E.std }),
+      A(b, [{ opacity: 0, transform: 'scale(.98)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 280, easing: 'cubic-bezier(.22,.61,.36,1)' })]);
+  } else if (how === 'x') {        // shared axis X
+    const d = opt.dir || 1;
+    await Promise.all([
+      A(a, [{ opacity: 1, transform: 'translateX(0)' }, { opacity: 0, transform: `translateX(${-60 * d}px)` }], { duration: 150, easing: E.acc }),
+      A(b, [{ opacity: 0, transform: `translateX(${60 * d}px)` }, { opacity: 1, transform: 'translateX(0)' }], { duration: 300, delay: 50, easing: E.dec })]);
+  } else if (how === 'up') {       // sheet grows into a full screen
+    await Promise.all([
+      A(a, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: E.acc }),
+      A(b, [{ opacity: 0, transform: 'translateY(48px)' }, { opacity: 1, transform: 'none' }], { duration: 400, easing: E.dec })]);
+  } else if (how === 'expand') {   // container transform: card -> screen
+    const r = rel(opt.from);
+    await A(b, [{ clipPath: inset(r, 20), opacity: 0 }, { opacity: 1, offset: .3 }, { clipPath: inset({ t: 0, r: 0, b: 0, l: 0 }, 38), opacity: 1 }], { duration: 450, easing: E.dec });
+  } else if (how === 'shrink') {   // container transform back: screen -> card
+    a.style.zIndex = 2; b.style.zIndex = 1;
+    const r = rel(opt.to);
+    await A(a, [{ clipPath: inset({ t: 0, r: 0, b: 0, l: 0 }, 38), opacity: 1 }, { opacity: 1, offset: .7 }, { clipPath: inset(r, 20), opacity: 0 }], { duration: opt.dur || 300, easing: opt.ease || E.acc });
+  }
+  a.classList.remove('on'); clean(a, b); a.style.zIndex = b.style.zIndex = ''; cur = b;
+}
+
+function jump(id) {
+  $$('.view').forEach(v => { v.classList.toggle('on', v.id === id); clean(v); v.style.zIndex = ''; });
+  cur = $('#' + id); navFor(cur); resetBits();
+}
+function resetBits() {
+  ['#filter-sheet', '#pin-card', '#wa-sheet', '#filter-scrim', '#wa-scrim', '#dial-scrim', '#dial'].forEach(s => { const e = $(s); e.classList.remove('open'); clean(e); });
+  $$('#dial .d').forEach(d => clean(d)); clean($('#plus svg')); dialOpen = false;
+  $('#pin-bf').classList.remove('sel'); clean($('#snack'));
+}
+
+async function sheetOpen(sheet, scrim) {
+  sheet.classList.add('open');
+  if (scrim) { scrim.classList.add('open'); A(scrim, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, easing: E.std }); }
+  await A(sheet, [{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }], { duration: 400, easing: E.dec });
+}
+async function sheetClose(sheet, scrim) {
+  if (scrim) A(scrim, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: E.std });
+  await A(sheet, [{ transform: 'translateY(0)' }, { transform: 'translateY(110%)' }], { duration: 250, easing: E.acc });
+  sheet.classList.remove('open'); scrim && scrim.classList.remove('open'); clean(sheet, scrim);
+}
+
+async function dial() {
+  const ds = $$('#dial .d'), plus = $('#plus'), icon = $('#plus svg'), sc = $('#dial-scrim');
+  if (!dialOpen) {
+    dialOpen = true; $('#dial').classList.add('open'); sc.classList.add('open');
+    A(sc, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, easing: E.std });
+    A(icon, [{ transform: 'rotate(0)' }, { transform: 'rotate(135deg)' }], { duration: 250, easing: E.dec });
+    const pr = plus.getBoundingClientRect();
+    await Promise.all(ds.map((d, i) => {
+      const end = d.classList.contains('mid') ? 'translateY(-34px)' : 'translateY(0)';
+      const dr = d.getBoundingClientRect();
+      const k = K(), dx = (pr.left + pr.width / 2 - (dr.left + dr.width / 2)) / k, dy = (pr.top - dr.top) / k;
+      return A(d, [{ opacity: 0, transform: `translate(${dx}px,${dy}px) scale(.3)` }, { opacity: 1, transform: end }], { duration: 250, delay: i * 30, easing: E.dec });
+    }));
+  } else {
+    dialOpen = false;
+    A(sc, [{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: E.acc });
+    A(icon, [{ transform: 'rotate(135deg)' }, { transform: 'rotate(0)' }], { duration: 200, easing: E.acc });
+    await Promise.all(ds.map((d, i) => A(d, [{ opacity: 1 }, { opacity: 0, transform: 'scale(.6)' }], { duration: 150, delay: (2 - i) * 20, easing: E.acc })));
+    $('#dial').classList.remove('open'); sc.classList.remove('open'); clean(sc, icon, ...ds);
+  }
+}
+
+async function climb(img) {                 // chef cat climbs up behind the card, then paws over the edge
+  const wrap = img.parentElement; wrap.style.zIndex = 1;
+  await A(img, [{ transform: 'translateY(75%)' }, { transform: 'translateY(-5px)', offset: .8 }, { transform: 'translateY(0)' }], { duration: 600, easing: E.dec });
+  wrap.style.zIndex = 3;
+}
+
+async function heart() {
+  const h = $('#heart'), on = h.classList.toggle('liked');
+  A(h.querySelector('svg'), [{ transform: 'scale(1)' }, { transform: 'scale(1.35)', offset: .4 }, { transform: 'scale(1)' }], { duration: 220, easing: E.std });
+  if (on) {
+    const s = $('#snack');
+    await A(s, [{ transform: 'translateY(170%)' }, { transform: 'translateY(0)' }], { duration: 300, easing: E.dec });
+    await wait(2600);
+    await A(s, [{ transform: 'translateY(0)' }, { transform: 'translateY(170%)' }], { duration: 200, easing: E.acc });
+    clean(s);
+  }
+}
+
+async function pin() {
+  const p = $('#pin-bf'); p.classList.add('sel');
+  A(p.querySelector('.bub'), [{ transform: 'scale(1)' }, { transform: 'scale(1.12)', offset: .5 }, { transform: 'scale(1)' }], { duration: 220, easing: E.std });
+  await wait(120); await sheetOpen($('#pin-card'));
+}
+
+async function launch() {
+  const cat = $('#splash-cat'), w = $('#splash-word'), s = $('#splash-sub');
+  A(cat, [{ opacity: 0, transform: 'translateY(24px) scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: E.dec });
+  A(w, [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 400, delay: 120, easing: E.dec });
+  await A(s, [{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 220, easing: E.std });
+  await wait(800); await go($('#v-w1'), 'fade'); clean(cat, w, s);
+}
+
+async function setupSeq() {
+  const st = $('#u-state'), help = $('#u-help');
+  st.innerHTML = ''; help.style.opacity = 0;
+  await climb($('#setup-cat'));
+  st.innerHTML = '<span class="spin"></span>'; await wait(700);
+  st.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+  A(st, [{ transform: 'scale(.4)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 150, easing: E.dec });
+  help.style.opacity = 1; A(help, [{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'none' }], { duration: 200, easing: E.dec });
+}
+
+async function feedIn() {
+  await Promise.all($$('#feed > .card').map((c, i) => A(c, [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 300, delay: i * 40, easing: E.dec })));
+  $$('#feed > .card').forEach(c => clean(c));
+}
+
+function resetConfirm() {
+  $('#who-t').textContent = ''; $('#who-ph').style.display = '';
+  const q = $('#req'); q.textContent = 'Required'; q.style.color = ''; q.style.background = '';
+  const s = $('#save'); s.style.opacity = .45; clean(s);
+  $$('#v-confirm .fill, #v-confirm .ichip').forEach(f => clean(f)); clean($('#price'));
+}
+
+function newCard() {
+  const el = document.createElement('article');
+  el.className = 'card tapcard'; el.dataset.go = 'place'; el.dataset.fresh = '1';
+  el.innerHTML = '<div class="top"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1;min-width:0"><div class="who"><b>Rahul</b> told you about</div><div class="place">Burger Factory</div><div class="meta"><i data-lucide="map-pin"></i>Koramangala · went Oct 10</div></div><span class="time">now</span></div><div class="lines"><div><i data-lucide="heart" style="color:var(--p)"></i>Chicken burger</div><div><i data-lucide="thumbs-down" style="color:var(--ink-3)"></i>Shake</div></div><div class="foot"><span class="rv good"><i data-lucide="smile"></i>Good</span><span class="price">₹300 / person</span><span class="priv"><i data-lucide="lock"></i>Only you</span></div>';
+  return el;
+}
+
+async function share() {
+  if (dialOpen) await dial();
+  if (cur.id !== 'v-wa') await go($('#v-wa'), 'fade');
+  resetConfirm();
+  const msg = $('#wa-msg'), sheet = $('#wa-sheet'), sc = $('#wa-scrim'), cat = $('#read-cat');
+  await A(msg, [{ boxShadow: '0 0 0 0 rgba(35,80,217,0)' }, { boxShadow: '0 0 0 3px rgba(35,80,217,.9)' }], { duration: 250, easing: E.std });
+  await wait(350);
+  sc.classList.add('open'); A(sc, [{ opacity: 0 }, { opacity: 1 }], { duration: 250, easing: E.std });
+  cat.parentElement.style.zIndex = 1;
+  A(cat, [{ transform: 'translateY(75%)' }, { transform: 'translateY(75%)' }], { duration: 10 });
+  await sheetOpen(sheet);
+  climb(cat);
+  // a copy of the message flies into the reading card
+  const r1 = rel(msg), r2 = rel($('#reading'));
+  const g = msg.cloneNode(true); g.removeAttribute('id'); g.classList.add('ghost');
+  Object.assign(g.style, { left: r1.l + 'px', top: r1.t + 'px', width: msg.offsetWidth + 'px' });
+  stage.appendChild(g);
+  A(g, [{ transform: 'none', opacity: 1 }, { transform: `translate(${r2.l - r1.l + 6}px, ${r2.t - r1.t + 24}px) scale(.5)`, opacity: 0 }], { duration: 650, delay: 200, easing: E.dec }).then(() => g.remove());
+  await wait(1500);
+  await go($('#v-confirm'), 'up');
+  sheet.classList.remove('open'); sc.classList.remove('open'); clean(sheet, sc, cat, msg);
+  // fields fill in one by one
+  await Promise.all($$('#v-confirm .fill').map((f, i) => A(f, [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 280, delay: i * 40, easing: E.dec })));
+  $$('#v-confirm .ichip').forEach(c => A(c, [{ transform: 'scale(.6)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 150, easing: E.dec }));
+  A($('#price'), [{ boxShadow: 'inset 0 0 0 2px #E2A417, 0 0 0 0 rgba(226,164,23,.55)' }, { boxShadow: 'inset 0 0 0 2px #E2A417, 0 0 0 10px rgba(226,164,23,0)' }], { duration: 700, easing: E.std });
+  await wait(600);
+  $('#who-ph').style.display = 'none';
+  for (const ch of 'Rahul') { $('#who-t').textContent += ch; await wait(110); }
+  const q = $('#req'); q.textContent = 'Done'; q.style.color = 'var(--good)'; q.style.background = 'var(--good-bg)';
+  const s = $('#save'); s.style.opacity = 1;
+  A(s, [{ opacity: .45, transform: 'scale(1)' }, { opacity: 1, transform: 'scale(1.04)', offset: .5 }, { opacity: 1, transform: 'scale(1)' }], { duration: 240, easing: E.std });
+  await wait(800);
+  await save();
+}
+
+async function save() {
+  const home = $('#v-home'), feed = $('#feed'), a = cur;
+  home.classList.add('on'); home.style.zIndex = 1; a.style.zIndex = 2; navFor(home);
+  feed.querySelectorAll('[data-fresh]').forEach(n => n.remove());
+  const olds = [...feed.children], before = olds.map(c => c.getBoundingClientRect().top);
+  const nc = newCard(); feed.prepend(nc); try { lucide.createIcons(); } catch (e) {}
+  const after = olds.map(c => c.getBoundingClientRect().top);
+  olds.forEach((c, i) => A(c, [{ transform: `translateY(${before[i] - after[i]}px)` }, { transform: 'none' }], { duration: 450, delay: 120, easing: E.dec }));
+  A(nc, [{ opacity: 0 }, { opacity: 0, offset: .55 }, { opacity: 1 }], { duration: 520 });
+  const r = rel(nc);
+  await A(a, [{ clipPath: inset({ t: 0, r: 0, b: 0, l: 0 }, 38), opacity: 1 }, { clipPath: inset(r, 20), opacity: 1, offset: .8 }, { clipPath: inset(r, 20), opacity: 0 }], { duration: 560, easing: E.dec });
+  a.classList.remove('on'); clean(a, nc, ...olds); a.style.zIndex = home.style.zIndex = ''; cur = home;
+  const pc = getComputedStyle(document.body).getPropertyValue('--pc').trim() || '#DBE4FF';
+  await A(nc, [{ backgroundColor: pc }, { backgroundColor: '#ffffff' }], { duration: 1200, easing: E.std });
+  clean(nc);
+}
+
+// ---------- interactions on the phone ----------
+const run = fn => async (...args) => { if (busy) return; busy = true; $$('.play').forEach(b => b.disabled = true); try { await fn(...args); } finally { busy = false; $$('.play').forEach(b => b.disabled = false); } };
+const actions = {
+  next: () => go(cur.id === 'v-w1' ? $('#v-w2') : $('#v-w3'), 'x'),
+  setup: async () => { $('#setup-cat').parentElement.style.zIndex = 1; $('#setup-cat').style.transform = 'translateY(75%)'; await go($('#v-setup'), 'fade'); $('#setup-cat').style.transform = ''; await setupSeq(); },
+  home: async () => { await go($('#v-home'), 'fade'); await feedIn(); },
+  filter: () => sheetOpen($('#filter-sheet'), $('#filter-scrim')),
+  'filter-close': () => sheetClose($('#filter-sheet'), $('#filter-scrim')),
+  place: async (t) => {
+    from = cur;
+    if (t.classList.contains('tapcard')) { lastCard = t; await openPlace(t); }
+    else { await sheetClose($('#pin-card')); $('#pin-bf').classList.remove('sel'); lastCard = null; await go($('#v-place'), 'x'); }
+  },
+  back: async () => {
+    if (lastCard && from && from.id === 'v-home') await closePlace(lastCard);
+    else await go(from || $('#v-home'), 'x', { dir: -1 });
+  },
+  heart: () => heart(),
+  dial: () => dial(),
+  share: () => share(),
+  pin: () => pin(),
+  save: () => save(),
+};
+document.addEventListener('click', e => {
+  const t = e.target.closest('#phone [data-go], #phone [data-tab]');
+  if (!t) return;
+  if (t.dataset.tab) return run(() => go($('#v-' + t.dataset.tab), 'fade'))();
+  const f = actions[t.dataset.go]; if (f) run(f)(t);
+});
+
+// ---------- spec "Play" buttons ----------
+const plays = {
+  launch: async () => { jump('v-splash'); await launch(); },
+  setup: async () => { jump('v-setup'); await setupSeq(); },
+  slides: async () => { jump('v-w1'); await wait(300); await go($('#v-w2'), 'x'); await wait(700); await go($('#v-w3'), 'x'); await wait(700); await go($('#v-w2'), 'x', { dir: -1 }); },
+  tabs: async () => { jump('v-home'); await wait(300); for (const t of ['search', 'map', 'profile', 'home']) { await go($('#v-' + t), 'fade'); await wait(650); } },
+  card: async () => { jump('v-home'); await wait(300); const c = $('#card-bao'); lastCard = c; from = $('#v-home'); await openPlace(c); await wait(1100); await closePlace(c); },
+  sheet: async () => { jump('v-home'); await wait(300); await sheetOpen($('#filter-sheet'), $('#filter-scrim')); await wait(1100); await sheetClose($('#filter-sheet'), $('#filter-scrim')); },
+  dial: async () => { jump('v-home'); await wait(300); await dial(); await wait(1300); await dial(); },
+  pin: async () => { jump('v-map'); await wait(300); await pin(); await wait(1500); await sheetClose($('#pin-card')); $('#pin-bf').classList.remove('sel'); },
+  heart: async () => { jump('v-place'); $('#heart').classList.remove('liked'); from = $('#v-home'); lastCard = null; await wait(300); await heart(); },
+  share: async () => { jump('v-wa'); await wait(300); await share(); },
+};
+$$('.mo-item').forEach(it => it.querySelector('.play').addEventListener('click', () => run(plays[it.dataset.play])()));
+$('#reset').addEventListener('click', () => run(async () => { jump('v-splash'); await launch(); })());
+
+// rings on Phase 1 style screens only
+const RINGS = [
+  '<g class="lt"><circle cx="360" cy="0" r="120"/><circle cx="360" cy="0" r="170"/><circle cx="360" cy="0" r="220"/><circle cx="360" cy="0" r="270"/></g><g class="lt"><circle cx="0" cy="780" r="110"/><circle cx="0" cy="780" r="160"/><circle cx="0" cy="780" r="210"/></g><circle class="a3" cx="340" cy="150" r="5"/>',
+  '<g class="lt"><circle cx="0" cy="60" r="90"/><circle cx="0" cy="60" r="140"/><circle cx="0" cy="60" r="190"/></g><g class="lt"><circle cx="360" cy="720" r="100"/><circle cx="360" cy="720" r="150"/><circle cx="360" cy="720" r="200"/><circle cx="360" cy="720" r="250"/></g><circle class="a3" cx="20" cy="330" r="5"/>',
+  '<g class="lt"><circle cx="180" cy="-60" r="160"/><circle cx="180" cy="-60" r="210"/><circle cx="180" cy="-60" r="260"/></g><g class="lt"><circle cx="380" cy="560" r="70"/><circle cx="380" cy="560" r="120"/></g><circle class="a3" cx="342" cy="452" r="5"/>'
+];
+$$('.view.rings').forEach((el, i) => el.insertAdjacentHTML('afterbegin', '<svg class="art art-rings" viewBox="0 0 360 780" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + RINGS[i % 3] + '</svg>'));
+try { lucide.createIcons({ attrs: { 'stroke-width': 2 } }); } catch (e) {}
+navFor(cur);
+run(launch)();
+</script>
+</body>
+</html>

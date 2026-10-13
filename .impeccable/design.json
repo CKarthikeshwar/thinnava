@@ -1,0 +1,407 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T00:00:00Z",
+  "title": "Design System: Thinnava?!",
+  "extensions": {
+    "colorMeta": {
+      "cobalt-blue": {
+        "role": "primary",
+        "displayName": "Cobalt Blue",
+        "canonical": "#2350D9",
+        "tonalRamp": [
+          "#10203D",
+          "#1B3869",
+          "#274F96",
+          "#3267C2",
+          "#5D89D5",
+          "#8EACE2",
+          "#BED0EE",
+          "#EBF0FA"
+        ]
+      },
+      "deep-cobalt": {
+        "role": "primary",
+        "displayName": "Deep Cobalt",
+        "canonical": "#16348F",
+        "tonalRamp": [
+          "#0F1E3E",
+          "#1A356B",
+          "#254B98",
+          "#3061C5",
+          "#5B84D7",
+          "#8CA9E3",
+          "#BDCEEF",
+          "#EAF0FA"
+        ]
+      },
+      "pale-cobalt": {
+        "role": "secondary",
+        "displayName": "Pale Cobalt",
+        "canonical": "#DBE4FF",
+        "tonalRamp": [
+          "#0C2541",
+          "#143F70",
+          "#1D5AA0",
+          "#2575D0",
+          "#5295E0",
+          "#86B4E9",
+          "#BAD4F3",
+          "#E9F2FB"
+        ]
+      },
+      "mist": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "#EEF2FF",
+        "tonalRamp": [
+          "#11253C",
+          "#1D3F68",
+          "#295A94",
+          "#3575C0",
+          "#5F95D3",
+          "#8FB4E0",
+          "#BFD4ED",
+          "#EBF2F9"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "canonical": "#10183A",
+        "tonalRamp": [
+          "#12203A",
+          "#1F3765",
+          "#2D4E90",
+          "#3A65BB",
+          "#6387CF",
+          "#92ABDD",
+          "#C1CFEC",
+          "#ECF0F9"
+        ]
+      },
+      "slate-ink": {
+        "role": "neutral",
+        "displayName": "Slate Ink",
+        "canonical": "#46507A",
+        "tonalRamp": [
+          "#1E242F",
+          "#343E51",
+          "#46507A",
+          "#607295",
+          "#8392AF",
+          "#A8B3C7",
+          "#CDD3DF",
+          "#EFF1F5"
+        ]
+      },
+      "good-green": {
+        "role": "semantic",
+        "displayName": "Good",
+        "canonical": "#17703E",
+        "tonalRamp": [
+          "#0E3E23",
+          "#186C3D",
+          "#239A57",
+          "#2DC870",
+          "#59D991",
+          "#8BE5B2",
+          "#BCF0D3",
+          "#EAFAF1"
+        ]
+      },
+      "okayish-amber": {
+        "role": "semantic",
+        "displayName": "Okayish",
+        "canonical": "#845300",
+        "tonalRamp": [
+          "#432E0A",
+          "#745011",
+          "#A57218",
+          "#D6931F",
+          "#E6AE4C",
+          "#EDC682",
+          "#F5DFB8",
+          "#FCF5E9"
+        ]
+      },
+      "bad-red": {
+        "role": "semantic",
+        "displayName": "Bad",
+        "canonical": "#A8301F",
+        "tonalRamp": [
+          "#3E130E",
+          "#6C2119",
+          "#992F23",
+          "#C73D2E",
+          "#D96659",
+          "#E4948B",
+          "#F0C2BD",
+          "#FAECEA"
+        ]
+      },
+      "on-pale-cobalt": {
+        "role": "neutral",
+        "displayName": "Deep Cobalt Ink"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface"
+      },
+      "surface-tint": {
+        "role": "neutral",
+        "displayName": "Surface Tint"
+      },
+      "muted-ink": {
+        "role": "neutral",
+        "displayName": "Muted Ink"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline"
+      },
+      "good-wash": {
+        "role": "semantic",
+        "displayName": "Good Wash"
+      },
+      "okayish-wash": {
+        "role": "semantic",
+        "displayName": "Okayish Wash"
+      },
+      "bad-wash": {
+        "role": "semantic",
+        "displayName": "Bad Wash"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Wordmark on splash and welcome."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Onboarding promises, setup titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Sheet titles, profile name, numerals."
+      },
+      "title-place": {
+        "displayName": "Place Title",
+        "purpose": "Place name on every entry card."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Explanatory copy."
+      },
+      "body-strong": {
+        "displayName": "Strong Body",
+        "purpose": "List names, sheet options."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Meta, nav, field labels, timestamps."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "All button text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-rest",
+        "value": "0 1px 2px rgba(20,30,50,.05), 0 6px 18px -12px rgba(20,30,50,.22)",
+        "purpose": "Timeline cards."
+      },
+      {
+        "name": "icon-button",
+        "value": "0 1px 2px rgba(20,30,50,.08)",
+        "purpose": "Round top-bar buttons."
+      },
+      {
+        "name": "floating-panel",
+        "value": "0 10px 30px -18px rgba(20,30,50,.4)",
+        "purpose": "Inline and empty-state panels."
+      },
+      {
+        "name": "search",
+        "value": "0 1px 2px rgba(20,30,50,.06), 0 8px 20px -14px rgba(20,30,50,.3)",
+        "purpose": "Search bar."
+      },
+      {
+        "name": "sheet",
+        "value": "0 -10px 30px -10px rgba(10,20,40,.25)",
+        "purpose": "Bottom sheets."
+      },
+      {
+        "name": "add-glow",
+        "value": "0 6px 14px -6px var(--p)",
+        "purpose": "Nav add button only."
+      },
+      {
+        "name": "map-pin",
+        "value": "0 4px 12px -4px rgba(10,20,40,.35)",
+        "purpose": "Map pin bubbles."
+      },
+      {
+        "name": "mascot",
+        "value": "drop-shadow(0 18px 18px rgba(20,40,80,.18))",
+        "purpose": "Sitting cat (CSS filter)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.2,.8,.2,1)",
+        "purpose": "Default easing for state transitions."
+      },
+      {
+        "name": "caret-blink",
+        "value": "1s steps(2) infinite",
+        "purpose": "Field caret; off under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "360px"
+      }
+    ],
+    "grounds": {
+      "status": "decided: rings",
+      "options": [
+        {
+          "name": "art",
+          "description": "Flat hard-edged tonal shapes per screen (primary mixed 8% / 15% into ground, accents primary at 55%, 1.6px line work at primary 30%); three cycled compositions; no blur, no gradient."
+        },
+        {
+          "name": "solid",
+          "description": "Flat Sky Field (#CFE1F4) ground."
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one main action per screen.",
+      "html": "<button class=\"ds-btn ds-btn-p\">Let&#39;s eat</button>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;font-family:Nunito,system-ui,sans-serif;font-weight:800;font-size:16px;border:0;cursor:pointer;transition:filter .2s cubic-bezier(.2,.8,.2,1)}.ds-btn:hover{filter:brightness(.95)}.ds-btn:active{filter:brightness(.9)}.ds-btn:focus-visible{outline:2px solid var(--p);outline-offset:3px}.ds-btn-p{background:var(--p);color:#fff}"
+    },
+    {
+      "name": "Tonal Button",
+      "kind": "button",
+      "refersTo": "button-tonal",
+      "description": "Second-most likely action (Accept, Directions).",
+      "html": "<button class=\"ds-btn ds-btn-tonal\">Directions</button>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;font-family:Nunito,system-ui,sans-serif;font-weight:800;font-size:16px;border:0;cursor:pointer;transition:filter .2s cubic-bezier(.2,.8,.2,1)}.ds-btn:hover{filter:brightness(.95)}.ds-btn:active{filter:brightness(.9)}.ds-btn:focus-visible{outline:2px solid var(--p);outline-offset:3px}.ds-btn-tonal{background:var(--pc);color:var(--on-pc)}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Low-emphasis alternative.",
+      "html": "<button class=\"ds-btn ds-btn-out\">Find people you know</button>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;font-family:Nunito,system-ui,sans-serif;font-weight:800;font-size:16px;border:0;cursor:pointer;transition:filter .2s cubic-bezier(.2,.8,.2,1)}.ds-btn:hover{filter:brightness(.95)}.ds-btn:active{filter:brightness(.9)}.ds-btn:focus-visible{outline:2px solid var(--p);outline-offset:3px}.ds-btn-out{background:transparent;color:var(--p);box-shadow:inset 0 0 0 1.5px var(--line)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "text-field",
+      "description": "Labelled field with inset hairline; 2px primary stroke on focus.",
+      "html": "<label class=\"ds-field\"><span>Username</span><input class=\"ds-inp\" placeholder=\"@karthik_eats\"></label>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-field{display:flex;flex-direction:column;gap:6px;width:300px}.ds-field span{font-size:13px;font-weight:800;color:var(--ink-2)}.ds-inp{height:54px;border-radius:16px;border:0;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line);padding:0 16px;font:600 16px Nunito,system-ui,sans-serif;color:var(--ink);transition:box-shadow .2s}.ds-inp::placeholder{color:var(--ink-3)}.ds-inp:hover{box-shadow:inset 0 0 0 1.5px var(--ink-3)}.ds-inp:focus{outline:none;box-shadow:inset 0 0 0 2px var(--p)}"
+    },
+    {
+      "name": "Filter Chips",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Filter and map-layer chips; selected is Pale Cobalt.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip on\">All</button><button class=\"ds-chip\">Visited</button><button class=\"ds-chip\">Wishlist</button></div>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-chips{display:flex;gap:8px}.ds-chip{height:34px;padding:0 13px;border-radius:10px;border:0;cursor:pointer;font:700 13.5px Nunito,system-ui,sans-serif;color:var(--ink-2);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}.ds-chip:hover{box-shadow:inset 0 0 0 1px var(--ink-3)}.ds-chip:focus-visible{outline:2px solid var(--p);outline-offset:2px}.ds-chip.on{background:var(--pc);color:var(--on-pc);box-shadow:none}"
+    },
+    {
+      "name": "Review Pills",
+      "kind": "custom",
+      "refersTo": "review-good",
+      "description": "The only rating mark: fixed semantic Good / Okayish / Bad.",
+      "html": "<div class=\"ds-rvs\"><span class=\"ds-rv good\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>Good</span><span class=\"ds-rv ok\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"8\" y1=\"15\" x2=\"16\" y2=\"15\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>Okayish</span><span class=\"ds-rv bad\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M16 16s-1.5-2-4-2-4 2-4 2\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>Bad</span></div>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-rvs{display:flex;gap:8px}.ds-rv{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px 0 7px;border-radius:999px;font-size:13px;font-weight:800}.ds-rv.good{background:var(--good-bg);color:var(--good)}.ds-rv.ok{background:var(--ok-bg);color:var(--ok)}.ds-rv.bad{background:var(--bad-bg);color:var(--bad)}"
+    },
+    {
+      "name": "Entry Card",
+      "kind": "card",
+      "refersTo": "card-entry",
+      "description": "Timeline card: who, where, loved / didn't like, verdict and price.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-top\"><span class=\"ds-av\">A</span><div style=\"flex:1\"><div class=\"ds-who\"><b>Ananya</b> went to</div><div class=\"ds-place\">Bao Story</div><div class=\"ds-meta\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg>Indiranagar · with Arjun</div></div><span class=\"ds-time\">2h</span></div><div class=\"ds-lines\"><div>Loved: chicken bao, chilli oil noodles</div><div>Didn&#39;t like: iced tea</div></div><div class=\"ds-foot\"><span class=\"ds-rv\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>Good</span><span class=\"ds-price\">₹450 / person</span></div></article>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-card{width:332px;background:var(--surface);border-radius:20px;padding:14px 14px 13px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 6px 18px -12px rgba(20,30,50,.22);transition:box-shadow .2s}.ds-card:hover{box-shadow:0 1px 2px rgba(20,30,50,.06),0 10px 24px -12px rgba(20,30,50,.3)}.ds-top{display:flex;gap:11px;align-items:flex-start}.ds-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;background:#6C8EBF;flex:none}.ds-who{font-size:14px;color:var(--ink-2)}.ds-who b{color:var(--ink);font-weight:800}.ds-place{font-family:Fredoka,system-ui,sans-serif;font-weight:600;font-size:17.5px;color:var(--ink);line-height:1.2}.ds-meta{font-size:12.5px;color:var(--ink-3);font-weight:600;margin-top:2px;display:flex;gap:6px;align-items:center}.ds-time{font-size:12px;font-weight:700;color:var(--ink-3)}.ds-lines{margin:10px 0 0 51px;display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--ink-2)}.ds-foot{margin:11px 0 0 51px;display:flex;gap:8px;align-items:center}.ds-rv{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px 0 7px;border-radius:999px;font-size:13px;font-weight:800;background:var(--good-bg);color:var(--good)}.ds-price{font-size:13.5px;font-weight:800;color:var(--ink)}"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "Material 3 bar with pill indicator and centre add button.",
+      "html": "<nav class=\"ds-nav\"><a class=\"on\" href=\"#\"><span class=\"ds-pill\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"/></svg></span>Home</a><a href=\"#\"><span class=\"ds-pill\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg></span>Search</a><a href=\"#\" aria-label=\"Add\"><span class=\"ds-plus\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg></span></a></nav>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-nav{width:300px;height:78px;background:var(--surface);display:flex;justify-content:space-around;align-items:flex-start;padding-top:10px;border-top:1px solid var(--line)}.ds-nav a{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--ink-2);text-decoration:none;width:64px}.ds-pill{width:56px;height:30px;border-radius:16px;display:grid;place-items:center;transition:background .2s}.ds-nav a:hover .ds-pill{background:var(--surface-2)}.ds-nav a:focus-visible{outline:2px solid var(--p);outline-offset:2px;border-radius:12px}.ds-nav a.on{color:var(--ink)}.ds-nav a.on .ds-pill{background:var(--pc);color:var(--on-pc)}.ds-plus{width:52px;height:52px;border-radius:18px;background:var(--p);color:#fff;display:grid;place-items:center;margin-top:-4px;box-shadow:0 6px 14px -6px var(--p)}"
+    },
+    {
+      "name": "Search Bar",
+      "kind": "input",
+      "refersTo": "search-bar",
+      "description": "Pill search with soft lift, used on Search and Map.",
+      "html": "<label class=\"ds-search\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input placeholder=\"Search places\"></label>",
+      "css": ":host{--p:#2350D9;--p-strong:#16348F;--on-p:#fff;--pc:#DBE4FF;--on-pc:#0E2266;--bg:#EEF2FF;--surface:#fff;--surface-2:#E6ECFF;--ink:#10183A;--ink-2:#46507A;--ink-3:#5C668C;--line:#D9E0F7;--good:#17703E;--good-bg:#DDF2E4;--ok:#845300;--ok-bg:#FBEFD2;--bad:#A8301F;--bad-bg:#FADFDB;font-family:Nunito,system-ui,sans-serif}.ds-search{width:320px;height:52px;border-radius:999px;background:var(--surface);display:flex;align-items:center;gap:10px;padding:0 18px;box-shadow:0 1px 2px rgba(20,30,50,.06),0 8px 20px -14px rgba(20,30,50,.3);color:var(--ink-2)}.ds-search input{border:0;outline:none;flex:1;background:transparent;font:600 15.5px Nunito,system-ui,sans-serif;color:var(--ink)}.ds-search input::placeholder{color:var(--ink-3)}.ds-search:focus-within{box-shadow:inset 0 0 0 2px var(--p),0 8px 20px -14px rgba(20,30,50,.3)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Friendly Kitchen",
+    "overview": "Thinnava is a food diary kept among friends, and the system is built to feel like a warm, uncluttered kitchen table rather than a review site. Every surface is about a person and what they said; nothing is about stars, photos or aggregate scores. The chef-cat mascot (the owner's own art, `ui-references/7.png`, used as alpha-matted cutouts `design/assets/cat-sitting.png` and `cat-peek.png`) is the brand and appears on identity moments: splash, welcome, profile setup and empty states, where the peeking cat's paws rest on the top edge of a card.\n\nStructure is Android Material 3 (top app bar, navigation bar with pill indicator, chips, bottom sheets, segmented control), and the brand arrives through theming: a cobalt-blue role set, soft rounded white cards, Fredoka for the friendly display voice and Nunito for everything read. The page ground is flat. The owner rejected gradients as \"vibecoded\"; depth comes from white surfaces lifting off a pale sky ground with soft, diffuse shadows.\n\nDensity is relaxed and one-handed: 48px touch targets, 52px primary buttons, an 18px screen gutter, one obvious primary action per screen.",
+    "keyCharacteristics": [
+      "Flat sky ground, white rounded cards and list surfaces on top.",
+      "Fredoka display (600) for wordmark, headings and place names; Nunito body with heavy weights (700/800) for names and labels.",
+      "Material 3 skeleton, brand via colour roles; one role set shared by every palette.",
+      "Good / Okayish / Bad review pills in fixed semantic green / amber / red.",
+      "The chef cat on identity and empty moments only."
+    ],
+    "rules": [
+      {
+        "name": "The Fixed Verdict Rule",
+        "body": "Good is always green, Okayish always amber, Bad always red, in every palette and every screen. Brand colour never stands in for a verdict, and verdict colours never decorate.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Role Set Rule",
+        "body": "Every colour on a screen comes from a role (`p`, `p-strong`, `pc`, `bg`, `surface`, `ink`...). New screens use roles, not hex values, so palettes stay swappable.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Fredoka speaks for the brand and for places (wordmark, headings, place names, big numerals); Nunito carries everything else. Never set body copy or buttons in Fredoka.",
+        "section": "typography"
+      },
+      {
+        "name": "The Soft Lift Rule",
+        "body": "Depth is white on sky plus a diffuse navy-tinted shadow. Strokes are inset hairlines (1-1.5px `hairline`), never heavy borders.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep the ground flat: Mist by default; Art or Solid treatment pending the owner's decision.",
+      "**Do** lead every entry with who and where, then loved / didn't like / price, with the review pill in the footer.",
+      "**Do** use the fixed Good / Okayish / Bad pills for every verdict, in every palette.",
+      "**Do** set place names, headings and the wordmark in Fredoka 600; everything else in Nunito.",
+      "**Do** use roles (`p`, `pc`, `surface`, `ink`) rather than raw hex so palettes remain swappable.",
+      "**Do** show the chef cat on identity and empty moments, peeking over a card's top edge.",
+      "**Do** mark private entries with the lock \"Only you\"."
+    ],
+    "donts": [
+      "**Don't** use gradients on grounds or surfaces; the owner rejected them.",
+      "**Don't** use hard offset shadows or heavy borders; lift is a soft blurred shadow, strokes are inset hairlines.",
+      "**Don't** show stars or numeric scores as the app's own rating, and no rating summaries; stars appear only beside Google's figure.",
+      "**Don't** add photos to entries or cards.",
+      "**Don't** recolour verdict pills with brand colours, or use verdict colours as decoration (the mockup's red \"loved\" heart is a known conflict with this rule, not a pattern to copy).",
+      "**Don't** set body copy or buttons in Fredoka."
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+# Design-tool scratch (review screenshots)
+.impeccable/review/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+google-services.json
+*.keystore
+*.jks
+
+# Dependencies and builds
+node_modules/
+.expo/
+dist/
+build/
+android/
+ios/
+*.apk
+*.aab
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

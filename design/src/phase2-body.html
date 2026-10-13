@@ -1,0 +1,718 @@
+<main>
+
+<!-- ================= PLACES & ENTRIES ================= -->
+<section class="sec">
+  <h2>Place page and entry detail</h2>
+  <p>The place page leads with <b>people</b>, not ratings: your own history, then everyone you know who's been, each with what they loved, didn't like and paid. The hand-off buttons (Directions, Swiggy) sit right under the name. Google's rating, hours and price load only on a tap, so we never pay for them.</p>
+  <div class="row">
+
+    <!-- C1 Place page -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb"><i data-lucide="heart" class="i"></i></button><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div class="hero-place">
+            <h1 class="h-lg">Burger Factory</h1>
+            <div class="meta-line">Fast food · Koramangala</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:0 14px;height:40px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);width:max-content;font-size:13.5px;font-weight:800;color:var(--ink-2)"><i data-lucide="star" style="width:16px;height:16px;color:var(--p)"></i>Google info<span style="font-weight:600;color:var(--ink-3)">rating, hours, price</span><i data-lucide="chevron-down" style="width:16px;height:16px;color:var(--ink-3)"></i></div>
+          </div>
+          <div class="acts">
+            <div class="act"><span class="c"><i data-lucide="navigation"></i></span>Directions</div>
+            <div class="act"><span class="c brand swiggy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.034 24c-.376-.411-2.075-2.584-3.95-5.513-.547-.916-.901-1.63-.833-1.814.178-.48 3.355-.743 4.333-.308.298.132.29.307.29.409 0 .44-.022 1.619-.022 1.619a.441.441 0 1 0 .883-.002l-.005-2.939c0-.255-.278-.319-.331-.329-.511-.002-1.548-.006-2.661-.006-2.457 0-3.006.101-3.423-.172-.904-.591-2.383-4.577-2.417-6.819C3.849 4.964 5.723 2.225 8.362.868A8.13 8.13 0 0 1 12.026 0c4.177 0 7.617 3.153 8.075 7.209l.001.011c.084.981-5.321 1.189-6.39.904-.164-.044-.206-.212-.206-.284L13.5 4.996a.442.442 0 0 0-.884.002l.009 3.866a.33.33 0 0 0 .268.32l3.354-.001c1.79 0 2.542.207 3.042.588.333.254.461.739.349 1.37C18.633 16.755 12.273 23.71 12.034 24z"/></svg></span>Swiggy</div>
+          </div>
+          <div class="panel">
+            <h3>Your visits</h3>
+            <div class="hist"><span class="chip">Jan 12 · <b class="t-good">Good</b></span><span class="chip">Sep 3 · <b class="t-ok">Okayish</b></span></div>
+          </div>
+          <div class="panel" style="margin-top:10px">
+            <h3>People who've been</h3>
+            <div class="person"><span class="av a2">A</span><div class="pc"><div class="pn"><b>Ananya</b> · with Arjun <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Peri peri fries</div><div class="pl muted">₹350 / person · Oct 2</div></div></div>
+            <div class="person"><span class="src"><i data-lucide="user-round"></i></span><div class="pc"><div class="pn"><b>Rahul</b> told you <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Chicken burger</div><div class="pl"><i data-lucide="thumbs-down" style="color:var(--ink-3)"></i>Shake</div><div class="pl muted"><i data-lucide="lock"></i>Only you</div></div></div>
+          </div>
+        </div>
+        <div class="efab"><i data-lucide="plus"></i>Add visit</div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>C1 Place page.</b> Heart (top right) adds to your wishlist. Google's rating, hours and price load only when you tap <b>Google info</b> (never automatically, so we stay inside Google's free allowance; when it runs out for the month the row just opens Google Maps). Hand-offs: <b>Directions</b> and a <b>Swiggy</b> search (Zomato and District are v2). Your own visits come first, then people who've been. Private friend entries carry "Only you". One main action: <b>Add visit</b>.</figcaption>
+    </figure>
+
+    <!-- C1a Google only + wishlist snackbar -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb" style="background:var(--p);color:#fff"><i data-lucide="heart" class="i" style="fill:currentColor"></i></button><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div class="hero-place">
+            <h1 class="h-lg">Biryani Zone</h1>
+            <div class="meta-line">Restaurant · HSR Layout</div>
+          </div>
+          <div class="acts">
+            <div class="act"><span class="c"><i data-lucide="navigation"></i></span>Directions</div>
+            <div class="act"><span class="c brand swiggy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.034 24c-.376-.411-2.075-2.584-3.95-5.513-.547-.916-.901-1.63-.833-1.814.178-.48 3.355-.743 4.333-.308.298.132.29.307.29.409 0 .44-.022 1.619-.022 1.619a.441.441 0 1 0 .883-.002l-.005-2.939c0-.255-.278-.319-.331-.329-.511-.002-1.548-.006-2.661-.006-2.457 0-3.006.101-3.423-.172-.904-.591-2.383-4.577-2.417-6.819C3.849 4.964 5.723 2.225 8.362.868A8.13 8.13 0 0 1 12.026 0c4.177 0 7.617 3.153 8.075 7.209l.001.011c.084.981-5.321 1.189-6.39.904-.164-.044-.206-.212-.206-.284L13.5 4.996a.442.442 0 0 0-.884.002l.009 3.866a.33.33 0 0 0 .268.32l3.354-.001c1.79 0 2.542.207 3.042.588.333.254.461.739.349 1.37C18.633 16.755 12.273 23.71 12.034 24z"/></svg></span>Swiggy</div>
+            
+          </div>
+          <div class="panel" style="padding:16px">
+            <div style="display:flex;gap:12px;align-items:center"><span class="src"><i data-lucide="users-round"></i></span><div><b style="font-size:15px">Nobody you know has been yet</b><div class="muted" style="font-size:13px;margin-top:2px">Here's what Google says.</div></div></div>
+          </div>
+          <div class="panel" style="margin-top:10px">
+            <div class="grow"><span class="ic"><i data-lucide="map-pin"></i></span><div>27th Main, Sector 2, HSR Layout</div></div>
+            <div style="margin:8px 0 2px;height:44px;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--line);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:14.5px;color:var(--p)"><i data-lucide="star" style="width:18px;height:18px"></i>Show Google's rating, hours and price</div>
+          </div>
+        </div>
+        <div class="snack">Added to your wishlist<span class="sa">Who sees it</span></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>C1a Nobody you know has been.</b> The address shows straight away; one tap loads Google's rating, hours and price level (tap-only keeps us inside the free allowance). Shown right after tapping the heart: a snackbar confirms "Added to your wishlist" with a shortcut to change who sees it. <i>(Sample data.)</i></figcaption>
+    </figure>
+
+    <!-- C1b closed + C2 entry -->
+    <figure>
+      <div class="phone" style="height:300px"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="hero-place">
+          <span class="closed"><i data-lucide="store"></i>Permanently closed</span>
+          <h1 class="h-lg" style="margin-top:10px;color:var(--ink-2)">Koshy's Café</h1>
+          <div class="meta-line">Café · MG Road</div>
+          <p class="t" style="font-size:14px;margin:12px 0 0">Your 3 visits and what people said are still here. Swiggy is hidden; Directions stays.</p>
+        </div>
+      </div></div>
+      <figcaption><b>C1b Closed.</b> A clear label; history stays, the Swiggy button disappears.</figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Rahul's experience</span><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div class="panel placelink"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Koramangala · Fast food</div></div><i data-lucide="chevron-right" class="i" style="color:var(--ink-3)"></i></div>
+          <div class="panel" style="margin-top:10px;padding:16px">
+            <span class="rv good big"><i data-lucide="smile"></i>Good</span>
+            <dl class="facts">
+              <dt>Loved</dt><dd>Chicken burger</dd>
+              <dt>Didn't like</dt><dd>Shake</dd>
+              <dt>Price</dt><dd>₹300 / person</dd>
+              <dt>Went on</dt><dd>Oct 10</dd>
+            </dl>
+          </div>
+                    <p class="muted" style="margin:12px 18px 0;font-size:12.5px;display:flex;gap:6px;align-items:center"><i data-lucide="lock" style="width:14px;height:14px"></i>Logged by you on Oct 11 · Only you can see this</p>
+        </div>
+        <div style="display:flex;gap:10px;padding:12px 18px 28px"><button class="btn btn-tonal" style="flex:1"><i data-lucide="pencil" class="i"></i>Edit</button><button class="btn btn-p" style="flex:1"><i data-lucide="heart" class="i"></i>Wishlist</button></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>C2 Entry detail.</b> The full entry. The original WhatsApp message is <b>not saved</b>, only what you confirmed. (An internet entry shows its original link here instead.) Never called "Rahul's review", it's his experience, logged by you. ⋮ holds Delete.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= SHARE IMPORT ================= -->
+<section class="sec">
+  <h2>Share import: from WhatsApp to saved</h2>
+  <p>The hero flow. Share a message to Thinnava, wait a second while the cat reads it, check what was found, add who told you, save. Every field can be fixed by hand, and the friend's name is never guessed.</p>
+  <div class="row">
+
+    <!-- D7 Reading -->
+    <figure>
+      <div class="phone"><div class="scr bare" style="background:#EFE7DE">
+        {{SB}}
+        <div style="background:#1F6E5B;color:#fff;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;font-weight:800"><i data-lucide="arrow-left" class="i"></i><span class="av sm a1">R</span>Rahul</div>
+        <div style="padding:18px 14px;display:flex;flex-direction:column;gap:8px">
+          <div class="wa in">Free this weekend?</div>
+          <div class="wa in" style="box-shadow:0 0 0 2px var(--p)">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div>
+        </div>
+        <div class="scrim"></div>
+        <div class="sheet" style="padding-bottom:36px">
+          <div class="handle"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;padding:0 22px">
+            <img src="assets/cat-peek.png" alt="" style="width:120px;margin:0 auto -9px;position:relative;z-index:2">
+            <div class="reading">
+              <b>Reading this message…</b>
+              <span class="sk" style="width:80%"></span><span class="sk" style="width:62%"></span><span class="sk" style="width:70%"></span>
+            </div>
+            <p class="muted" style="font-size:13px;margin:12px 0 0;text-align:center">Looking for the place, dishes and price.</p>
+          </div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D7 Reading.</b> Opens over WhatsApp as a sheet, so you never lose your place in the chat. Takes 1–3 seconds.</figcaption>
+    </figure>
+
+    <!-- D8 Confirmation -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">Check what we found</span><span class="step">1 of 2</span></div>
+        <div class="body form">
+          <div class="seg" style="margin:0"><span class="on"><i data-lucide="user-round"></i>A friend</span><span><i data-lucide="globe"></i>Internet</span></div>
+          <div class="field"><label>Who told you? <span class="req">Required</span></label><div class="inp focus"><span class="muted">Type a name</span><span class="caret"></span></div>
+            <div class="sugg"><span class="chip">Rahul</span><span class="chip">Rahul K <i data-lucide="link"></i></span><span class="chip">Mom</span></div></div>
+          <div class="field"><label>Place</label><div class="inp"><i data-lucide="map-pin" style="width:18px;height:18px;color:var(--p)"></i>Burger Factory, Koramangala<span class="chg">Change</span></div></div>
+          <div class="field"><label>How was it for them?</label><div class="revsel"><span class="on good"><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+          <div class="field"><label>Loved</label><div class="chipin"><span class="ichip">Chicken burger<i data-lucide="x"></i></span><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="field"><label>Didn't like</label><div class="chipin"><span class="ichip">Shake<i data-lucide="x"></i></span><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="field"><label>Price per person</label><div class="inp warn">₹ 300</div><span class="flag"><i data-lucide="circle-alert"></i>Please check this</span></div>
+        </div>
+        <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" style="flex:1;opacity:.45">Save</button></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D8 Confirmation.</b> "1 of 2" because the message named two places. <b>Who told you</b> is empty and required, with quick picks from your names. Save stays off until it's filled (or you switch to Internet). Unsure fields get an amber "please check". Below the fold: the date, and the shared message for reference while checking (it isn't saved).</figcaption>
+    </figure>
+
+    <!-- D8b place candidates -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Which one?</span></div>
+        <div class="body">
+          <p class="t" style="margin:0 18px 12px;font-size:14px">We found 2 places called <b>Burger Factory</b>. Pick the right one.</p>
+          <div class="panel">
+            <div class="cand on"><div class="mthumb"><svg class="base"><use href="#mapbase"/></svg><span class="mdot"></span></div><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">80 Feet Rd, Koramangala · 3.1 km</div></div><span class="radio on"></span></div>
+            <div class="cand"><div class="mthumb"><svg class="base" style="transform:translate(-30px,-40px)"><use href="#mapbase"/></svg><span class="mdot"></span></div><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Indiranagar 100 Ft Rd · 6.4 km</div></div><span class="radio"></span></div>
+          </div>
+          <button class="btn btn-out" style="width:auto;margin:14px 18px 0;padding:0 18px;height:44px;font-size:14px"><i data-lucide="search" style="width:16px;height:16px"></i>Search for a different place</button>
+        </div>
+        <div class="bar2"><button class="btn btn-p">Use this place</button></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D8b Pick the place.</b> Shown only when the name matches more than one Google place.</figcaption>
+    </figure>
+
+    <!-- D8c filled + D7 fail -->
+    <figure>
+      <div class="phone" style="height:360px"><div class="scr">
+        {{SB}}
+        <div class="body form" style="padding-top:12px">
+          <div class="field"><label>Who told you? <span class="req" style="color:var(--good);background:var(--good-bg)">Done</span></label><div class="inp"><span class="av sm a1" style="width:26px;height:26px">R</span>Rahul<span class="chg">Change</span></div></div>
+          <div class="field"><label>Shared message <span class="optl">for checking · not saved</span></label><div class="quote">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div></div>
+        </div>
+        <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" style="flex:1">Save</button></div>
+      </div></div>
+      <figcaption><b>D8 ready to save.</b> Name filled, Save turns on. "Save" then moves to the 2nd place.</figcaption>
+      <div class="phone" style="height:330px"><div class="scr">
+        <div class="body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center">
+          <img src="assets/cat-sitting.png" alt="" style="width:92px;filter:grayscale(.2)">
+          <h2 class="h-md" style="margin-top:10px">Couldn't find a place in that</h2>
+          <p class="t" style="font-size:14px;margin:6px 0 16px">No worries, fill it in yourself.</p>
+          <button class="btn btn-p">Fill it in</button>
+        </div>
+      </div></div>
+      <figcaption><b>D7 failed.</b> AI can't read it (or you're offline): straight to the form, prefilled with anything it did find.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= LOGGING BY HAND ================= -->
+<section class="sec">
+  <h2>Logging by hand</h2>
+  <p>The same fields as the confirmation sheet, so there's one form to learn. Smart defaults (today, nearby places, All connections) mean most visits take a few taps.</p>
+  <div class="row">
+
+    <!-- D1 place picker -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Where did you eat?</span></div>
+        <div style="padding:0 0 10px"><div class="search"><i data-lucide="search" class="i"></i><span>Search places</span></div></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">Near you</div>
+          <div class="row-item"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Bao Story</div><div class="sub">Indiranagar · 120 m</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="coffee"></i></span><div style="flex:1"><div class="nm">Third Wave Coffee</div><div class="sub">Indiranagar · 300 m</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Toit</div><div class="sub">Indiranagar · 450 m</div></div></div>
+          <div class="sec-lbl">Recently used</div>
+          <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">MTR</div><div class="sub">Lalbagh Road</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Koramangala</div></div></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D1 Place picker.</b> Nearby first (if location is allowed), then recently used. Only Google places can be picked.</figcaption>
+    </figure>
+
+    <!-- D2 Add visit -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">Add visit</span></div>
+        <div class="body form">
+          <div class="placebar"><span class="thumb" style="width:40px;height:40px"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Bao Story</div><div class="sub">Indiranagar</div></div><span class="chip" style="height:30px"><i data-lucide="calendar"></i>Today</span></div>
+          <div class="field"><label>How was it?</label><div class="revsel"><span class="on good"><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+          <div class="field"><label>Loved</label><div class="chipin"><span class="ichip">Chicken bao<i data-lucide="x"></i></span><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="field"><label>Didn't like <span class="optl">optional</span></label><div class="chipin"><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="two"><div class="field"><label>Price / person</label><div class="inp">₹ 450</div></div>
+            <div class="field"><label>Went with</label><div class="inp" style="gap:0"><span class="av sm a3" style="width:26px;height:26px;box-shadow:0 0 0 2px #fff">A</span><span class="av sm" style="width:26px;height:26px;margin-left:-6px;background:var(--surface-2);color:var(--p-strong);box-shadow:0 0 0 2px #fff">M</span><span style="margin-left:8px;font-size:14px">Arjun, Mom</span></div></div></div>
+          <div class="field"><label>Notes <span class="optl">optional</span></label><div class="inp"><span class="muted">Anything to remember?</span></div></div>
+          <div class="aud"><i data-lucide="users-round"></i><div style="flex:1">Shared with<b>All connections</b></div><i data-lucide="chevron-right"></i></div>
+        </div>
+        <div class="bar2"><button class="btn btn-p">Save visit</button></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D2 Add visit.</b> Place and date at the top (date defaults to today). Review is three big buttons, dishes are quick chips. "Went with" mixes connections (tagged, they'll get a request) and private names like Mom. Audience defaults to All connections.</figcaption>
+    </figure>
+
+    <!-- D5 manual friend entry -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">A friend told me</span></div>
+        <div class="clip"><i data-lucide="clipboard"></i><div style="flex:1"><b>Use copied text?</b><span>"bro try Meghana's boneless biryani…"</span></div><span class="sa">Use</span></div>
+        <div class="body form">
+          <div class="seg" style="margin:0"><span class="on"><i data-lucide="user-round"></i>A friend</span><span><i data-lucide="globe"></i>Internet</span></div>
+          <div class="field"><label>Who told you? <span class="req">Required</span></label><div class="inp"><span class="muted">Type a name</span></div></div>
+          <div class="field"><label>Place</label><div class="inp"><span class="muted">Search places</span><i data-lucide="search" style="margin-left:auto;width:18px;height:18px;color:var(--ink-3)"></i></div></div>
+          <div class="field"><label>How was it for them?</label><div class="revsel"><span><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+          <div class="field"><label>Loved</label><div class="chipin"><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+        </div>
+        <div class="bar2"><button class="btn btn-p" style="opacity:.45">Save</button></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D5 By hand.</b> Same form, empty, no AI. If you've just copied something, a one-tap "Use copied text?" offers to read it. Switch to <b>Internet</b> and the name field becomes "Link (optional)".</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= PICKERS ================= -->
+<section class="sec">
+  <h2>Pickers and confirmations</h2>
+  <p>Small sheets that slide up from below, each doing one job. They keep the forms short.</p>
+  <div class="row">
+
+    <!-- D6 friend name picker -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:540px">
+          <div class="handle"></div>
+          <h2 class="h-md" style="padding:0 22px 12px">Who told you?</h2>
+          <div class="search" style="box-shadow:inset 0 0 0 2px var(--p)"><span class="typed">Rahu</span><span class="caret" style="margin-left:0"></span></div>
+          <div class="sec-lbl">Your names</div>
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Rahul</div><div class="sub">5 entries</div></div></div>
+          <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <i data-lucide="link" style="width:14px;height:14px;color:var(--p)"></i></div><div class="sub">Linked to @rahulk · 2 entries</div></div></div>
+          <div class="row-item"><span class="thumb" style="width:40px;height:40px;border-radius:50%"><i data-lucide="plus"></i></span><div style="flex:1"><div class="nm" style="color:var(--p)">Add "Rahu" as a new name</div></div></div>
+          <p class="muted" style="font-size:12.5px;margin:10px 22px 0">Names are private to you. Link one to a connection from Settings → Friend names.</p>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D6 Friend name.</b> Autocompletes from your private names; linked ones show a link mark. New names are one tap.</figcaption>
+    </figure>
+
+    <!-- D3 companions -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:560px">
+          <div class="handle"></div>
+          <h2 class="h-md" style="padding:0 22px 12px">Who did you go with?</h2>
+          <div class="search"><i data-lucide="search" class="i"></i><span>Search</span></div>
+          <div class="sec-lbl">Connections <span style="font-weight:600">· they'll be asked to confirm</span></div>
+          <div class="row-item"><span class="av a3">A</span><div style="flex:1"><div class="nm">Arjun</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="av a2">A</span><div style="flex:1"><div class="nm">Ananya</div></div><span class="check"></span></div>
+          <div class="sec-lbl">Private names <span style="font-weight:600">· only you see these</span></div>
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Mom</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="thumb" style="width:40px;height:40px;border-radius:50%"><i data-lucide="plus"></i></span><div style="flex:1"><div class="nm" style="color:var(--p)">Add a private name</div></div></div>
+          <div style="padding:10px 18px 0"><button class="btn btn-p">Done · 2 people</button></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D3 Went with.</b> Two clear groups: connections (tagged, they can accept or reject) and private names (just for you).</figcaption>
+    </figure>
+
+    <!-- D4 audience -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:500px">
+          <div class="handle"></div>
+          <h2 class="h-md" style="padding:0 22px 4px">Who can see this?</h2>
+          <p class="muted" style="font-size:13px;margin:0 22px 8px">Pick one or more lists.</p>
+          <div class="row-item"><span class="src"><i data-lucide="users-round"></i></span><div style="flex:1"><div class="nm">All connections</div><div class="sub">9 people · everyone you connect with</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="heart-handshake"></i></span><div style="flex:1"><div class="nm">Close friends</div><div class="sub">3 people</div></div><span class="check"></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="graduation-cap"></i></span><div style="flex:1"><div class="nm">College</div><div class="sub">5 people</div></div><span class="check"></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="lock"></i></span><div style="flex:1"><div class="nm">Only me</div><div class="sub">An empty list, nobody else sees it</div></div><span class="check"></span></div>
+          <div style="padding:12px 18px 0"><button class="btn btn-p">Done</button></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D4 Audience.</b> Multi-select lists. "Only me" is shown as a ready-made empty list so nobody has to work it out. Built in, next to All connections.</figcaption>
+    </figure>
+
+    <!-- D10 delete dialog -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Your visit</span></div>
+        <div class="body"><div class="panel placelink"><span class="thumb"><i data-lucide="utensils"></i></span><div style="flex:1"><div class="nm">Bao Story</div><div class="sub">Oct 9 · Good</div></div></div></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic"><i data-lucide="trash-2"></i></span>
+          <h2 class="h-md">Delete this visit?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">It'll disappear for everyone you shared it with. Arjun's own review stays on his profile.</p>
+          <div class="dlg-acts"><span class="tbtn">Cancel</span><span class="tbtn danger">Delete</span></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>D10 Delete.</b> A dialog only for things that can't be undone. Says exactly what happens.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= PEOPLE ================= -->
+<section class="sec">
+  <h2>People, connections and lists</h2>
+  <p>Connections are mutual and request-based, and you see nothing about someone until you're connected. "Their map" means a map of the places they've been and wishlisted, limited to what they've shared with you.</p>
+  <div class="row">
+
+    <!-- E1 connection profile -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb"><i data-lucide="bell" class="i"></i></button><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body">
+          <div style="display:flex;gap:14px;align-items:center;padding:0 18px">
+            <span class="av a2" style="width:72px;height:72px;font-size:28px">A</span>
+            <div style="flex:1"><h1 class="h-md">Ananya R</h1><div class="muted" style="font-size:14px;font-weight:700">@ananya.eats</div><div class="t" style="font-size:13.5px;margin-top:2px">Momo hunter. Will travel for bao.</div></div>
+          </div>
+          <div style="display:flex;gap:8px;padding:14px 18px 0"><span class="chip" style="height:38px"><i data-lucide="check"></i>Connected</span><span class="chip" style="height:38px"><i data-lucide="heart-handshake"></i>Close friends</span><span class="muted" style="margin-left:auto;font-size:13px;font-weight:700;align-self:center">24 visited</span></div>
+          <div class="seg" style="margin-top:14px"><span class="on">Visited</span><span>Wishlist</span></div>
+          <div style="margin:12px 18px 0;height:120px;border-radius:20px;overflow:hidden;position:relative">
+            <div class="map"><svg class="base"><use href="#mapbase"/></svg>
+              <div class="pin" style="left:24%;top:50%"><div class="bub" style="padding:3px"><span class="av a2" style="width:22px;height:22px;font-size:10px">A</span></div><div class="tail"></div></div>
+              <div class="pin" style="left:56%;top:40%"><div class="bub" style="padding:3px"><span class="av a2" style="width:22px;height:22px;font-size:10px">A</span></div><div class="tail"></div></div>
+              <div class="pin" style="left:44%;top:92%"><div class="bub" style="padding:3px"><span class="av a2" style="width:22px;height:22px;font-size:10px">A</span></div><div class="tail"></div></div>
+            </div>
+          </div>
+          <div class="panel" style="margin-top:12px">
+            <div class="person"><span class="thumb" style="width:40px;height:40px"><i data-lucide="utensils"></i></span><div class="pc"><div class="pn"><b>Bao Story</b> <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Chicken bao</div></div></div>
+            <div class="person"><span class="thumb" style="width:40px;height:40px"><i data-lucide="utensils"></i></span><div class="pc"><div class="pn"><b>Burger Factory</b> <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Peri peri fries</div></div></div>
+          </div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E1 Connection's profile.</b> Their map shows their visited (or wishlist) places. The bell turns on their visit notifications (off by default). The list chip shows which of your lists they're in; ⋮ has Remove and Block.</figcaption>
+    </figure>
+
+    <!-- E2 not connected -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb ghost"><i data-lucide="more-vertical" class="i"></i></button></div>
+        <div class="body" style="display:flex;flex-direction:column;align-items:center;padding:20px 22px 0;text-align:center">
+          <span class="av a5" style="width:96px;height:96px;font-size:36px">A</span>
+          <h1 class="h-md" style="margin-top:12px">Anand K</h1>
+          <div class="muted" style="font-size:14px;font-weight:700">@anandk</div>
+          <img src="assets/cat-peek.png" alt="" style="width:130px;margin:36px auto -10px;position:relative;z-index:2">
+          <div class="panel" style="margin:0;padding:26px 20px 20px;width:100%">
+            <h2 class="h-md" style="font-size:18px">Connect to see where Anand eats</h2>
+            <p class="t" style="font-size:14px;margin:6px 0 16px">Once you both say yes, you'll see each other's visits and wishlist.</p>
+            <button class="btn btn-p"><i data-lucide="user-plus" class="i"></i>Request to connect</button>
+          </div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E2 Not connected.</b> Name, username, photo, and one action. After tapping it reads "Requested". If they asked you, it reads "Accept".</figcaption>
+    </figure>
+
+    <!-- E3 connections / requests -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Connections</span><button class="icb ghost"><i data-lucide="user-plus" class="i"></i></button></div>
+        <div class="mtabs"><span>Connections · 9</span><span class="on">Requests · 2</span></div>
+        <div class="body listsurf" style="margin-top:0;border-radius:0">
+          <div class="sec-lbl">Want to connect with you</div>
+          <div class="row-item"><span class="av a1">A</span><div style="flex:1;min-width:0"><div class="nm">Anu</div><div class="sub">@anu.bites</div></div><button class="btn btn-tonal btn-sm" style="height:36px">Accept</button><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="sec-lbl">You asked</div>
+          <div class="row-item"><span class="av a3">A</span><div style="flex:1;min-width:0"><div class="nm">Anantha S</div><div class="sub">@anantha_s · 2 days ago</div></div><button class="btn btn-out btn-sm" style="height:36px;color:var(--ink-2)">Cancel</button></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E3 Connections.</b> Two tabs. Requests shows incoming (Accept / ×) and the ones you sent (Cancel). The person+ icon opens Search → People.</figcaption>
+    </figure>
+
+    <!-- E5 add to lists -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="body"></div>
+        <div class="scrim"></div>
+        <div class="sheet" style="height:470px">
+          <div class="handle"></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:0 22px 4px"><span class="av a1">A</span><h2 class="h-md" style="font-size:18px">You and Anu are connected!</h2></div>
+          <p class="muted" style="font-size:13.5px;margin:0 22px 8px">Add Anu to any of your lists?</p>
+          <div class="row-item"><span class="src"><i data-lucide="users-round"></i></span><div style="flex:1"><div class="nm">All connections</div><div class="sub">Automatic</div></div><span class="check on" style="opacity:.5"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="heart-handshake"></i></span><div style="flex:1"><div class="nm">Close friends</div></div><span class="check on"><i data-lucide="check"></i></span></div>
+          <div class="row-item"><span class="src"><i data-lucide="graduation-cap"></i></span><div style="flex:1"><div class="nm">College</div></div><span class="check"></span></div>
+          <div style="display:flex;gap:10px;padding:12px 18px 0"><button class="btn btn-out" style="flex:1;color:var(--ink-2)">Skip</button><button class="btn btn-p" style="flex:1">Done</button></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E5 Add to lists.</b> Pops up when a connection is made. All connections is automatic; the rest are optional.</figcaption>
+    </figure>
+
+    <!-- E6 my lists -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">My lists</span></div>
+        <div class="body">
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="users-round"></i></span><div style="flex:1">All connections<div class="muted sm">9 people · automatic</div></div></div>
+            <div class="grow"><span class="ic"><i data-lucide="heart-handshake"></i></span><div style="flex:1">Close friends<div class="muted sm">3 people</div></div><div class="stack"><span class="av a2">A</span><span class="av a3">A</span><span class="av a1">A</span></div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="graduation-cap"></i></span><div style="flex:1">College<div class="muted sm">5 people</div></div><div class="stack"><span class="av a5">J</span><span class="av a4">K</span></div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="lock"></i></span><div style="flex:1">Only me<div class="muted sm">Empty list · just you</div></div></div>
+          </div>
+          <div style="padding:4px 16px"><button class="btn btn-tonal"><i data-lucide="plus" class="i"></i>New list</button></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E6 My lists.</b> Your audience lists, Snapchat-style. Built-in ones can't be edited.</figcaption>
+    </figure>
+
+    <!-- E7 list detail -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Close friends</span><button class="icb ghost"><i data-lucide="pencil" class="i"></i></button></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">3 people</div>
+          <div class="row-item"><span class="av a2">A</span><div style="flex:1"><div class="nm">Ananya R</div><div class="sub">@ananya.eats</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="row-item"><span class="av a3">A</span><div style="flex:1"><div class="nm">Arjun</div><div class="sub">@arjun.m</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="row-item"><span class="av a1">A</span><div style="flex:1"><div class="nm">Anu</div><div class="sub">@anu.bites</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="x" class="i"></i></button></div>
+          <div class="row-item"><span class="thumb" style="width:40px;height:40px;border-radius:50%"><i data-lucide="plus"></i></span><div class="nm" style="color:var(--p)">Add people</div></div>
+          <div style="padding:20px 18px"><span class="tbtn danger" style="padding:0"><i data-lucide="trash-2" style="width:16px;height:16px"></i> Delete list</span></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E7 List detail.</b> Rename (pencil), remove people (×), add people, delete the list.</figcaption>
+    </figure>
+
+    <!-- E8 tag request -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">You were tagged</span></div>
+        <div class="body">
+          <p class="t" style="margin:0 18px 12px;font-size:15px"><b style="color:var(--ink)">Ananya</b> says you went to <b style="color:var(--ink)">Bao Story</b> together on Oct 9.</p>
+          <div class="panel" style="padding:16px">
+            <div style="display:flex;gap:10px;align-items:center"><span class="av a2">A</span><div style="flex:1"><b>Ananya's review</b><div class="muted sm">Shared with you</div></div><span class="rv good"><i data-lucide="smile"></i>Good</span></div>
+            <dl class="facts" style="margin-top:12px"><dt>Loved</dt><dd>Chicken bao, chilli oil noodles</dd><dt>Didn't like</dt><dd>Iced tea</dd><dt>Price</dt><dd>₹450 / person</dd></dl>
+          </div>
+          <p class="muted" style="font-size:13px;margin:14px 18px 0">To accept, add your own review. It'll be yours, shared with your own lists.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:12px 18px 30px">
+          <button class="btn btn-p"><i data-lucide="pencil" class="i"></i>Write my review</button>
+          <button class="btn btn-tonal"><i data-lucide="copy" class="i"></i>Same as Ananya's</button>
+          <button class="btn" style="background:transparent;color:var(--bad)">Not me, reject</button>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E8 Tag request.</b> Accepting means adding your own review: write it, or one tap copies Ananya's into yours (editable later). Reject removes the tag.</figcaption>
+    </figure>
+
+    <!-- E9 block dialog -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button></div>
+        <div class="body" style="display:flex;flex-direction:column;align-items:center;padding-top:20px"><span class="av a5" style="width:96px;height:96px;font-size:36px">A</span><h1 class="h-md" style="margin-top:12px">Anand K</h1></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic" style="background:var(--bad-bg);color:var(--bad)"><i data-lucide="ban"></i></span>
+          <h2 class="h-md">Block Anand?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">Anand won't be able to find you, send you requests or tag you. If you're connected, you'll be disconnected. They won't be told.</p>
+          <div class="dlg-acts"><span class="tbtn">Cancel</span><span class="tbtn danger">Block</span></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>E9 Block.</b> Remove connection uses the same dialog with softer wording.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= NOTIFICATIONS & SETTINGS ================= -->
+<section class="sec">
+  <h2>Notifications, settings and housekeeping</h2>
+  <p>Settings follows your account reference: grouped white panels with a round icon, a label and a chevron. Housekeeping screens are plain lists.</p>
+  <div class="row">
+
+    <!-- F1 notifications -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Notifications</span></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">Today</div>
+          <div class="note"><span class="av a1">A</span><div style="flex:1"><div><b>Anu</b> wants to connect</div><div class="nacts"><button class="btn btn-p btn-sm" style="height:34px">Accept</button><button class="btn btn-out btn-sm" style="height:34px;color:var(--ink-2)">Decline</button></div></div><span class="time">2m</span></div>
+          <div class="note"><span class="av a2">A</span><div style="flex:1"><div><b>Ananya</b> tagged you at <b>Bao Story</b></div><div class="nacts"><button class="btn btn-tonal btn-sm" style="height:34px">Add your review</button></div></div><span class="time">1h</span></div>
+          <div class="sec-lbl">Earlier</div>
+          <div class="note"><span class="av a3">A</span><div style="flex:1"><div><b>Arjun</b> visited <b>Toit</b>, a place on your wishlist</div></div><span class="time">2d</span></div>
+          <div class="note"><span class="av a5">J</span><div style="flex:1"><div><b>Jay</b> accepted your request</div></div><span class="time">3d</span></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>F1 Notifications.</b> Requests and tags by default, actionable right here. Visit updates only from people whose bell you turned on.</figcaption>
+    </figure>
+
+    <!-- F2 settings -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Settings</span></div>
+        <div class="body">
+          <div style="display:flex;gap:12px;align-items:center;padding:4px 18px 16px"><span class="av a4" style="width:56px;height:56px;font-size:22px">K</span><div style="flex:1"><b style="font-size:16px">Karthik C</b><div class="muted sm">@karthik_eats</div></div><button class="btn btn-tonal btn-sm" style="height:36px">Edit</button></div>
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="users-round"></i></span><div style="flex:1">Connections</div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="list"></i></span><div style="flex:1">My lists</div><i data-lucide="chevron-right" class="chev"></i></div>
+          </div>
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="message-circle"></i></span><div style="flex:1">Friend names</div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="user-round"></i></span><div style="flex:1">Private companion names</div><i data-lucide="chevron-right" class="chev"></i></div>
+            <div class="grow"><span class="ic"><i data-lucide="cloud-off"></i></span><div style="flex:1">Offline drafts</div><span class="badge">1</span><i data-lucide="chevron-right" class="chev"></i></div>
+          </div>
+          <div class="group">
+            <div class="grow"><span class="ic"><i data-lucide="log-out"></i></span><div style="flex:1">Sign out</div></div>
+            <div class="grow" style="color:var(--bad)"><span class="ic" style="background:var(--bad-bg);color:var(--bad)"><i data-lucide="trash-2"></i></span><div style="flex:1">Delete account</div><i data-lucide="chevron-right" class="chev"></i></div>
+          </div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>F2 Settings.</b> Three short groups: people, your private names and drafts, account. The badge flags a draft that needs attention.</figcaption>
+    </figure>
+
+    <!-- F3 edit profile -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title">Edit profile</span></div>
+        <div class="body form">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0 4px"><span class="av a4" style="width:84px;height:84px;font-size:32px">K</span><span class="muted sm">Photo comes from your Google account</span></div>
+          <div class="field"><label>Name</label><div class="inp">Karthik C</div></div>
+          <div class="field"><label>Username</label><div class="inp"><span class="muted">@</span>karthik_eats<span style="margin-left:auto;color:var(--good);display:grid"><i data-lucide="circle-check" class="i"></i></span></div></div>
+          <div class="field"><label>Bio <span class="optl">optional</span></label><div class="inp" style="height:76px;align-items:flex-start;padding-top:14px">Biryani first, questions later.</div></div>
+        </div>
+        <div class="bar2"><button class="btn btn-p">Save</button></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>F3 Edit profile.</b> Same fields and live username check as sign-up.</figcaption>
+    </figure>
+
+    <!-- F4 friend names -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Friend names</span></div>
+        <div class="body">
+          <div class="body listsurf" style="margin-top:4px">
+            <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Rahul</div><div class="sub">5 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <i data-lucide="link" style="width:14px;height:14px;color:var(--p)"></i></div><div class="sub">Linked to @rahulk · 2 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Meera</div><div class="sub">3 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Mom</div><div class="sub">2 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <p class="muted" style="font-size:12.5px;margin:6px 18px 0">⋮ to rename, merge into another name, link to a connection, or delete. Only you see these names.</p>
+          </div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>F4 Friend names.</b> Your private names list. No automatic suggestions: to merge "Rahul" and "Rahul K" yourself, use ⋮ → Merge into… and pick the other name.</figcaption>
+    </figure>
+
+    <!-- F5 companion names -->
+    <figure>
+      <div class="phone" style="height:420px"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title" style="font-size:19px">Private companion names</span></div>
+        <div class="body listsurf">
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Mom</div><div class="sub">On 4 visits</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+          <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Dad</div><div class="sub">On 3 visits</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+          <div class="row-item"><span class="src"><i data-lucide="users-round"></i></span><div style="flex:1"><div class="nm">Hostel gang</div><div class="sub">On 6 visits</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+        </div>
+      </div></div>
+      <figcaption><b>F5 Companion names.</b> People you tag who aren't on the app. Never shown to anyone else.</figcaption>
+    </figure>
+
+    <!-- F6 offline drafts + F8 banner -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="offline"><i data-lucide="cloud-off"></i>You're offline. Changes will sync later.</div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Offline drafts</span></div>
+        <div class="body listsurf">
+          <div class="sec-lbl">Needs a place</div>
+          <div class="row-item" style="align-items:flex-start"><span class="thumb" style="color:var(--ok);background:var(--ok-bg)"><i data-lucide="map-pin-off"></i></span><div style="flex:1"><div class="nm">"that dosa place near office"</div><div class="sub">Your visit · Oct 8 · Good</div><button class="btn btn-tonal btn-sm" style="height:34px;margin-top:8px">Pick the place</button></div></div>
+          <div class="sec-lbl">Waiting to sync</div>
+          <div class="row-item"><span class="thumb"><i data-lucide="refresh-cw"></i></span><div style="flex:1"><div class="nm">Meghana Foods</div><div class="sub">From Rahul · saved offline</div></div></div>
+          <div class="row-item"><span class="thumb"><i data-lucide="refresh-cw"></i></span><div style="flex:1"><div class="nm">Toit</div><div class="sub">Added to wishlist · saved offline</div></div></div>
+          <p class="muted" style="font-size:12.5px;margin:10px 18px 0">Drafts without a Google place stay on this phone until you pick one.</p>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>F6 Offline drafts + F8 offline banner.</b> The dark strip appears at the top of any screen while offline. Drafts that never match a Google place stay on the device.</figcaption>
+    </figure>
+
+    <!-- F7 delete account -->
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Delete account</span></div>
+        <div class="body form">
+          <img src="assets/cat-sitting.png" alt="" style="width:110px;margin:0 auto;filter:grayscale(.35)">
+          <h1 class="h-md" style="text-align:center">Sad to see you go, Karthik</h1>
+          <div class="panel" style="margin:0;padding:6px 0">
+            <div class="grow"><span class="ic"><i data-lucide="utensils"></i></span><div>17 visits and your reviews</div></div>
+            <div class="grow"><span class="ic"><i data-lucide="message-circle"></i></span><div>12 friend and internet entries</div></div>
+            <div class="grow"><span class="ic"><i data-lucide="users-round"></i></span><div>9 connections and your lists</div></div>
+          </div>
+          <p class="t" style="font-size:14px;margin:0">All of this is deleted permanently. Tags on other people's visits are removed.</p>
+          <div class="field"><label>Type <b>karthik_eats</b> to confirm</label><div class="inp"><span class="muted">Your username</span></div></div>
+        </div>
+        <div class="bar2"><button class="btn" style="background:var(--bad);color:#fff;opacity:.45">Delete my account</button></div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>F7 Delete account.</b> The one place we add friction on purpose: shows what will be lost, asks you to type your username.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= PERMISSIONS ================= -->
+<section class="sec">
+  <h2>Permission explainers</h2>
+  <p>Asked only when a feature first needs them, never during onboarding. "Not now" never blocks the app.</p>
+  <div class="row">
+    <figure>
+      <div class="phone"><div class="scr bare" style="background:var(--map-land)">
+        <div class="map"><svg class="base"><use href="#mapbase"/></svg></div>
+        <div class="sb" style="position:relative;z-index:6"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic"><i data-lucide="locate-fixed"></i></span>
+          <h2 class="h-md">Show places near you?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">We use your location only to centre the map and list nearby places first. It's never shared.</p>
+          <div class="dlg-acts"><span class="tbtn">Not now</span><span class="tbtn strong">Allow</span></div>
+        </div>
+      </div></div>
+      <figcaption><b>A7 Location.</b> First time you open the Map or the place picker. Then Android's own prompt follows.</figcaption>
+    </figure>
+    <figure>
+      <div class="phone"><div class="scr">
+        {{SB}}
+        <div class="body listsurf" style="margin-top:60px">
+          <div class="row-item"><span class="av a5" style="width:48px;height:48px">A</span><div style="flex:1"><div class="nm">Anand K</div><div class="sub">@anandk</div></div><button class="btn btn-out btn-sm" style="height:36px;color:var(--ink-2)">Requested</button></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <span class="dlg-ic"><i data-lucide="bell-ring"></i></span>
+          <h2 class="h-md">Know when Anand says yes?</h2>
+          <p class="t" style="font-size:14.5px;margin:8px 0 0">We'll only notify you about requests and tags, unless you turn on more for someone.</p>
+          <div class="dlg-acts"><span class="tbtn">Not now</span><span class="tbtn strong">Turn on</span></div>
+        </div>
+        {{GEST}}
+      </div></div>
+      <figcaption><b>A7 Notifications.</b> First time you send a request or tag someone, the moment it's obviously useful.</figcaption>
+    </figure>
+  </div>
+</section>
+</main>

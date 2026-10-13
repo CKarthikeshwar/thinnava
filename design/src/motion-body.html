@@ -1,0 +1,272 @@
+<main class="mo">
+  <div class="mo-stage">
+    <div class="phone" id="phone">
+      <div class="stage" id="stage">
+
+        <!-- Splash -->
+        <section class="view scr rings on" id="v-splash">
+          {{SB}}
+          <div class="body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding-bottom:60px">
+            <img id="splash-cat" src="assets/cat-sitting.png" alt="" style="width:200px">
+            <p class="ob-word" id="splash-word" style="margin-top:14px">Thinnava?!</p>
+            <p class="t" style="margin:0;font-weight:700" id="splash-sub">Did you eat?</p>
+          </div>
+        </section>
+
+        <!-- Welcome 1..3 -->
+        <section class="view scr rings" id="v-w1">
+          {{SB}}
+          <div class="body wel">
+            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
+            <img src="assets/cat-sitting.png" alt="" style="width:180px;margin:20px auto 0">
+            <h1 class="h-lg" style="text-align:center;margin-top:22px">Remember every place your friends tell you about</h1>
+            <p class="t" style="text-align:center;margin:10px 0 0">No more scrolling chats to find "that biryani place Rahul said".</p>
+            <div style="flex:1"></div>
+            <div class="dots"><i class="on"></i><i></i><i></i></div>
+            <button class="btn btn-p gbtn" data-go="next"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+          </div>
+        </section>
+        <section class="view scr rings" id="v-w2">
+          {{SB}}
+          <div class="body wel">
+            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
+            <div class="mini-share">
+              <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><span class="av sm a1">R</span><b style="font-size:14px">Rahul</b><span class="muted" style="font-size:12px;font-weight:700;margin-left:auto">WhatsApp</span></div>
+              <div class="quote" style="box-shadow:inset 0 0 0 2px var(--p)">Went to Burger Factory yesterday. Chicken burger was insane…</div>
+            </div>
+            <h1 class="h-lg" style="text-align:center;margin-top:26px">Share it here. We'll do the typing.</h1>
+            <p class="t" style="text-align:center;margin:10px 0 0">Hold a message → <b>Share</b> → <b>Thinnava</b>.</p>
+            <div style="flex:1"></div>
+            <div class="dots"><i></i><i class="on"></i><i></i></div>
+            <button class="btn btn-p gbtn" data-go="next"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+          </div>
+        </section>
+        <section class="view scr rings" id="v-w3">
+          {{SB}}
+          <div class="body wel">
+            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span></div>
+            <div class="mini-map"><svg class="base"><use href="#mapbase"/></svg>
+              <div class="pin" style="left:30%;top:42%"><div class="bub"><span class="av a2">A</span>Good</div><div class="tail"></div></div>
+              <div class="pin" style="left:70%;top:62%"><div class="bub"><span class="av a1">R</span>Good</div><div class="tail"></div></div>
+            </div>
+            <h1 class="h-lg" style="text-align:center;margin-top:24px">See where your people ate</h1>
+            <p class="t" style="text-align:center;margin:10px 0 0">Connect with friends and see what they loved, skipped and paid.</p>
+            <div style="flex:1"></div>
+            <div class="dots"><i></i><i></i><i class="on"></i></div>
+            <button class="btn btn-p gbtn" data-go="setup"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+          </div>
+        </section>
+
+        <!-- Set up profile -->
+        <section class="view scr rings" id="v-setup">
+          {{SB}}
+          <div class="body" style="display:flex;flex-direction:column">
+            <div class="peekwrap"><img id="setup-cat" src="assets/cat-peek.png" alt="" style="width:150px"></div>
+            <div class="setup-card" id="setup-card">
+              <div><h1 class="h-lg">Set up your profile</h1><p class="t" style="margin:6px 0 0">This is how friends find you.</p></div>
+              <div class="field"><label>Name</label><div class="inp">Karthik C</div></div>
+              <div class="field"><label>Username</label><div class="inp focus" id="u-inp"><span class="muted">@</span><span id="u-text">karthik_eats</span><span class="caret"></span><span id="u-state" class="ustate"></span></div><span class="help ok" id="u-help" style="opacity:0"><i data-lucide="check"></i>@karthik_eats is available</span></div>
+              <div style="flex:1"></div>
+              <button class="btn btn-p" data-go="home">Let's eat</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Home -->
+        <section class="view scr rings tabv" id="v-home">
+          {{SB}}
+          <div class="tab"><span class="wordmark">Thinnava?!</span><button class="icb" data-go="filter"><i data-lucide="sliders-horizontal" class="i"></i></button><button class="icb"><i data-lucide="bell" class="i"></i></button></div>
+          <div class="body"><div class="feed" id="feed">
+            <article class="card tapcard" id="card-bao" data-go="place">
+              <div class="top"><span class="av a2">A</span><div style="flex:1;min-width:0"><div class="who"><b>Ananya</b> went to</div><div class="place">Bao Story</div><div class="meta"><i data-lucide="map-pin"></i>Indiranagar · with Arjun</div></div><span class="time">2h</span></div>
+              <div class="lines"><div><i data-lucide="heart" style="color:var(--p)"></i>Chicken bao, chilli oil noodles</div></div>
+              <div class="foot"><span class="rv good"><i data-lucide="smile"></i>Good</span><span class="price">₹450 / person</span></div>
+            </article>
+            <article class="card tapcard" data-go="place">
+              <div class="top"><span class="src"><i data-lucide="globe"></i></span><div style="flex:1;min-width:0"><div class="who"><b>From a reel</b></div><div class="place">Meghana Foods</div><div class="meta"><i data-lucide="map-pin"></i>Residency Road</div></div><span class="time">1d</span></div>
+              <div class="lines"><div><i data-lucide="heart" style="color:var(--p)"></i>Boneless chicken biryani</div></div>
+              <div class="foot"><span class="rv ok"><i data-lucide="meh"></i>Okayish</span><span class="priv"><i data-lucide="lock"></i>Only you</span></div>
+            </article>
+            <article class="card tapcard" data-go="place">
+              <div class="top"><span class="av a3">M</span><div style="flex:1;min-width:0"><div class="who"><b>Meera</b> went to</div><div class="place">MTR</div><div class="meta"><i data-lucide="map-pin"></i>Lalbagh Road</div></div><span class="time">3d</span></div>
+              <div class="lines"><div><i data-lucide="heart" style="color:var(--p)"></i>Rava idli, filter coffee</div></div>
+              <div class="foot"><span class="rv good"><i data-lucide="smile"></i>Good</span><span class="price">₹200 / person</span></div>
+            </article>
+          </div></div>
+          <div class="scrim sheet-scrim" id="filter-scrim" data-go="filter-close"></div>
+          <div class="sheet fsheet" id="filter-sheet">
+            <div class="handle"></div>
+            <h2 class="h-md" style="padding:0 22px 8px">Show</h2>
+            <div class="opt"><span class="src"><i data-lucide="layers"></i></span><div>Everything</div><span class="radio on"></span></div>
+            <div class="opt"><span class="src"><i data-lucide="users-round"></i></span><div>Connections<small>Reviews they posted</small></div><span class="radio"></span></div>
+            <div class="opt"><span class="src"><i data-lucide="user-round"></i></span><div>From friends<small>What friends told you</small></div><span class="radio"></span></div>
+            <div class="opt"><span class="src"><i data-lucide="utensils"></i></span><div>Mine<small>Places you went</small></div><span class="radio"></span></div>
+          </div>
+        </section>
+
+        <!-- Search -->
+        <section class="view scr rings tabv" id="v-search">
+          {{SB}}
+          <div style="padding:10px 0 12px"><div class="search"><i data-lucide="search" class="i"></i><span>Search places or people</span></div></div>
+          <div class="seg"><span class="on"><i data-lucide="store"></i>Places</span><span><i data-lucide="users-round"></i>People</span></div>
+          <div class="body listsurf" style="padding-top:6px">
+            <div class="sec-lbl">Recent</div>
+            <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">Meghana Foods</div><div class="sub">Residency Road</div></div></div>
+            <div class="row-item"><span class="thumb"><i data-lucide="history"></i></span><div style="flex:1"><div class="nm">Burger Factory</div><div class="sub">Koramangala</div></div></div>
+          </div>
+        </section>
+
+        <!-- Map -->
+        <section class="view scr bare tabv" id="v-map" style="background:var(--map-land)">
+          <div class="map"><svg class="base"><use href="#mapbase"/></svg>
+            <div class="pin tappin" style="left:24%;top:46%"><div class="bub"><span class="av a2">A</span>Bao Story</div><div class="tail"></div></div>
+            <div class="pin tappin" id="pin-bf" data-go="pin" style="left:64%;top:58%"><div class="bub"><span class="av a1">R</span>Burger Factory</div><div class="tail"></div></div>
+            <div class="pin me" style="left:42%;top:72%"><div class="bub"><span class="g"><i data-lucide="check"></i></span>MTR</div><div class="tail"></div></div>
+          </div>
+          {{SB}}
+          <div style="position:relative;z-index:6;padding:6px 18px 0"><div class="search" style="margin:0"><i data-lucide="search" class="i"></i>Search places</div></div>
+          <div class="sheet pincard" id="pin-card">
+            <div class="handle"></div>
+            <div style="padding:0 18px">
+              <h2 class="h-md">Burger Factory</h2>
+              <div class="muted" style="font-size:13px;font-weight:700;margin-top:3px">Koramangala · Fast food</div>
+              <div style="display:flex;gap:10px;align-items:center;margin-top:12px"><span class="src" style="width:32px;height:32px"><i data-lucide="user-round"></i></span><div style="flex:1;font-size:14px;color:var(--ink-2)"><b style="color:var(--ink)">Rahul</b> loved the chicken burger</div><span class="rv good"><i data-lucide="smile"></i>Good</span></div>
+              <div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-p btn-sm" style="flex:1" data-go="place">Open place</button><button class="btn btn-tonal btn-sm" style="flex:1">Directions</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Profile -->
+        <section class="view scr rings tabv" id="v-profile">
+          {{SB}}
+          <div class="tab"><span class="title">Profile</span><button class="icb"><i data-lucide="settings" class="i"></i></button></div>
+          <div class="body" style="display:flex;flex-direction:column;align-items:center">
+            <span class="av a4" style="width:92px;height:92px;font-size:34px">K</span>
+            <h1 class="h-md" style="margin-top:12px">Karthik C</h1>
+            <div class="muted" style="font-size:14px;font-weight:700">@karthik_eats</div>
+            <div class="seg" style="margin-top:18px;width:calc(100% - 36px)"><span class="on">Visited</span><span>Wishlist</span><span>Saved</span></div>
+          </div>
+        </section>
+
+        <!-- Place page (flat ground) -->
+        <section class="view scr" id="v-place">
+          {{SB}}
+          <div class="tab"><button class="icb ghost" data-go="back"><i data-lucide="arrow-left" class="i"></i></button><span style="flex:1"></span><button class="icb" id="heart" data-go="heart"><i data-lucide="heart" class="i"></i></button></div>
+          <div class="body">
+            <div class="hero-place"><h1 class="h-lg">Bao Story</h1><div class="meta-line">Asian · Indiranagar</div></div>
+            <div class="acts">
+              <div class="act"><span class="c"><i data-lucide="navigation"></i></span>Directions</div>
+              <div class="act"><span class="c brand"><svg viewBox="0 0 24 24"><path d="{{SWIGGY}}"/></svg></span>Swiggy</div>
+            </div>
+            <div class="panel">
+              <h3>People who've been</h3>
+              <div class="person"><span class="av a2">A</span><div class="pc"><div class="pn"><b>Ananya</b> · with Arjun <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Chicken bao, chilli oil noodles</div><div class="pl muted">₹450 / person · Oct 9</div></div></div>
+            </div>
+          </div>
+          <div class="efab"><i data-lucide="plus"></i>Add visit</div>
+          <div class="snack" id="snack">Added to your wishlist<span class="sa">Who sees it</span></div>
+        </section>
+
+        <!-- WhatsApp (outside app) -->
+        <section class="view scr bare" id="v-wa" style="background:#EFE7DE">
+          {{SB}}
+          <div style="background:#1F6E5B;color:#fff;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;font-weight:800"><i data-lucide="arrow-left" class="i"></i><span class="av sm a1">R</span>Rahul</div>
+          <div style="padding:18px 14px;display:flex;flex-direction:column;gap:8px">
+            <div class="wa in">Free this weekend?</div>
+            <div class="wa in" id="wa-msg">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div>
+          </div>
+          <div class="scrim" id="wa-scrim" style="opacity:0"></div>
+          <div class="sheet" id="wa-sheet" style="padding-bottom:36px">
+            <div class="handle"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:0 22px">
+              <div class="peekwrap sm"><img id="read-cat" src="assets/cat-peek.png" alt="" style="width:120px"></div>
+              <div class="reading" id="reading"><b>Reading this message…</b><span class="sk" style="width:80%"></span><span class="sk" style="width:62%"></span><span class="sk" style="width:70%"></span></div>
+              <p class="muted" style="font-size:13px;margin:12px 0 0;text-align:center">Looking for the place, dishes and price.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Confirmation (flat ground) -->
+        <section class="view scr" id="v-confirm">
+          {{SB}}
+          <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">Check what we found</span></div>
+          <div class="body form">
+            <div class="field fill"><label>Who told you? <span class="req" id="req">Required</span></label><div class="inp focus" id="who"><span class="muted" id="who-ph">Type a name</span><span id="who-t"></span><span class="caret"></span></div></div>
+            <div class="field fill"><label>Place</label><div class="inp"><i data-lucide="map-pin" style="width:18px;height:18px;color:var(--p)"></i>Burger Factory, Koramangala</div></div>
+            <div class="field fill"><label>How was it for them?</label><div class="revsel"><span class="on good"><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
+            <div class="field fill"><label>Loved</label><div class="chipin"><span class="ichip">Chicken burger<i data-lucide="x"></i></span></div></div>
+            <div class="field fill"><label>Didn't like</label><div class="chipin"><span class="ichip">Shake<i data-lucide="x"></i></span></div></div>
+            <div class="field fill"><label>Price per person</label><div class="inp warn" id="price">₹ 300</div><span class="flag"><i data-lucide="circle-alert"></i>Please check this</span></div>
+          </div>
+          <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" id="save" style="flex:1;opacity:.45" data-go="save">Save</button></div>
+        </section>
+
+      </div>
+
+      <!-- persistent navigation bar (fades through only the content above it) -->
+      <nav class="nav" id="nav">
+        <a class="on" data-tab="home"><span class="pill"><i data-lucide="house" class="i"></i></span>Home</a>
+        <a data-tab="search"><span class="pill"><i data-lucide="search" class="i"></i></span>Search</a>
+        <a data-go="dial"><span class="plus" id="plus"><i data-lucide="plus"></i></span></a>
+        <a data-tab="map"><span class="pill"><i data-lucide="map" class="i"></i></span>Map</a>
+        <a data-tab="profile"><span class="pill"><i data-lucide="circle-user-round" class="i"></i></span>Profile</a>
+      </nav>
+      <div class="scrim dial-scrim" id="dial-scrim" data-go="dial"></div>
+      <div class="dial" id="dial">
+        <div class="d"><span class="c"><i data-lucide="utensils"></i></span><span>I went<br>somewhere</span></div>
+        <div class="d mid" data-go="share"><span class="c"><i data-lucide="message-circle"></i></span><span>A friend<br>told me</span></div>
+        <div class="d"><span class="c"><i data-lucide="globe"></i></span><span>Found it<br>online</span></div>
+      </div>
+      <div class="gest"></div>
+    </div>
+    <div class="mo-ctrl">
+      <label class="rm"><input type="checkbox" id="rm"> Remove animations <small>(Android accessibility setting)</small></label>
+      <button class="mo-reset" id="reset">Restart from splash</button>
+    </div>
+  </div>
+
+  <div class="mo-spec">
+    <h2 class="mo-h">Motion</h2>
+    <p class="mo-lede">Fast and quiet for everyday navigation; one authored moment where it matters: a friend's message becoming a saved entry. Tap any <b>Play</b>, or use the phone directly. Every pattern is a Material 3 transition, themed with Thinnava's own curves and the chef cat.</p>
+
+    <h3 class="mo-group">Signature</h3>
+    <div class="mo-item hero" data-play="share">
+      <button class="play">Play</button>
+      <div><b>From WhatsApp to saved</b><span class="mo-meta">≈ 3.5 s end to end · emphasized curves</span>
+        <ol>
+          <li>The shared bubble lights up and lifts; the Thinnava sheet <b>rises</b> from the bottom (400 ms).</li>
+          <li>The chef cat <b>climbs up behind the card</b> and hooks its paws over the edge (500 ms).</li>
+          <li>A copy of the message <b>flies into the reading card</b> while the shimmer runs.</li>
+          <li>The sheet grows into the confirmation screen; fields <b>fill in one by one</b> (40 ms stagger), the price flag pulses once.</li>
+          <li>Typing a friend's name <b>wakes the Save button</b>.</li>
+          <li>Save <b>shrinks the screen into a new card</b> that drops into the top of Home; the other cards slide down to make room.</li>
+        </ol></div>
+    </div>
+    <div class="mo-item" data-play="launch"><button class="play">Play</button><div><b>Launch → welcome</b><span class="mo-meta">Cat lands 500 ms · fade through 300 ms</span><p>The cat settles in, the wordmark follows 100 ms later, then splash fades through to slide 1.</p></div></div>
+    <div class="mo-item" data-play="setup"><button class="play">Play</button><div><b>Peeking cat</b><span class="mo-meta">500 ms · emphasized decelerate</span><p>On Set up profile (and every peeking-cat screen) the cat climbs from behind the card, then its paws come over the edge. The username check spins, then the tick pops in.</p></div></div>
+
+    <h3 class="mo-group">Navigation</h3>
+    <div class="mo-item" data-play="slides"><button class="play">Play</button><div><b>Welcome slides</b><span class="mo-meta">Shared axis X · 300 ms</span><p>Slides move sideways together; the active dot stretches into a pill.</p></div></div>
+    <div class="mo-item" data-play="tabs"><button class="play">Play</button><div><b>Switching tabs</b><span class="mo-meta">Soft crossfade · 280 ms</span><p>The new tab settles in on top (from 98% scale) while the old one fades beneath it, so there is never a blank frame. The bar itself never moves, only its pill indicator.</p></div></div>
+    <div class="mo-item" data-play="card"><button class="play">Play</button><div><b>Card → place page</b><span class="mo-meta">Title glide 460 ms · content rise 320 ms, 45 ms stagger · back 380 ms</span><p>The place name lifts off the card and glides up to become the page title; the card dims, the page settles in, and the buttons and people rise into place. Back fades the content and glides the title down into its card.</p></div></div>
+    <div class="mo-item" data-play="sheet"><button class="play">Play</button><div><b>Bottom sheets</b><span class="mo-meta">Slide up 400 ms · down 250 ms</span><p>Filter, pickers and the map pin card rise from below over a fading scrim; they leave faster than they arrive.</p></div></div>
+    <div class="mo-item" data-play="dial"><button class="play">Play</button><div><b>The + button</b><span class="mo-meta">Fan out 250 ms · 30 ms stagger</span><p>Three circles spring out of the + along an arc; + turns into ×. Closing pulls them back in.</p></div></div>
+    <div class="mo-item" data-play="pin"><button class="play">Play</button><div><b>Map pin</b><span class="mo-meta">Pin 150 ms · card 400 ms</span><p>The tapped pin grows a ring, then its card slides up from below.</p></div></div>
+
+    <h3 class="mo-group">Feedback</h3>
+    <div class="mo-item" data-play="heart"><button class="play">Play</button><div><b>Wishlist heart</b><span class="mo-meta">Pop 200 ms · snackbar 300 ms, stays 3 s</span><p>The heart fills and pops once; a snackbar confirms with a shortcut.</p></div></div>
+
+    <h3 class="mo-group">Tokens</h3>
+    <table class="mo-tok">
+      <tr><th>Token</th><th>Value</th><th>Use</th></tr>
+      <tr><td>short</td><td>100–150 ms</td><td>Presses, ticks, heart pop, chip in/out</td></tr>
+      <tr><td>medium</td><td>250–300 ms</td><td>Tabs, slides, speed dial, toggles</td></tr>
+      <tr><td>long</td><td>400–450 ms</td><td>Sheets, container transform</td></tr>
+      <tr><td>signature</td><td>500–900 ms</td><td>Cat climb, share import steps only</td></tr>
+      <tr><td>standard</td><td><code>cubic-bezier(.2,0,0,1)</code></td><td>Small state changes</td></tr>
+      <tr><td>emphasized decelerate</td><td><code>cubic-bezier(.05,.7,.1,1)</code></td><td>Things arriving</td></tr>
+      <tr><td>emphasized accelerate</td><td><code>cubic-bezier(.3,0,.8,.15)</code></td><td>Things leaving (always faster)</td></tr>
+    </table>
+    <p class="mo-lede" style="margin-top:14px"><b>Remove animations:</b> when the Android setting is on, every movement becomes a short crossfade (≤150 ms). State changes such as Save turning on, the heart filling and the snackbar still show. Tick the box under the phone to preview.</p>
+  </div>
+</main>
