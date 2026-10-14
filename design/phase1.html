@@ -340,7 +340,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <!-- ============ ONBOARDING ============ -->
 <section class="sec">
   <h2>Splash and welcome</h2>
-  <p>The chef cat is the brand. Welcome is shown two ways so you can compare: one screen with everything, or three swipeable slides. Both keep <b>Continue with Google</b> on screen at all times.</p>
+  <p>The chef cat is the brand. Onboarding is three screens: <b>A1 Splash</b>, <b>A1b Intro</b> (the promise and the social map in one screen), then <b>A2 Welcome</b> with <b>Continue with Google</b>. There is no "how to share" step: copying a friend's message is taught later, when it is useful.</p>
   <div class="row">
 
     <!-- A1 Splash -->
@@ -348,14 +348,38 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
         <div class="body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding-bottom:60px">
-          <img src="assets/cat-sitting.png" alt="Chef cat mascot" style="width:210px;height:auto;filter:drop-shadow(0 18px 18px rgba(20,40,80,.18))">
+          <img src="assets/cat-waving.png" alt="Chef cat waving hi" style="width:200px;height:auto;filter:drop-shadow(0 18px 18px rgba(20,40,80,.18))">
           <p class="ob-word" style="margin-top:14px">Thinnava?!</p>
           <p class="t" style="margin:0;font-weight:700">Did you eat?</p>
-          <div class="dots" style="margin-top:34px"><i class="on" style="width:7px"></i><i style="background:var(--p);opacity:.5"></i><i style="background:var(--p);opacity:.25"></i></div>
+          <div class="dots" style="margin-top:34px"><i class="on"></i><i></i><i></i></div>
         </div>
         <div class="gest"></div>
       </div></div>
       <figcaption><b>A1 Splash.</b> Cat + wordmark while the session loads. "Did you eat?" explains the name for non-Telugu speakers.</figcaption>
+    </figure>
+
+    <!-- A1b Intro (merged slide 1/3 + 3/3) -->
+    <figure>
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+        <div class="body" style="display:flex;flex-direction:column;padding:0 22px 28px">
+          <div style="display:flex;justify-content:space-between;align-items:center;height:48px"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
+          <img src="assets/cat-offering.png" alt="" style="width:130px;aspect-ratio:610/680;height:auto;margin:2px auto 0;filter:drop-shadow(0 14px 14px rgba(20,40,80,.16))">
+          <h1 class="h-lg" style="text-align:center;margin-top:12px">Remember every place your friends tell you about</h1>
+          <p class="t" style="text-align:center;margin:8px 0 0">No more scrolling chats to find "that biryani place Rahul said".</p>
+          <div style="margin-top:18px;height:170px;border-radius:24px;overflow:hidden;position:relative;box-shadow:0 10px 30px -18px rgba(20,30,50,.4)">
+            <div class="map"><svg class="base"><use href="#mapbase"/></svg></div>
+            <div class="pin" style="left:26%;top:30%"><div class="bub"><span class="av a2">A</span>Good</div><div class="tail"></div></div>
+            <div class="pin" style="left:72%;top:42%"><div class="bub"><span class="av a1">R</span>Good</div><div class="tail"></div></div>
+            <div style="position:absolute;left:10px;right:10px;bottom:10px;background:var(--surface);border-radius:14px;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--ink);box-shadow:0 6px 16px -8px rgba(20,30,50,.4)"><i data-lucide="users-round" style="width:18px;height:18px;color:var(--p);flex:none"></i>See where your people ate. No strangers, no ads.</div>
+          </div>
+          <div style="flex:1"></div>
+          <div class="dots" style="margin-bottom:18px"><i></i><i class="on"></i><i></i></div>
+          <button class="btn btn-p" style="background:var(--p-strong)">Next<i data-lucide="arrow-right" class="i"></i></button>
+        </div>
+        <div class="gest"></div>
+      </div></div>
+      <figcaption><b>A1b Intro.</b> The old slide 1 (the problem) and slide 3 (the social part) merged into one screen: cat, one promise, a small map of friends' pins. Skip jumps to A2.</figcaption>
     </figure>
 
     <!-- A2 single -->
@@ -364,89 +388,23 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
         <div class="body" style="display:flex;flex-direction:column">
           <p class="ob-word" style="margin-top:26px">Thinnava?!</p>
-          <img src="assets/cat-peek.png" alt="" style="width:200px;height:auto;margin:16px auto -15px;position:relative;z-index:2">
-          <div class="ob-card" style="margin:0 12px 12px;padding:34px 22px 20px;flex:1;display:flex;flex-direction:column;gap:14px">
+          <div class="dots" style="margin-top:14px"><i></i><i></i><i class="on"></i></div>
+          <div style="flex:1"></div>
+          <img src="assets/cat-peek.png" alt="" style="width:230px;height:auto;margin:16px auto -17px;position:relative;z-index:2">
+          <div class="ob-card" style="margin:0 12px 12px;padding:38px 22px 20px;display:flex;flex-direction:column;gap:16px">
             <h1 class="h-lg">Every place your friends rave about, in one spot.</h1>
             <ul class="vals">
               <li><span><i data-lucide="message-circle"></i></span>Save what friends tell you</li>
               <li><span><i data-lucide="utensils"></i></span>Log where you ate</li>
               <li><span><i data-lucide="users-round"></i></span>See where your people have been</li>
             </ul>
-            <div style="flex:1"></div>
-            <button class="btn btn-white"><svg class="gl"><use href="#g-logo"/></svg>Continue with Google</button>
+            <button class="btn btn-white" style="margin-top:4px"><svg class="gl"><use href="#g-logo"/></svg>Continue with Google</button>
             <p class="legal" style="margin:0">By continuing you agree to the Terms and Privacy Policy.</p>
           </div>
         </div>
         <div class="gest" style="background:#fff"></div>
       </div></div>
-      <figcaption><span class="vs">Option 1</span><b>A2 Welcome, one screen.</b> Everything at once: promise and sign-in. Sharing is taught later, the first time it's useful. Fastest path: open the app, tap once and you're in.</figcaption>
-    </figure>
-
-    <!-- A2 slides x3 -->
-    <figure>
-      <div class="phone"><div class="scr">
-        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
-        <div class="body" style="display:flex;flex-direction:column;padding:0 22px 28px">
-          <div style="display:flex;justify-content:space-between;align-items:center;height:48px"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
-          <img src="assets/cat-sitting.png" alt="" style="width:190px;margin:22px auto 0;filter:drop-shadow(0 16px 16px rgba(20,40,80,.16))">
-          <h1 class="h-lg" style="text-align:center;margin-top:26px">Remember every place your friends tell you about</h1>
-          <p class="t" style="text-align:center;margin:10px 0 0">No more scrolling chats to find "that biryani place Rahul said".</p>
-          <div style="flex:1"></div>
-          <div class="dots" style="margin-bottom:20px"><i class="on"></i><i></i><i></i></div>
-          <button class="btn btn-p" style="background:var(--p-strong)"><span style="background:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
-        </div>
-        <div class="gest"></div>
-      </div></div>
-      <figcaption><span class="vs">Option 2 · 1/3</span><b>Slide 1: the problem.</b> Sitting cat, one promise. Skip goes to the last slide.</figcaption>
-    </figure>
-
-    <figure>
-      <div class="phone"><div class="scr">
-        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
-        <div class="body" style="display:flex;flex-direction:column;padding:0 22px 28px">
-          <div style="display:flex;justify-content:space-between;align-items:center;height:48px"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
-          <!-- mini share demo -->
-          <div style="margin-top:14px;background:var(--surface);border-radius:24px;padding:14px;box-shadow:0 10px 30px -18px rgba(20,30,50,.4);position:relative">
-            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><span class="av sm a1">R</span><b style="font-size:14px">Rahul</b><span style="font-size:12px;color:var(--ink-3);font-weight:700;margin-left:auto">WhatsApp</span></div>
-            <div style="background:#E7F7DE;border-radius:14px 14px 14px 4px;padding:10px 12px;font-size:13.5px;line-height:1.4;color:#1f2d1a;box-shadow:inset 0 0 0 2px var(--p)">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div>
-            <div style="display:flex;gap:10px;margin-top:14px;justify-content:center">
-              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3)"><span class="thumb" style="width:46px;height:46px;border-radius:50%"><i data-lucide="copy"></i></span>Copy</div>
-              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3)"><span class="thumb" style="width:46px;height:46px;border-radius:50%"><i data-lucide="mail"></i></span>Mail</div>
-              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:800;color:var(--p-strong)"><span style="width:46px;height:46px;border-radius:50%;background:var(--pc);display:grid;place-items:center;box-shadow:0 0 0 3px var(--p);overflow:hidden"><img src="assets/cat-peek.png" alt="" style="width:40px;margin-top:6px"></span>Thinnava</div>
-              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3)"><span class="thumb" style="width:46px;height:46px;border-radius:50%"><i data-lucide="more-horizontal"></i></span>More</div>
-            </div>
-          </div>
-          <h1 class="h-lg" style="text-align:center;margin-top:26px">Share it here. We'll do the typing.</h1>
-          <p class="t" style="text-align:center;margin:10px 0 0">Hold a message → <b>Share</b> → <b>Thinnava</b>. We pull out the place, dishes and price, and you check it.</p>
-          <div style="flex:1"></div>
-          <div class="dots" style="margin-bottom:20px"><i></i><i class="on"></i><i></i></div>
-          <button class="btn btn-p" style="background:var(--p-strong)"><span style="background:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
-        </div>
-        <div class="gest"></div>
-      </div></div>
-      <figcaption><span class="vs">Option 2 · 2/3</span><b>Slide 2: how to share.</b> The old "how to share" screen (A6) lives here as a mini demo of the share sheet.</figcaption>
-    </figure>
-
-    <figure>
-      <div class="phone"><div class="scr">
-        <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
-        <div class="body" style="display:flex;flex-direction:column;padding:0 22px 28px">
-          <div style="display:flex;justify-content:space-between;align-items:center;height:48px"><span class="wordmark" style="font-size:22px">Thinnava?!</span></div>
-          <div style="margin-top:14px;height:250px;border-radius:24px;overflow:hidden;position:relative;box-shadow:0 10px 30px -18px rgba(20,30,50,.4)">
-            <div class="map"><svg class="base"><use href="#mapbase"/></svg></div>
-            <div class="pin" style="left:30%;top:42%"><div class="bub"><span class="av a2">A</span>Good</div><div class="tail"></div></div>
-            <div class="pin" style="left:70%;top:62%"><div class="bub"><span class="av a1">R</span>Good</div><div class="tail"></div></div>
-            <div class="pin me" style="left:52%;top:86%"><div class="bub"><span class="g"><i data-lucide="check"></i></span>You</div><div class="tail"></div></div>
-          </div>
-          <h1 class="h-lg" style="text-align:center;margin-top:26px">See where your people ate</h1>
-          <p class="t" style="text-align:center;margin:10px 0 0">Connect with friends and see what they loved, skipped and paid. No strangers, no ads.</p>
-          <div style="flex:1"></div>
-          <div class="dots" style="margin-bottom:20px"><i></i><i></i><i class="on"></i></div>
-          <button class="btn btn-p" style="background:var(--p-strong)"><span style="background:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
-        </div>
-        <div class="gest"></div>
-      </div></div>
-      <figcaption><span class="vs">Option 2 · 3/3</span><b>Slide 3: the social part.</b> A mini map with friends' pins. <b>My take:</b> option 1 is less friction; option 2 teaches sharing better.</figcaption>
+      <figcaption><b>A2 Welcome.</b> The last onboarding screen: the promise and sign-in. Copying a friend's message is taught later, the first time it's useful. Open the app, tap once and you're in.</figcaption>
     </figure>
 
     <!-- A3 -->
@@ -459,7 +417,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <div><h1 class="h-lg">Set up your profile</h1><p class="t" style="margin:6px 0 0">This is how friends find you.</p></div>
             <div class="field"><label>Name</label><div class="inp">Karthik C</div></div>
             <div class="field"><label>Username</label><div class="inp focus"><span class="muted">@</span>karthik_eats<span class="caret"></span><span style="margin-left:auto;color:var(--good);display:grid"><i data-lucide="circle-check" class="i"></i></span></div><span class="help ok"><i data-lucide="check"></i>@karthik_eats is available</span></div>
-            <div class="field"><label>Bio <span style="font-weight:600;color:var(--ink-3)">(optional)</span></label><div class="inp" style="height:76px;align-items:flex-start;padding-top:14px"><span class="muted">Biryani first, questions later…</span></div></div>
+            <div class="field"><label>Bio <span style="font-weight:600;color:var(--ink-3)">(optional)</span></label><div class="inp" style="height:76px;align-items:flex-start;padding-top:14px"><span class="muted">Will travel for a good dosa…</span></div></div>
             <div style="flex:1"></div>
             <button class="btn btn-p">Let's eat</button>
           </div>
@@ -570,12 +528,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <button class="btn btn-out"><i data-lucide="user-plus" class="i"></i>Find people you know</button>
             </div>
           </div>
-          <div class="share-hint" style="background:var(--surface-2);color:var(--ink-2);margin-top:14px"><i data-lucide="lightbulb" class="i" style="color:var(--p)"></i><span>Tip: in WhatsApp, hold a message → <b>Share</b> → <b>Thinnava</b></span></div>
+          <div class="share-hint" style="background:var(--surface-2);color:var(--ink-2);margin-top:14px"><i data-lucide="lightbulb" class="i" style="color:var(--p)"></i><span>Tip: copy a friend's message, then tap <b>+</b> → <b>A friend told me</b></span></div>
         </div>
         <nav class="nav"><a class="on"><span class="pill"><i data-lucide="house" class="i"></i></span>Home</a><a><span class="pill"><i data-lucide="search" class="i"></i></span>Search</a><a><span class="plus"><i data-lucide="plus"></i></span></a><a><span class="pill"><i data-lucide="map" class="i"></i></span>Map</a><a><span class="pill"><i data-lucide="circle-user-round" class="i"></i></span>Profile</a></nav>
         <div class="gest"></div>
       </div></div>
-      <figcaption><b>B1a Empty Home.</b> The first thing a new user sees: the cat, three clear starts, and the share tip again.</figcaption>
+      <figcaption><b>B1a Empty Home.</b> The first thing a new user sees: the cat, three clear starts, and a tip on copying a friend's message.</figcaption>
     </figure>
 
     <!-- B3 speed dial -->
@@ -600,7 +558,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <div class="foot"><span class="rv ok"><i data-lucide="meh"></i>Okayish</span><span class="priv"><i data-lucide="lock"></i>Only you</span></div>
             </article>
           </div></div>
-        <div class="scrim" style="background:color-mix(in srgb,var(--p-strong) 84%,transparent)"></div>
+        <div class="scrim" style="background:rgba(14,24,44,.78);backdrop-filter:blur(3px)"></div>
         <div class="dial">
           <div class="d"><span class="c"><i data-lucide="utensils"></i></span><span>I went<br>somewhere</span></div>
           <div class="d mid"><span class="c"><i data-lucide="message-circle"></i></span><span>A friend<br>told me</span></div>
@@ -731,7 +689,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <div style="position:relative"><span class="av a4" style="width:92px;height:92px;font-size:34px;box-shadow:0 0 0 4px var(--surface),0 10px 24px -12px rgba(20,30,50,.5)">K</span><span style="position:absolute;right:-4px;bottom:0;width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 3px var(--surface)"><i data-lucide="pencil" style="width:15px;height:15px"></i></span></div>
             <h1 class="h-md" style="margin-top:12px">Karthik C</h1>
             <div style="font-size:14px;font-weight:700;color:var(--ink-3)">@karthik_eats</div>
-            <p class="t" style="margin:6px 0 0;text-align:center;font-size:14px">Biryani first, questions later.</p>
+            <p class="t" style="margin:6px 0 0;text-align:center;font-size:14px">Will travel for a good dosa.</p>
             <div style="display:flex;gap:6px;margin-top:14px;width:100%">
               <div style="flex:1;text-align:center;background:var(--surface);border-radius:16px;padding:10px 4px"><div style="font-family:var(--display);font-weight:600;font-size:20px">17</div><div class="lbl">Visited</div></div>
               <div style="flex:1;text-align:center;background:var(--surface);border-radius:16px;padding:10px 4px"><div style="font-family:var(--display);font-weight:600;font-size:20px">12</div><div class="lbl">Wishlist</div></div>

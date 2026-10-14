@@ -12,6 +12,19 @@ Entry format:
 
 ---
 
+## 2026-10-14 · WhatsApp messages are copied, not shared; onboarding is three screens
+- **What:**
+  - **WhatsApp can't share messages to other apps; it only lets you copy them.** So the main route for a friend's message is now **copy → open Thinnava → + → "A friend told me" → "Use copied text?"** (already in D5), which runs the same D7 reading → D8 confirmation.
+  - **The share target stays** for apps that do allow sharing text or links (browser, Instagram, YouTube, Google Maps, Zomato, Swiggy…). §10.1's link handling is unchanged.
+  - **Onboarding is three screens:** A1 Splash → **A1b Intro** (new: the promise plus a small map of friends, merged from old slides 1 and 3) → A2 Welcome with **Continue with Google**. The old 3-slide welcome is gone; the "how to share" slide was dropped.
+  - **B1a tip** now reads "Copy a friend's message, then tap + → A friend told me".
+  - Wording: "shared message" became "message (copied or shared)" where it described the original text; D7 opens over the sharing app **or** inside Thinnava.
+  - Spike M0 now tests sharing from a browser and Instagram, plus reading the clipboard after copying a WhatsApp message. Demo criterion 1 is now "copy a WhatsApp message".
+- **Why:** WhatsApp's message long-press has no Share → Thinnava, so the planned flow could not work for the main use case.
+- **Spec:** §1 (summary), §4 (scope row M), §6.2, §10 (all), §14 A1/A1b/A2, B1a, D7, F6, §16.7 unchanged, §26.2 routes, §26.3, §26.5, §26.6, §27 privacy wording, M0 spike, M2, M5, §30 demo test, §33 routes.
+
+---
+
 ## 2026-10-13 · Gap review (spec v1.1)
 - **What, decided by the owners:**
   - **Zero-cost guarantee:** no card may ever be charged.
