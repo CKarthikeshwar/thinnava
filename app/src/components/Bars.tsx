@@ -1,0 +1,90 @@
+import type { ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ArrowLeft, Search, WifiOff } from 'lucide-react-native';
+import { colors, fonts, radii, shadows, size, space } from '@/theme';
+import { IconButton } from './IconButton';
+import { Pressable } from './Pressable';
+import { T } from './T';
+
+type TopBarProps = {
+  /** Wordmark on Home; otherwise a screen title. */
+  wordmark?: boolean;
+  title?: string;
+  onBack?: () => void;
+  actions?: ReactNode;
+};
+
+/** 56 dp top app bar: wordmark or Fredoka title, 48 dp round actions on the right. */
+export function TopBar({ wordmark, title, onBack, actions }: TopBarProps) {
+  return (
+    <View style={[styles.bar, onBack && styles.withBack]}>
+      {onBack ? <IconButton icon={ArrowLeft} label="Back" ghost onPress={onBack} /> : null}
+      <View style={styles.titleWrap}>
+        {wordmark ? (
+          <T variant="wordmark" accessibilityRole="header">Thinnava?!</T>
+        ) : title ? (
+          <T variant="screenTitle" numberOfLines={1} accessibilityRole="header">{title}</T>
+        ) : null}
+      </View>
+      {actions ? <View style={styles.actions}>{actions}</View> : null}
+    </View>
+  );
+}
+
+/** Pill search bar (opens a search screen or filters in place). */
+export function SearchBar({ placeholder, value, onPress, trailing }: { placeholder: string; value?: string; onPress?: () => void; trailing?: ReactNode }) {
+  return (
+    <Pressable onPress={onPress} pressScale={0.99} style={styles.search} accessibilityRole="search" accessibilityLabel={placeholder}>
+      <Search size={22} color={colors.inkSoft} strokeWidth={2} />
+      <T style={styles.searchText} color={value ? colors.ink : colors.inkMuted} numberOfLines={1}>{value || placeholder}</T>
+      {trailing}
+    </Pressable>
+  );
+}
+
+/** Segmented control: Surface Tint track, white selected segment. */
+export function Segmented<K extends string>({ options, value, onChange }: { options: { key: K; label: string }[]; value: K; onChange: (k: K) => void }) {
+  return (
+    <View style={styles.seg} accessibilityRole="tablist">
+      {options.map((o) => {
+        const on = o.key === value;
+        return (
+          <Pressable
+            key={o.key}
+            onPress={() => onChange(o.key)}
+            pressScale={0.98}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: on }}
+            style={[styles.segItem, on && styles.segOn]}
+          >
+            <T style={styles.segText} color={on ? colors.ink : colors.inkSoft}>{o.label}</T>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
+/** Dark strip under the top bar while offline (F8). */
+export function OfflineBanner() {
+  return (
+    <View style={styles.offline} accessibilityLiveRegion="polite">
+      <WifiOff size={16} color={colors.onPrimary} strokeWidth={2} />
+      <T variant="label" color={colors.onPrimary}>You're offline · changes will sync</T>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  bar: { height: size.topBar, flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: space.gutter, paddingRight: 10 },
+  withBack: { paddingLeft: 6 },
+  titleWrap: { flex: 1, minWidth: 0 },
+  actions: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  search: { height: 52, borderRadius: radii.pill, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', gap: 10, paddingLeft: 18, paddingRight: 8, marginHorizontal: space.gutter, boxShadow: shadows.search },
+  searchText: { flex: 1, fontFamily: fonts.bodySemi, fontSize: 15.5 },
+  seg: { flexDirection: 'row', backgroundColor: colors.surfaceTint, borderRadius: radii.pill, padding: 4, marginHorizontal: space.gutter },
+  segItem: { flex: 1, height: 40, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center' },
+  segOn: { backgroundColor: colors.surface, boxShadow: shadows.segment },
+  segText: { fontFamily: fonts.bodyHeavy, fontSize: 14 },
+  offline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, height: 34, backgroundColor: colors.ink },
+});

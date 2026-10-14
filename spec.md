@@ -23,7 +23,7 @@
 
 - You **connect** (mutually) with people you know and see where they ate and what they thought.
 - You **log your own visits** (Good / Okayish / Bad, dishes you loved / didn't like, price per person).
-- You **privately save** what friends tell you (mostly by sharing a WhatsApp message into the app, where AI fills in the form for you to confirm) and places you find online.
+- You **privately save** what friends tell you and places you find online. Mostly you copy a WhatsApp message and tap **Read it** in Thinnava, or share a link into it; AI fills in the form and you confirm.
 - From any place you jump out to **Google Maps** (directions) or **Swiggy** (order).
 
 Pitch: **"Your friends' food experiences, organized."**
@@ -190,12 +190,22 @@ Example (A–B connected, B–C connected, A–C not): A and B went together and
 - Visibility: my wishlist has its own audience (default **All connections**), changed from Profile → Wishlist tab → "Who can see this".
 - Shown on: Profile Wishlist tab, map ♡ layer, place page ♡ state.
 
-## 10. Share import and AI
+## 10. Import (copy or share) and AI
 
-### 10.1 What can be shared in
-| Shared content | Behaviour |
+### 10.0 Two ways in
+WhatsApp on Android **can't share a text message to other apps**: it only forwards to other WhatsApp chats. Links are different, and can be shared (owner-tested 2026-10-13). So there are two ways in:
+1. **Copied text, the main path for WhatsApp messages.** The user copies the message in WhatsApp (long-press → Copy), then opens Thinnava.
+   - If the clipboard has text, Home shows a card at the top of the feed: **"You copied a message"** with **Read it** and ✕. The same offer appears as a banner in + → A friend told me (§10.4).
+   - The app only checks *whether* the clipboard has text. It reads the text **only when the user taps Read it**, so Android's "pasted from clipboard" notice appears only then.
+   - After Read it or ✕, the card stays hidden for 6 hours, so an old copy doesn't keep nagging. It comes back when the app sees the clipboard change while it's open.
+2. **Share → Thinnava** from any app that can share: links from Instagram, YouTube, Google Maps and Chrome, and text from apps that support it.
+
+Both paths run the same import (§10.2–10.3).
+
+### 10.1 What can come in
+| Content | Behaviour |
 |---|---|
-| Plain text (e.g., WhatsApp message) | AI import → confirmation (§10.3). Default source **Friend**. |
+| Plain text (copied WhatsApp message, or text shared from another app) | AI import → confirmation (§10.3). Default source **Friend**. |
 | Text containing a URL | Treated by URL type first (rows below); remaining text is passed to the AI with it. |
 | Google Maps link (`maps.app.goo.gl`, `google.com/maps`, `goo.gl/maps`) | Resolved straight to the place; confirmation with source **Internet**, place prefilled. |
 | Zomato / District / Swiggy restaurant link | Treated as an internet find: link kept; the restaurant name in the shared text goes to the AI. |
@@ -217,7 +227,7 @@ D7 "Reading this…" sheet with the cat. Target ≤ 3 s, timeout 15 s. On failur
 - Group totals: if the message gives a total for a group ("1200 for 4"), the AI converts to per person and marks price confidence low.
 
 ### 10.4 Manual (no AI)
-+ → "A friend told me" / "Found it online" opens D5 directly. If the clipboard has text, a chip "Use copied text?" appears at the top; tapping it runs the same AI import. The clipboard is read only on that tap.
++ → "A friend told me" / "Found it online" opens D5 directly. If the clipboard has text, a banner "Use copied text?" appears at the top; tapping **Use** runs the same AI import. The clipboard is read only on that tap.
 
 ## 11. Hand-offs (going, ordering)
 
@@ -295,7 +305,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 - **A1 Splash** `/` — chef cat, wordmark and "Did you eat?" while the session loads. Signed in with profile → Home. Signed in without profile → A3. Otherwise → A2.
 - **A2 Welcome** `/welcome` — 3 swipeable slides with dots and a Skip button (jumps to the last slide). **Continue with Google** is always visible.
   - Slide 1: "Remember every place your friends tell you about" / "No more scrolling chats to find 'that biryani place Rahul said'."
-  - Slide 2: "Share it here. We'll do the typing." / "Hold a message → Share → Thinnava. We pull out the place, dishes and price, and you check it." (with a mini share-sheet demo)
+  - Slide 2: "Copy it. We'll do the typing." / "Copy a friend's message, open Thinnava and tap Read it. We pull out the place, dishes and price, and you check it." (mini demo: a WhatsApp bubble with Copy highlighted, then the "You copied a message" card)
   - Slide 3: "See where your people ate" / "Connect with friends and see what they loved, skipped and paid. No strangers, no ads."
   - Under the button: "By continuing you agree to the Terms and Privacy Policy", with both linked (§27.4).
   - *Sign-in error* → snackbar "Couldn't sign in. Try again."
@@ -308,7 +318,8 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 
 ### B. Main tabs (bottom nav: Home · Search · + · Map · Profile)
 - **B1 Home** `/(tabs)` — top bar: wordmark, 🔔 (dot if unread), filter icon. Timeline cards (one per entry, newest first by creation time), infinite scroll (20 per page), pull to refresh. Card: avatar or source mark; header "**Anu** went to" / "**You** went to" / "**Rahul** told you about", or for internet entries "From a reel" (Instagram link), "From a video" (YouTube), "From a link" (other link) or "Found online" (no link); place (Fredoka); meta line: area · "with Arjun" (visits with companions) or "went Oct 10" (friend entries with a date); time ago; ❤ loved line, 👎 didn't-like line; footer: rating pill, ₹/person, "Only you" lock for private entries, "with X" when tagged. Tap card → C2 (title glide motion). Tap name → profile.
-  - *B1a Empty*: cat peeking over a card, "Hi <first name>! Your feed is empty." / "Start with whichever is easiest." Buttons: **Log a place you've been** (→ D1), **Save what a friend told you** (→ D5 friend), **Find people you know** (→ Search · People). Tip: "In WhatsApp, hold a message → Share → Thinnava".
+  - *Copied-message card* (§10.0): at the top of the feed when the clipboard has text. "You copied a message" / "Want us to read it?" with the peeking cat, **Read it** (→ D7) and ✕.
+  - *B1a Empty*: cat peeking over a card, "Hi <first name>! Your feed is empty." / "Start with whichever is easiest." Buttons: **Log a place you've been** (→ D1), **Save what a friend told you** (→ D5 friend), **Find people you know** (→ Search · People). Tip: "Copy a friend's WhatsApp message, then open Thinnava".
   - *Filtered empty*: "No entries from friends yet" + the matching action.
 - **B1b Home filter** sheet "Show" (radio): Everything · Connections ("Reviews they posted") · From friends ("What friends told you") · Internet ("Reels, videos, links") · Mine ("Places you went"). Any filter other than Everything shows as a chip under the top bar ("From friends ×").
 - **B2 Map** `/(tabs)/map` — Google map with pins (§16.6), clustering and my location dot.
@@ -372,7 +383,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 - **D4 Who can see this?** sheet — options per §8 with member counts; [Done].
 - **D5 Friend / internet entry (manual)** `/saved/new?source=friend|internet` · `/saved/[id]/edit` — Source toggle; Friend: Who told you? (→ D6, required); Internet: Link (optional); Place (→ D1); How was it for them? (optional pills); Loved; Didn't like; Price per person; When they went (friend only, optional). If the clipboard has text: a banner "Use copied text?" with a preview and **Use** (runs the AI import). **Save**.
 - **D6 Who told you?** sheet — autocompletes from my friend names. Each row shows "5 entries", and linked names show "Linked to @rahulk". Last row: "Add '<text>' as a new name". Note: "Names are private to you. Link one to a connection from Settings → Friend names."
-- **D7 Reading** sheet — opens over the source app: "Reading this message…" / "Looking for the place, dishes and price." with the cat. Never shows a sender's name, because we don't know it. *Failed*: "Couldn't find a place in that" / "No worries, fill it in yourself." [Fill it in].
+- **D7 Reading** sheet — opens over Home after Read it, or over the source app after a share: "Reading this message…" / "Looking for the place, dishes and price." with the cat. Never shows a sender's name, because we don't know it. *Failed*: "Couldn't find a place in that" / "No worries, fill it in yourself." [Fill it in].
 - **D8 Confirmation** `/import` — "Check what we found", "1 of 2"; behaviour per §10.3.
   - Who told you? shows quick-pick chips of my most recent friend names.
   - Flags read "Please check this".
@@ -1073,7 +1084,7 @@ src/app/
   notifications.tsx           F1
   settings/index.tsx · settings/profile.tsx · settings/friend-names.tsx · settings/companion-names.tsx
   settings/drafts.tsx · settings/blocked.tsx · settings/delete-account.tsx
-  _gallery.tsx                dev-only component gallery
+  dev/gallery.tsx             dev-only component gallery
 ```
 - Sheets (B1b, B2a, B2b, D3, D4, D6, E5) are `@gorhom/bottom-sheet` components, not routes.
 - Dialogs (D10, E9, A7) use one shared `Dialog` component.
@@ -1119,6 +1130,11 @@ src/app/
   - **Signed out:** save it to `pendingShares` and continue after onboarding.
   - **Offline:** save it to `pendingShares` and show "Saved. We'll read it when you're online".
   - **Otherwise:** detect a URL in the text, navigate to `/import` with `{text, url}`, then reset the intent.
+- **Copied text** (`features/import/clipboard.ts`):
+  - When the app becomes active, call `Clipboard.hasStringAsync()`. This doesn't read the text, so Android shows no notice.
+  - If it returns true and there was no Read it / ✕ in the last 6 hours (time stored in MMKV), show the Home card.
+  - While the app is open, `addClipboardListener` re-shows the card when the clipboard changes.
+  - **Read it** calls `Clipboard.getStringAsync()` and navigates to `/import` with `{text, url}`, the same as a share.
 - `/import`: if a URL is present, call `links` first and branch on `kind` (§10.1); otherwise call `extract`. The motion follows the share-import sequence in §16.7.
 
 ### 26.7 Map
@@ -1265,20 +1281,25 @@ Two people build in parallel on two laptops (how: §33).
 
 The milestones below describe *what* gets built; §33.2 shows who builds what, in which order, side by side. Steps marked ∥ can run in parallel.
 
-### M0 · Foundations and spikes
+### M0 · Foundations (no accounts needed)
+Each account is created only when a milestone needs it, so the account-dependent spikes moved to the start of those milestones (decided 2026-10-13).
 1. `git init`, `.gitignore`, the repo layout (§19). Add a `changelog.md` entry with the exact Expo SDK and library versions.
-2. Create all accounts and keys (§27.2), set up **all four zero-cost locks** (§27.5) and test lock 1 with a cap of 1, draft and publish the privacy policy and terms (§27.4), and write `.env.example`. Record each Places SKU's free allowance and the Maps SDK pricing in `changelog.md`.
-3. Create the Expo app in `app/`: TypeScript, Expo Router, the §18.1 dependencies, and `app.config.ts` with the package id, plugins and Maps key.
-4. ∥ **Spike: share target.** Dev build on a phone; share a WhatsApp message and a URL into the app and print them.
-5. ∥ **Spike: sign-in.** Google sign-in → a Supabase session on the phone.
-6. ∥ **Spike: Gemini.** First prompt + 10 messages in `tools/extraction-eval`; check the JSON quality.
-7. ∥ **Spike: Places.** Autocomplete, details and text search through a first version of the `places` function on dev.
+2. Create the Expo app in `app/`: TypeScript, Expo Router (`src/app`), the §18.1 dependencies, `app.config.ts` (package id, scheme, plugins), and `.env.example`.
+3. `supabase/` folder (`supabase init`). The local Supabase stack runs in Docker for development; hosted projects come later.
+4. Draft the privacy policy and terms (§27.4) in `docs/legal/`. They get published before M2.
+5. **Spike: share target.** Install a dev build on the phone; share a URL into the app and show it. (Done 2026-10-13. WhatsApp text can't be shared, which led to the copy path in §10.0.)
 
-**Done when:** a dev build on a phone signs in and receives shared text, and the eval returns sensible JSON for 10 messages.
+**Done when:** the dev build runs on the phone and shows shared links. ✅ Done 2026-10-13.
+
+**Account-dependent spikes, now at the start of each milestone:**
+- **M2:** Google Cloud `thinnava-free` (OAuth) and publish the legal pages → **sign-in spike** (Google sign-in → Supabase session).
+- **M3:** Google Cloud `thinnava-maps`, set up and test all four zero-cost locks (§27.5), record each SKU's free allowance and the Maps SDK pricing → **Places spike**.
+- **M5:** Gemini key (on `thinnava-free`) → **Gemini spike** (first prompt + 10 messages in `tools/extraction-eval`).
+- **M7 or the first APK:** Expo account, Firebase. **Hosted Supabase** before the first APK for other people.
 
 ### M1 · App shell and design system
 1. `theme/` tokens, type and motion; fonts load behind the splash.
-2. Every §16.5 component, matching `design/phase1.html` and `phase2.html`, shown in the dev-only `/_gallery` route.
+2. Every §16.5 component, matching `design/phase1.html` and `phase2.html`, shown in the dev-only `/dev/gallery` route.
 3. App icon and splash (§16.8).
 4. Tab layout with the custom nav bar, the + speed dial (with motion), the Rings ground for tab screens, TopBar, and an OfflineBanner placeholder.
 
@@ -1314,14 +1335,14 @@ The milestones below describe *what* gets built; §33.2 shows who builds what, i
 1. Migration: friend_names and saved_entries, with their RPCs.
 2. D5 manual form, D6 friend-name picker, F4 friend names (rename, merge, delete; linking comes in M6).
 3. The `extract` and `links` functions with the full prompt. Grow the eval set to 30 messages and meet the pass bar.
-4. Share intent → `/import`:
+4. Share intent **and the copied-message card** (§10.0, §26.6) → `/import`:
    - D7 reading, then D8 confirmation (multi-place, flags, D8b candidates);
    - on failure, D5 prefilled;
    - the "Use copied text?" chip.
 5. Home filters From friends and Internet; the Profile Saved tab.
 
 **Done when:**
-- demo criterion 1 passes (WhatsApp → a Rahul entry on Home and on the place page, in under 20 s);
+- demo criterion 1 passes (copy a WhatsApp message → Read it → a Rahul entry on Home and on the place page, in under 20 s);
 - the eval pass bar is met.
 
 ### M6 · Connections, lists and audience (P2)
@@ -1365,7 +1386,7 @@ The milestones below describe *what* gets built; §33.2 shows who builds what, i
 
 ## 31. Demo script and success criteria
 
-1. **Share-to-app:** share a WhatsApp message → confirm it → add the friend's name → the entry appears on Home and on the place page.
+1. **Message to entry:** copy a WhatsApp message → open Thinnava → Read it → confirm → add the friend's name → the entry appears on Home and on the place page. Also share an Instagram link → it becomes an internet entry.
 2. **Connections:** send a request → accept it → add them to a list → open their profile and map → tap a place → see their review.
 3. **Collab tag:** A tags B → B taps "Same as A's" → C, who is connected only to B, sees "B went with A" but none of A's content.
 4. **Audience:** a visit shared with "Close friends" is invisible to a connection outside that list.

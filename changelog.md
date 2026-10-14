@@ -12,6 +12,149 @@ Entry format:
 
 ---
 
+## 2026-10-14 · M1 work log (app shell and design system)
+**Theme** (`app/src/theme/`)
+- `tokens.ts`:
+  - Cobalt colour roles (spec §16.1), avatar tints, radii, spacing, sizes;
+  - shadows as CSS `boxShadow` strings, copied from the mockups (React Native's new architecture supports them);
+  - inset strokes for fields and chips.
+- `type.ts`: Fredoka 600 + Nunito 400/600/700/800, text styles from DESIGN.md, and font scaling capped at 130%.
+- `motion.ts`:
+  - the three Material curves plus the title-glide curve, and the spec durations;
+  - `useMotion()` honours Android's "Remove animations" setting (movement becomes a ≤150 ms fade).
+
+**Components** (`app/src/components/`, all built from tokens, with accessibility labels)
+- Basics: `T` (all text), `Pressable` (standard press shrink/dim), `Button` (primary / tonal / outline / white / strong / small / disabled, plus the Google "G" mark), `IconButton` (48 dp, badge, active).
+- Chips and marks: `Chip`, `ReviewPill` (fixed Good/Okayish/Bad colours with face icons), `Avatar` / `AvatarStack` / `SourceMark`.
+- Content: `EntryCard` (the Home timeline card), `List` (ListSurface, Panel, ListRow, SectionLabel, Divider, Thumb).
+- Inputs: `TextField` (focus/error/success states), `ChipInput` (dish chips: ≤10 items, ≤40 chars, case-insensitive dedupe).
+- Bars: `Bars` (TopBar, SearchBar, Segmented, OfflineBanner).
+- Mascot and ground: `RingsGround` (the three Rings compositions from the mockup), `CatPeek` (the cat climbs up from behind a card's edge), `EmptyState`.
+- Overlays: `Sheet` / `SheetOption` / `Radio` (bottom sheet, 400 ms rise), `Dialog`, `Snackbar` (`showSnack()` from anywhere).
+- Map: `MapPin` / `Cluster` / `YouDot`.
+- Navigation: `NavBar` (custom tab bar with the animated pill and the + button), `SpeedDial` (three circles fan out with a 30 ms stagger, + turns 135° into ×, navy scrim, Android back closes it), `Screen` (Mist ground + optional Rings + safe area).
+
+**Screens** (`app/src/app/`)
+- `_layout.tsx`: loads the fonts behind the splash; share-intent, gesture, safe-area and bottom-sheet providers; light status bar.
+- `(tabs)/`, with tabs crossfading in 280 ms:
+  - Home: the B1a empty state with the cat, three start buttons and the copy tip;
+  - Search: search bar, Places/People, filter chips;
+  - Map: a static preview of the pins on map colours (the real map is M8);
+  - Profile: identity block, counts, and a dev-only gallery link.
+- `dev/gallery.tsx`: a **dev-only design gallery** showing every component (opens a sheet, dialog and snackbar; live username field states; dish chips). In release builds it redirects to Home.
+- Removed the temporary M0 check screen.
+- The + speed dial items show a "arrives in a later milestone" snackbar for now.
+
+**App icon and splash** (spec §16.8)
+- Generated with Python/PIL from the mascot art into `app/assets/`:
+  - `android-icon-foreground.png`: the peeking cat inside the adaptive-icon safe zone, on a cobalt `#2350D9` background;
+  - `android-icon-monochrome.png`: the cat silhouette, for Android themed icons;
+  - `icon.png`: cobalt square with the cat;
+  - `splash-icon.png`: the cat for the splash screen.
+- `app.config.ts` adds the expo-splash-screen plugin (cat on Mist, 200 dp).
+- Removed the template's `android-icon-background.png` and `favicon.png`.
+- Native project regenerated (`expo prebuild --clean`) and rebuilt.
+
+**Checks**
+- `tsc --noEmit` passes.
+- On the phone: Home, the speed dial and Search render like the mockups (screenshots compared).
+
+**Fixes after testing on the phone**
+- **Disabled buttons weren't faded:** the press animation overrode the 40% opacity. `Pressable` now owns the disabled opacity.
+- **Android back closed the screen instead of an open sheet:** `Sheet` now closes itself on back first.
+- **Icon paws clipped on round masks:** the icon foreground was shrunk to fit every launcher shape (circle and squircle previews checked).
+- **The code server stopped during a native rebuild** and an old copy kept the port busy. Fixed by stopping it; there's now a single command to start development: `cd app && npm run phone` (connects the phone over USB and starts the server).
+- **Removed `app/LICENSE`:** it was Expo's own MIT licence copied in by the template, not ours.
+
+**Spec tweak:** the gallery route is `/dev/gallery`, not `/_gallery`, because Expo Router reserves `_` files for layouts (spec §26.2, §30 M1 updated).
+
+**M1 status:** ✅ Done.
+- The gallery matches the mockups on the phone.
+- Tabs crossfade, the pill moves, and the speed dial fans out.
+- Sheet, dialog and snackbar work.
+- "Remove animations" support is built in through `useMotion()` and Reanimated's system setting, but hasn't been checked on the phone: we didn't change the owner's phone settings. To check it: Settings → Accessibility → Visibility enhancements → Remove animations, then open the + menu. It should simply fade.
+
+**Notes**
+- Expo Router 57 bundles React Navigation, so tab-bar types come from `expo-router/tabs`.
+- In dev builds a grey gear (Expo's dev-tools button) floats top-right. It isn't part of the app and doesn't appear in release APKs.
+
+## 2026-10-14 · WhatsApp messages come in by copy, not share
+- **What:**
+  - Owner found WhatsApp on Android **can't share a text message to other apps** (only forward). A web check agrees: a "share to other apps" bar was only in a 2025 beta.
+  - The main path is now: copy the message → open Thinnava → Home card **"You copied a message · Read it"** → the same reading and confirmation as before.
+  - The app checks only *whether* the clipboard has text, and reads it only on **Read it**. After Read it or ✕, the card stays hidden for 6 hours, unless the clipboard changes while the app is open.
+  - Share → Thinnava still works for links (Instagram reel tested ✅) and for text from apps that can share.
+- **Spec:** §1, §10 (new §10.0; §10.1, §10.4), §14 (A2 slide 2, B1 copied-message card, B1a tip, D7), §26.6, §30 (M0 marked done, M5 step 4 and done-when), §31 demo 1.
+- **Also updated:**
+  - `DESIGN.md` motion line;
+  - `CLAUDE.md` project line;
+  - `design/phase1.html`: slide 2 now shows Copy → the "You copied a message · Read it" card, plus a new tip and caption;
+  - `design/motion.html`: step 1 text notes the copied-card start; the animation itself still shows a share, which is still valid for links.
+
+## 2026-10-13 · M0 complete ✅
+- The dev build runs on the phone (SM-S711B) and receives shared links. See the work log below.
+
+## 2026-10-13 · M0 work log (foundations)
+**Plan change**
+- M0 now needs **no accounts**. The account-dependent spikes moved to the start of the milestone that needs each account: sign-in → M2, Places + zero-cost locks → M3, Gemini → M5, Expo/Firebase/hosted Supabase → M7 or the first APK (spec §30 M0).
+
+**Repo and git**
+- Created the private GitHub repo `CKarthikeshwar/thinnava` and pushed 2 commits. Neither commit mentions Claude.
+- Added `.gitignore` (excludes `.impeccable/review/` screenshots, `.env*`, keystores, `google-services.json`, `node_modules`, builds, native folders) and `.gitattributes` (LF line endings).
+- New rule: Claude asks before every commit and every push.
+
+**Phone**
+- Dev phone: Samsung Galaxy S23 FE (SM-S711B), Android 16, connected over USB with USB debugging.
+
+**App created in `app/`**
+- Created with `create-expo-app` (blank TypeScript template), then switched to Expo Router (`"main": "expo-router/entry"`, routes in `app/src/app/`).
+- Removed `app.json`, `App.tsx` and `index.ts`. Added `app/app.config.ts`:
+  - package `com.thinnava.app`, scheme `thinnava`, version 0.1.0, light mode;
+  - app name "Thinnava?! (dev)" for dev builds;
+  - plugins: expo-router, expo-share-intent (Android `text/*` only, iOS off), Google Sign-In, react-native-maps (key from env), expo-location (permission text).
+- Added `app/.env.example` (no real values), `app/tsconfig.json` with the `@/` path alias, and folders `src/{app,components,features,lib,platform,theme,types}`.
+- `app/package.json` scripts: `start`, `android`, `lint`, `typecheck`, `test`, `doctor`.
+- Kept Expo's `app/AGENTS.md` (guidance for AI tools: use versioned Expo docs, `npx expo install`).
+- **Installed versions:**
+  - Core: Expo SDK **57.0.28**, React Native **0.86.3**, React 19.2.3, TypeScript 6.0.3.
+  - Navigation and UI: expo-router 57.0.26, Reanimated 4.5.1 (+ worklets 0.10.1), Gesture Handler 2.32, bottom-sheet 5.2, FlashList 2.0.2, lucide-react-native 1.56, react-native-svg 15.15, Fredoka/Nunito fonts.
+  - Data and state: TanStack Query 5.104, MMKV 4.3, zustand 5, supabase-js 2.117, react-hook-form 7.90 + zod 3.25.
+  - Native features: expo-share-intent 8.0.1, Google Sign-In 16.1.5, react-native-maps 1.27.2 (+ supercluster 9), expo-location/notifications/clipboard/image/crypto/haptics/system-ui/build-properties, NetInfo 12, expo-dev-client.
+  - Other: date-fns 4.
+  - Tests: jest 29 + jest-expo 57, @testing-library/react-native 14.
+- **First screen:** `src/app/_layout.tsx` (share-intent, gesture and safe-area providers) and `src/app/index.tsx` (a temporary "M0 check" screen that shows anything shared into the app).
+
+**Problems hit and fixes**
+- **npm "allow-scripts" error.** Your global npm config has `allow-scripts=["@higgsfield/cli"]`, which npm 11 rejects inside projects. Fix: `app/.npmrc` with `allow-scripts=` (empty) overrides it for this project only. Your global setting is unchanged.
+- **Dependency clash:** a newer `react-dom` (19.3) was pulled in. Fixed by pinning `react-dom` to 19.2.3 with `npx expo install react-dom`.
+- **Missing scheme:** expo-share-intent needs an app URL scheme, so it's set to `thinnava`.
+- **Light mode setting:** needs `expo-system-ui`, so that was installed.
+- **Device flag:** the first build couldn't find the phone, because `--device` needs the model name (`SM_S711B`), not the serial number.
+
+**First dev build on the phone** ✅
+- `npx expo run:android --device SM_S711B` built and installed "Thinnava?! (dev)". The first attempt took 21 min and failed on a campus-network download drop; the retry succeeded in 1.5 min thanks to the cache.
+- Running it day to day:
+  1. Start the code server: `cd app && npx expo start --dev-client --port 8081`.
+  2. Connect the phone over USB with `adb reverse tcp:8081 tcp:8081`, because campus Wi-Fi blocks laptop-to-phone traffic.
+  3. In the app, connect to `http://localhost:8081`.
+- Problems hit and fixes:
+  - **Network drop:** the download from `dl.google.com` was cut off on campus Wi-Fi ("Remote host terminated the handshake"). Fix: re-run the build. If it happens again, use a phone hotspot for the build.
+  - **Blank screen, then "unexpected end of stream":** `expo start --localhost` listened only on IPv6 `::1`, while the USB tunnel connects via `127.0.0.1`. Fix: start without `--localhost`, so it listens on all addresses.
+- Build logs are written to `build.log` and `metro.log` in the repo root (git-ignored by `*.log`).
+
+**Backend folder**
+- Ran `supabase init` (CLI 2.120.0 via npx): `supabase/config.toml`, project_id `thinnava`. Nothing runs yet.
+
+**Legal drafts**
+- `docs/legal/privacy.md` and `docs/legal/terms.md`, plain English, per spec §27.4. A **contact email is still needed** before publishing (placeholder `<CONTACT EMAIL>`).
+
+## 2026-10-13 · Solo start; commit rule
+- **What:**
+  - One owner does both P1 and P2 work, in milestone order. They use one dev Supabase project (`thinnava-dev`) plus `thinnava-prod`. Personal dev projects (§33.4) come only when a second person starts.
+  - Claude must **ask before every commit and every push**, and commits only after a huge chunk of work.
+- **Why:** owner's instruction.
+- **Spec:** §33 (applies once two people work in parallel). `CLAUDE.md` updated.
+
 ## 2026-10-13 · Zomato/District link tests; stays v2
 - **What:** owner phone tests showed:
   - Zomato and District can't be searched by name.

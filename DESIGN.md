@@ -342,7 +342,7 @@ Prototype: `design/motion.html` (clickable; every transition has a Play button).
 
 **Signature moments:**
 - **Chef cat climb:** wherever the peeking cat appears, it rises from behind the card (600 ms, emphasized decelerate) and only then hooks its paws over the edge.
-- **Share import:** the shared bubble lights up; the sheet rises; the cat climbs; a copy of the message flies into the reading card; the sheet grows into the confirmation screen; fields fill in with a 40 ms stagger and the amber flag pulses once; entering a friend's name wakes Save; Save shrinks the screen into a new card that drops onto the top of Home while the other cards slide down, then the new card's tint fades from Pale Cobalt to white.
+- **Share import:** the copied-message card on Home lifts (or, for a shared link, the shared bubble lights up); the sheet rises; the cat climbs; a copy of the message flies into the reading card; the sheet grows into the confirmation screen; fields fill in with a 40 ms stagger and the amber flag pulses once; entering a friend's name wakes Save; Save shrinks the screen into a new card that drops onto the top of Home while the other cards slide down, then the new card's tint fades from Pale Cobalt to white.
 
 **Feedback:** heart pops once (scale 1.35, 220 ms) and fills; snackbars rise 300 ms, stay 3 s, leave 200 ms; review buttons and chips respond within 150 ms; the username check spins, then the tick pops in.
 
