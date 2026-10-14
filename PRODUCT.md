@@ -16,7 +16,7 @@ College students and young professionals in Indian cities (Bengaluru first). The
 
 ## Product Purpose
 
-Thinnava ("Did you eat?" in Telugu) is a social food memory app. Users log their own visits, privately save friends' experiences and internet finds (mostly via the Android share sheet with AI-assisted extraction they confirm), connect mutually with people they know, and jump out to Google Maps / Swiggy / Zomato. Success: when deciding where to eat, the answer "who I know has been there and what they thought" is one tap away.
+Thinnava ("Did you eat?" in Telugu) is a social food memory app. Users log their own visits, privately save friends' experiences and internet finds (mostly by copying a WhatsApp message into the app, or via the Android share sheet from apps that allow it, with AI-assisted extraction they confirm), connect mutually with people they know, and jump out to Google Maps / Swiggy / Zomato. Success: when deciding where to eat, the answer "who I know has been there and what they thought" is one tap away.
 
 ## Positioning
 

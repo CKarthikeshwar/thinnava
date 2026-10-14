@@ -335,7 +335,7 @@ async function save() {
 // ---------- interactions on the phone ----------
 const run = fn => async (...args) => { if (busy) return; busy = true; $$('.play').forEach(b => b.disabled = true); try { await fn(...args); } finally { busy = false; $$('.play').forEach(b => b.disabled = false); } };
 const actions = {
-  next: () => go(cur.id === 'v-w1' ? $('#v-w2') : $('#v-w3'), 'x'),
+  next: () => go($('#v-w3'), 'x'),
   setup: async () => { $('#setup-cat').parentElement.style.zIndex = 1; $('#setup-cat').style.transform = 'translateY(75%)'; await go($('#v-setup'), 'fade'); $('#setup-cat').style.transform = ''; await setupSeq(); },
   home: async () => { await go($('#v-home'), 'fade'); await feedIn(); },
   filter: () => sheetOpen($('#filter-sheet'), $('#filter-scrim')),
@@ -366,7 +366,7 @@ document.addEventListener('click', e => {
 const plays = {
   launch: async () => { jump('v-splash'); await launch(); },
   setup: async () => { jump('v-setup'); await setupSeq(); },
-  slides: async () => { jump('v-w1'); await wait(300); await go($('#v-w2'), 'x'); await wait(700); await go($('#v-w3'), 'x'); await wait(700); await go($('#v-w2'), 'x', { dir: -1 }); },
+  slides: async () => { jump('v-w1'); await wait(300); await go($('#v-w3'), 'x'); await wait(900); await go($('#v-w1'), 'x', { dir: -1 }); },
   tabs: async () => { jump('v-home'); await wait(300); for (const t of ['search', 'map', 'profile', 'home']) { await go($('#v-' + t), 'fade'); await wait(650); } },
   card: async () => { jump('v-home'); await wait(300); const c = $('#card-bao'); lastCard = c; from = $('#v-home'); await openPlace(c); await wait(1100); await closePlace(c); },
   sheet: async () => { jump('v-home'); await wait(300); await sheetOpen($('#filter-sheet'), $('#filter-scrim')); await wait(1100); await sheetClose($('#filter-sheet'), $('#filter-scrim')); },
@@ -393,7 +393,7 @@ run(launch)();
 contract = """<!--
 THESIS: Motion for Thinnava?! that explains, never decorates: fast Material transitions for everyday navigation, one authored moment where a friend's message becomes a saved entry.
 OWN-WORLD: Inherited from DESIGN.md (Cobalt, Mist ground, Rings on main tabs, white cards, Fredoka + Nunito, chef cat). Motion material: Material 3 emphasized curves; the chef cat climbing over card edges is the brand's motion signature.
-STORY: Launch -> welcome -> profile -> Home; card expands into place; share import lifts the message, the cat reads it, fields fill, Save drops a new card into Home.
+STORY: Launch -> welcome -> profile -> Home; card expands into place; a copied message is read by the cat, fields fill, Save drops a new card into Home.
 FIRST VIEWPORT: Phone prototype (left, sticky) auto-playing launch; motion spec with Play buttons and tokens (right).
 FORM: Extension of the established world; motion thesis per animate.md; no concept roll.
 -->"""

@@ -12,6 +12,26 @@ Entry format:
 
 ---
 
+## 2026-10-14 · Merged the other device's branch `docs/copy-flow-onboarding`
+- **What:** merged the owner's branch, made on another laptop from an older clone (commit a9c45aa), into `main`. Local work was committed first, with a safety branch `backup-before-merge`.
+- **Decisions (owner):**
+  - **Copy route: both.** The Home card "You copied a message · Read it" (fastest) **and** the "Use copied text?" chip in + → A friend told me.
+  - **Onboarding: the branch's three screens.** A1 Splash → A1b Intro (cat offering a dessert + friends' map) → A2 Welcome with Continue with Google. My 3-slide welcome (with the "Copy it" slide) was dropped.
+- **How the conflicts were resolved:**
+  - **spec.md:**
+    - §10 combines both versions: the new §10.0 lists both copy entry points;
+    - §14 A1/A1b/A2 come from the branch; B1 keeps the copied-message card;
+    - D7 covers both cases;
+    - M0 stays as completed here; demo criterion 1 mentions both routes;
+    - §26.6 points to both.
+  - **CLAUDE.md:** both wordings combined. **changelog.md:** both entries kept.
+  - **Mockups:**
+    - `phase1.html`: the branch's onboarding, with the Home tip "Copy a friend's WhatsApp message, then open Thinnava";
+    - `motion-body.html`: the branch's version, noting the Home card;
+    - `phase2.html` and `motion.html` regenerated from `design/src/`.
+- **New from the branch:** cat art (`design/assets/cat-offering.png`, `cat-sad.png`, `cat-waving.png`), `ui-references/9.png`, and `PRODUCT.md` wording.
+- **App code:** not affected (the onboarding screens get built in M2).
+
 ## 2026-10-14 · M1 work log (app shell and design system)
 **Theme** (`app/src/theme/`)
 - `tokens.ts`:
@@ -164,6 +184,18 @@ Entry format:
   A v2 design is recorded: automatic lookup through free Gemini web search, a share-a-link backup, and "Wrong restaurant?". The owners chose to keep it in v2.
 - **Why:** findable automatically, but it adds scope; v1 stays Directions + Swiggy.
 - **Spec:** §11.2, §11.3.
+## 2026-10-14 · WhatsApp messages are copied, not shared; onboarding is three screens
+- **What:**
+  - **WhatsApp can't share messages to other apps; it only lets you copy them.** So the main route for a friend's message is now **copy → open Thinnava → + → "A friend told me" → "Use copied text?"** (already in D5), which runs the same D7 reading → D8 confirmation.
+  - **The share target stays** for apps that do allow sharing text or links (browser, Instagram, YouTube, Google Maps, Zomato, Swiggy…). §10.1's link handling is unchanged.
+  - **Onboarding is three screens:** A1 Splash → **A1b Intro** (new: the promise plus a small map of friends, merged from old slides 1 and 3) → A2 Welcome with **Continue with Google**. The old 3-slide welcome is gone; the "how to share" slide was dropped.
+  - **B1a tip** now reads "Copy a friend's message, then tap + → A friend told me".
+  - Wording: "shared message" became "message (copied or shared)" where it described the original text; D7 opens over the sharing app **or** inside Thinnava.
+  - Spike M0 now tests sharing from a browser and Instagram, plus reading the clipboard after copying a WhatsApp message. Demo criterion 1 is now "copy a WhatsApp message".
+- **Why:** WhatsApp's message long-press has no Share → Thinnava, so the planned flow could not work for the main use case.
+- **Spec:** §1 (summary), §4 (scope row M), §6.2, §10 (all), §14 A1/A1b/A2, B1a, D7, F6, §16.7 unchanged, §26.2 routes, §26.3, §26.5, §26.6, §27 privacy wording, M0 spike, M2, M5, §30 demo test, §33 routes.
+
+---
 
 ## 2026-10-13 · Gap review (spec v1.1)
 - **What, decided by the owners:**

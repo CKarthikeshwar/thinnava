@@ -438,11 +438,11 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
           </div>
           <div class="panel">
             <h3>Your visits</h3>
-            <div class="hist"><span class="chip">Jan 12 · <b class="t-good">Good</b></span><span class="chip">Sep 3 · <b class="t-ok">Okayish</b></span></div>
+            <div class="hist"><span class="chip">Jan 12 <b class="t-good">Good</b></span><span class="chip">Sep 3 <b class="t-ok">Okayish</b></span></div>
           </div>
           <div class="panel" style="margin-top:10px">
             <h3>People who've been</h3>
-            <div class="person"><span class="av a2">A</span><div class="pc"><div class="pn"><b>Ananya</b> · with Arjun <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Peri peri fries</div><div class="pl muted">₹350 / person · Oct 2</div></div></div>
+            <div class="person"><span class="av a2">A</span><div class="pc"><div class="pn"><b>Ananya</b> with Arjun <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Peri peri fries</div><div class="pl muted">₹350 / person · Oct 2</div></div></div>
             <div class="person"><span class="src"><i data-lucide="user-round"></i></span><div class="pc"><div class="pn"><b>Rahul</b> told you <span class="rv good"><i data-lucide="smile"></i>Good</span></div><div class="pl"><i data-lucide="heart" style="color:var(--p)"></i>Chicken burger</div><div class="pl"><i data-lucide="thumbs-down" style="color:var(--ink-3)"></i>Shake</div><div class="pl muted"><i data-lucide="lock"></i>Only you</div></div></div>
           </div>
         </div>
@@ -461,6 +461,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
           <div class="hero-place">
             <h1 class="h-lg">Biryani Zone</h1>
             <div class="meta-line">Restaurant · HSR Layout</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:0 14px;height:40px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);width:max-content;font-size:13.5px;font-weight:800;color:var(--ink-2)"><i data-lucide="star" style="width:16px;height:16px;color:var(--p)"></i>Google info<span style="font-weight:600;color:var(--ink-3)">rating, hours, price</span><i data-lucide="chevron-down" style="width:16px;height:16px;color:var(--ink-3)"></i></div>
           </div>
           <div class="acts">
             <div class="act"><span class="c"><i data-lucide="navigation"></i></span>Directions</div>
@@ -470,15 +471,11 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
           <div class="panel" style="padding:16px">
             <div style="display:flex;gap:12px;align-items:center"><span class="src"><i data-lucide="users-round"></i></span><div><b style="font-size:15px">Nobody you know has been yet</b><div class="muted" style="font-size:13px;margin-top:2px">Here's what Google says.</div></div></div>
           </div>
-          <div class="panel" style="margin-top:10px">
-            <div class="grow"><span class="ic"><i data-lucide="map-pin"></i></span><div>27th Main, Sector 2, HSR Layout</div></div>
-            <div style="margin:8px 0 2px;height:44px;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--line);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:14.5px;color:var(--p)"><i data-lucide="star" style="width:18px;height:18px"></i>Show Google's rating, hours and price</div>
-          </div>
         </div>
         <div class="snack">Added to your wishlist<span class="sa">Who sees it</span></div>
         <div class="gest"></div>
       </div></div>
-      <figcaption><b>C1a Nobody you know has been.</b> The address shows straight away; one tap loads Google's rating, hours and price level (tap-only keeps us inside the free allowance). Shown right after tapping the heart: a snackbar confirms "Added to your wishlist" with a shortcut to change who sees it. <i>(Sample data.)</i></figcaption>
+      <figcaption><b>C1a Nobody you know has been.</b> The name and area show straight away; one tap on <b>Google info</b> loads Google's rating, hours and price level (tap-only keeps us inside the free allowance). Shown right after tapping the heart: a snackbar confirms "Added to your wishlist" with a shortcut to change who sees it. <i>(Sample data.)</i></figcaption>
     </figure>
 
     <!-- C1b closed + C2 entry -->
@@ -523,19 +520,16 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
 
 <!-- ================= SHARE IMPORT ================= -->
 <section class="sec">
-  <h2>Share import: from WhatsApp to saved</h2>
-  <p>The hero flow. Share a message to Thinnava, wait a second while the cat reads it, check what was found, add who told you, save. Every field can be fixed by hand, and the friend's name is never guessed.</p>
+  <h2>Copy or share in: from a message to saved</h2>
+  <p>The hero flow. Copy a friend's message (WhatsApp only lets you copy) and tap <b>Use copied text?</b>, or share text and links from an app that allows it. Wait a second while the cat reads it, check what was found, add who told you, save. Every field can be fixed by hand, and the friend's name is never guessed.</p>
   <div class="row">
 
     <!-- D7 Reading -->
     <figure>
-      <div class="phone"><div class="scr bare" style="background:#EFE7DE">
+      <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
-        <div style="background:#1F6E5B;color:#fff;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;font-weight:800"><i data-lucide="arrow-left" class="i"></i><span class="av sm a1">R</span>Rahul</div>
-        <div style="padding:18px 14px;display:flex;flex-direction:column;gap:8px">
-          <div class="wa in">Free this weekend?</div>
-          <div class="wa in" style="box-shadow:0 0 0 2px var(--p)">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div>
-        </div>
+        <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">A friend told me</span></div>
+        <div class="clip"><i data-lucide="clipboard"></i><div style="flex:1"><b>Use copied text?</b><span>"Went to Burger Factory yesterday. Chicken burger was insane…"</span></div><span class="sa">Use</span></div>
         <div class="scrim"></div>
         <div class="sheet" style="padding-bottom:36px">
           <div class="handle"></div>
@@ -550,7 +544,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
         </div>
         <div class="gest"></div>
       </div></div>
-      <figcaption><b>D7 Reading.</b> Opens over WhatsApp as a sheet, so you never lose your place in the chat. Takes 1–3 seconds.</figcaption>
+      <figcaption><b>D7 Reading.</b> Opens as a sheet over the screen you started from (here: after tapping "Use copied text?"; when text is shared from another app it opens over that app). Takes 1–3 seconds.</figcaption>
     </figure>
 
     <!-- D8 Confirmation -->
@@ -561,7 +555,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
         <div class="body form">
           <div class="seg" style="margin:0"><span class="on"><i data-lucide="user-round"></i>A friend</span><span><i data-lucide="globe"></i>Internet</span></div>
           <div class="field"><label>Who told you? <span class="req">Required</span></label><div class="inp focus"><span class="muted">Type a name</span><span class="caret"></span></div>
-            <div class="sugg"><span class="chip">Rahul</span><span class="chip">Rahul K <i data-lucide="link"></i></span><span class="chip">Mom</span></div></div>
+            <div class="sugg"><span class="chip">Rahul</span><span class="chip">Rahul K <img src="assets/cat-peek.png" alt="" style="width:22px;height:auto;margin-left:1px"></span><span class="chip">Mom</span></div></div>
           <div class="field"><label>Place</label><div class="inp"><i data-lucide="map-pin" style="width:18px;height:18px;color:var(--p)"></i>Burger Factory, Koramangala<span class="chg">Change</span></div></div>
           <div class="field"><label>How was it for them?</label><div class="revsel"><span class="on good"><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
           <div class="field"><label>Loved</label><div class="chipin"><span class="ichip">Chicken burger<i data-lucide="x"></i></span><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
@@ -571,7 +565,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
         <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" style="flex:1;opacity:.45">Save</button></div>
         <div class="gest"></div>
       </div></div>
-      <figcaption><b>D8 Confirmation.</b> "1 of 2" because the message named two places. <b>Who told you</b> is empty and required, with quick picks from your names. Save stays off until it's filled (or you switch to Internet). Unsure fields get an amber "please check". Below the fold: the date, and the shared message for reference while checking (it isn't saved).</figcaption>
+      <figcaption><b>D8 Confirmation.</b> "1 of 2" because the message named two places. <b>Who told you</b> is empty and required, with quick picks from your names. Save stays off until it's filled (or you switch to Internet). Unsure fields get an amber "please check". Below the fold: the date, and the original message for reference while checking (it isn't saved).</figcaption>
     </figure>
 
     <!-- D8b place candidates -->
@@ -599,7 +593,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
         <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
         <div class="body form" style="padding-top:12px">
           <div class="field"><label>Who told you? <span class="req" style="color:var(--good);background:var(--good-bg)">Done</span></label><div class="inp"><span class="av sm a1" style="width:26px;height:26px">R</span>Rahul<span class="chg">Change</span></div></div>
-          <div class="field"><label>Shared message <span class="optl">for checking · not saved</span></label><div class="quote">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div></div>
+          <div class="field"><label>Original message <span class="optl">for checking · not saved</span></label><div class="quote">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div></div>
         </div>
         <div class="bar2"><button class="btn btn-out" style="width:auto;padding:0 20px;color:var(--ink-2)">Discard</button><button class="btn btn-p" style="flex:1">Save</button></div>
       </div></div>
@@ -676,6 +670,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
           <div class="field"><label>Place</label><div class="inp"><span class="muted">Search places</span><i data-lucide="search" style="margin-left:auto;width:18px;height:18px;color:var(--ink-3)"></i></div></div>
           <div class="field"><label>How was it for them?</label><div class="revsel"><span><i data-lucide="smile"></i>Good</span><span><i data-lucide="meh"></i>Okayish</span><span><i data-lucide="frown"></i>Bad</span></div></div>
           <div class="field"><label>Loved</label><div class="chipin"><span class="addc"><i data-lucide="plus"></i>Add</span></div></div>
+          <div class="field"><label>Notes <span class="optl">optional</span></label><div class="inp"><span class="muted">Anything to remember?</span></div></div>
         </div>
         <div class="bar2"><button class="btn btn-p" style="opacity:.45">Save</button></div>
         <div class="gest"></div>
@@ -703,7 +698,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
           <div class="search" style="box-shadow:inset 0 0 0 2px var(--p)"><span class="typed">Rahu</span><span class="caret" style="margin-left:0"></span></div>
           <div class="sec-lbl">Your names</div>
           <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Rahul</div><div class="sub">5 entries</div></div></div>
-          <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <i data-lucide="link" style="width:14px;height:14px;color:var(--p)"></i></div><div class="sub">Linked to @rahulk · 2 entries</div></div></div>
+          <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <img src="assets/cat-peek.png" alt="Has an account" style="width:20px;height:auto;vertical-align:-3px;margin-left:2px"></div><div class="sub">Linked to @rahulk · 2 entries</div></div></div>
           <div class="row-item"><span class="thumb" style="width:40px;height:40px;border-radius:50%"><i data-lucide="plus"></i></span><div style="flex:1"><div class="nm" style="color:var(--p)">Add "Rahu" as a new name</div></div></div>
           <p class="muted" style="font-size:12.5px;margin:10px 22px 0">Names are private to you. Link one to a connection from Settings → Friend names.</p>
         </div>
@@ -1008,7 +1003,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
           <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0 4px"><span class="av a4" style="width:84px;height:84px;font-size:32px">K</span><span class="muted sm">Photo comes from your Google account</span></div>
           <div class="field"><label>Name</label><div class="inp">Karthik C</div></div>
           <div class="field"><label>Username</label><div class="inp"><span class="muted">@</span>karthik_eats<span style="margin-left:auto;color:var(--good);display:grid"><i data-lucide="circle-check" class="i"></i></span></div></div>
-          <div class="field"><label>Bio <span class="optl">optional</span></label><div class="inp" style="height:76px;align-items:flex-start;padding-top:14px">Biryani first, questions later.</div></div>
+          <div class="field"><label>Bio <span class="optl">optional</span></label><div class="inp" style="height:76px;align-items:flex-start;padding-top:14px">Will travel for a good dosa.</div></div>
         </div>
         <div class="bar2"><button class="btn btn-p">Save</button></div>
         <div class="gest"></div>
@@ -1021,10 +1016,10 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
       <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
         <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Friend names</span></div>
-        <div class="body">
-          <div class="body listsurf" style="margin-top:4px">
+        <div class="body listsurf" style="margin-top:4px">
+          <div>
             <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Rahul</div><div class="sub">5 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
-            <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <i data-lucide="link" style="width:14px;height:14px;color:var(--p)"></i></div><div class="sub">Linked to @rahulk · 2 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
+            <div class="row-item"><span class="av a1">R</span><div style="flex:1"><div class="nm">Rahul K <img src="assets/cat-peek.png" alt="Has an account" style="width:20px;height:auto;vertical-align:-3px;margin-left:2px"></div><div class="sub">Linked to @rahulk · 2 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
             <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Meera</div><div class="sub">3 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
             <div class="row-item"><span class="src"><i data-lucide="user-round"></i></span><div style="flex:1"><div class="nm">Mom</div><div class="sub">2 entries</div></div><button class="icb ghost" style="width:40px;height:40px"><i data-lucide="more-vertical" class="i"></i></button></div>
             <p class="muted" style="font-size:12.5px;margin:6px 18px 0">⋮ to rename, merge into another name, link to a connection, or delete. Only you see these names.</p>
@@ -1074,7 +1069,7 @@ FORM: Extension of an established world (DESIGN.md); no concept roll.
         <div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
         <div class="tab"><button class="icb ghost"><i data-lucide="arrow-left" class="i"></i></button><span class="title">Delete account</span></div>
         <div class="body form">
-          <img src="assets/cat-sitting.png" alt="" style="width:110px;margin:0 auto;filter:grayscale(.35)">
+          <img src="assets/cat-sad.png" alt="" style="width:130px;margin:0 auto">
           <h1 class="h-md" style="text-align:center">Sad to see you go, Karthik</h1>
           <div class="panel" style="margin:0;padding:6px 0">
             <div class="grow"><span class="ic"><i data-lucide="utensils"></i></span><div>17 visits and your reviews</div></div>

@@ -7,55 +7,50 @@
         <section class="view scr rings on" id="v-splash">
           {{SB}}
           <div class="body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding-bottom:60px">
-            <img id="splash-cat" src="assets/cat-sitting.png" alt="" style="width:200px">
+            <img id="splash-cat" src="assets/cat-waving.png" alt="" style="width:190px">
             <p class="ob-word" id="splash-word" style="margin-top:14px">Thinnava?!</p>
             <p class="t" style="margin:0;font-weight:700" id="splash-sub">Did you eat?</p>
           </div>
         </section>
 
-        <!-- Welcome 1..3 -->
+        <!-- Intro (A1b) and Welcome (A2) -->
         <section class="view scr rings" id="v-w1">
           {{SB}}
           <div class="body wel">
-            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
-            <img src="assets/cat-sitting.png" alt="" style="width:180px;margin:20px auto 0">
-            <h1 class="h-lg" style="text-align:center;margin-top:22px">Remember every place your friends tell you about</h1>
-            <p class="t" style="text-align:center;margin:10px 0 0">No more scrolling chats to find "that biryani place Rahul said".</p>
-            <div style="flex:1"></div>
-            <div class="dots"><i class="on"></i><i></i><i></i></div>
-            <button class="btn btn-p gbtn" data-go="next"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
-          </div>
-        </section>
-        <section class="view scr rings" id="v-w2">
-          {{SB}}
-          <div class="body wel">
-            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px">Skip</span></div>
-            <div class="mini-share">
-              <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><span class="av sm a1">R</span><b style="font-size:14px">Rahul</b><span class="muted" style="font-size:12px;font-weight:700;margin-left:auto">WhatsApp</span></div>
-              <div class="quote" style="box-shadow:inset 0 0 0 2px var(--p)">Went to Burger Factory yesterday. Chicken burger was insane…</div>
+            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span><span class="lbl" style="font-size:14px" data-go="next">Skip</span></div>
+            <img src="assets/cat-offering.png" alt="" style="width:130px;aspect-ratio:610/680;height:auto;margin:2px auto 0">
+            <h1 class="h-lg" style="text-align:center;margin-top:12px">Remember every place your friends tell you about</h1>
+            <p class="t" style="text-align:center;margin:8px 0 0">No more scrolling chats to find "that biryani place Rahul said".</p>
+            <div class="mini-map" style="margin-top:18px;height:170px"><svg class="base"><use href="#mapbase"/></svg>
+              <div class="pin" style="left:26%;top:30%"><div class="bub"><span class="av a2">A</span>Good</div><div class="tail"></div></div>
+              <div class="pin" style="left:72%;top:42%"><div class="bub"><span class="av a1">R</span>Good</div><div class="tail"></div></div>
+              <div style="position:absolute;left:10px;right:10px;bottom:10px;background:var(--surface);border-radius:14px;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--ink);box-shadow:0 6px 16px -8px rgba(20,30,50,.4)"><i data-lucide="users-round" style="width:18px;height:18px;color:var(--p);flex:none"></i>See where your people ate. No strangers, no ads.</div>
             </div>
-            <h1 class="h-lg" style="text-align:center;margin-top:26px">Share it here. We'll do the typing.</h1>
-            <p class="t" style="text-align:center;margin:10px 0 0">Hold a message → <b>Share</b> → <b>Thinnava</b>.</p>
             <div style="flex:1"></div>
             <div class="dots"><i></i><i class="on"></i><i></i></div>
-            <button class="btn btn-p gbtn" data-go="next"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+            <button class="btn btn-p gbtn" data-go="next">Next<i data-lucide="arrow-right" class="i"></i></button>
           </div>
         </section>
         <section class="view scr rings" id="v-w3">
           {{SB}}
-          <div class="body wel">
-            <div class="wtop"><span class="wordmark" style="font-size:22px">Thinnava?!</span></div>
-            <div class="mini-map"><svg class="base"><use href="#mapbase"/></svg>
-              <div class="pin" style="left:30%;top:42%"><div class="bub"><span class="av a2">A</span>Good</div><div class="tail"></div></div>
-              <div class="pin" style="left:70%;top:62%"><div class="bub"><span class="av a1">R</span>Good</div><div class="tail"></div></div>
-            </div>
-            <h1 class="h-lg" style="text-align:center;margin-top:24px">See where your people ate</h1>
-            <p class="t" style="text-align:center;margin:10px 0 0">Connect with friends and see what they loved, skipped and paid.</p>
+          <div class="body" style="display:flex;flex-direction:column">
+            <p class="ob-word" style="margin-top:26px">Thinnava?!</p>
+            <div class="dots" style="margin-top:14px"><i></i><i></i><i class="on"></i></div>
             <div style="flex:1"></div>
-            <div class="dots"><i></i><i></i><i class="on"></i></div>
-            <button class="btn btn-p gbtn" data-go="setup"><span class="gwrap"><svg class="gl"><use href="#g-logo"/></svg></span>Continue with Google</button>
+            <img src="assets/cat-peek.png" alt="" style="width:230px;height:auto;margin:16px auto -17px;position:relative;z-index:2">
+            <div class="ob-card" style="margin:0 12px 12px;padding:38px 22px 20px;display:flex;flex-direction:column;gap:16px">
+              <h1 class="h-lg">Every place your friends rave about, in one spot.</h1>
+              <ul class="vals">
+                <li><span><i data-lucide="message-circle"></i></span>Save what friends tell you</li>
+                <li><span><i data-lucide="utensils"></i></span>Log where you ate</li>
+                <li><span><i data-lucide="users-round"></i></span>See where your people have been</li>
+              </ul>
+              <button class="btn btn-white" style="margin-top:4px" data-go="setup"><svg class="gl"><use href="#g-logo"/></svg>Continue with Google</button>
+              <p class="legal" style="margin:0">By continuing you agree to the Terms and Privacy Policy.</p>
+            </div>
           </div>
         </section>
+
 
         <!-- Set up profile -->
         <section class="view scr rings" id="v-setup">
@@ -167,13 +162,15 @@
           <div class="snack" id="snack">Added to your wishlist<span class="sa">Who sees it</span></div>
         </section>
 
-        <!-- WhatsApp (outside app) -->
-        <section class="view scr bare" id="v-wa" style="background:#EFE7DE">
+        <!-- A friend told me (D5), with the "Use copied text?" banner -->
+        <section class="view scr" id="v-wa">
           {{SB}}
-          <div style="background:#1F6E5B;color:#fff;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;font-weight:800"><i data-lucide="arrow-left" class="i"></i><span class="av sm a1">R</span>Rahul</div>
-          <div style="padding:18px 14px;display:flex;flex-direction:column;gap:8px">
-            <div class="wa in">Free this weekend?</div>
-            <div class="wa in" id="wa-msg">Went to Burger Factory yesterday. Chicken burger was insane, shake was meh. ~300 each</div>
+          <div class="tab"><button class="icb ghost"><i data-lucide="x" class="i"></i></button><span class="title" style="font-size:19px">A friend told me</span></div>
+          <div class="clip" id="wa-msg"><i data-lucide="clipboard"></i><div style="flex:1"><b>Use copied text?</b><span>"Went to Burger Factory yesterday. Chicken burger was insane…"</span></div><span class="sa">Use</span></div>
+          <div class="body form">
+            <div class="seg" style="margin:0"><span class="on"><i data-lucide="user-round"></i>A friend</span><span><i data-lucide="globe"></i>Internet</span></div>
+            <div class="field"><label>Who told you? <span class="req">Required</span></label><div class="inp"><span class="muted">Type a name</span></div></div>
+            <div class="field"><label>Place</label><div class="inp"><span class="muted">Search places</span><i data-lucide="search" style="margin-left:auto;width:18px;height:18px;color:var(--ink-3)"></i></div></div>
           </div>
           <div class="scrim" id="wa-scrim" style="opacity:0"></div>
           <div class="sheet" id="wa-sheet" style="padding-bottom:36px">
@@ -232,21 +229,21 @@
     <h3 class="mo-group">Signature</h3>
     <div class="mo-item hero" data-play="share">
       <button class="play">Play</button>
-      <div><b>From WhatsApp to saved</b><span class="mo-meta">≈ 3.5 s end to end · emphasized curves</span>
+      <div><b>From a copied message to saved</b><span class="mo-meta">≈ 3.5 s end to end · emphasized curves</span>
         <ol>
-          <li>The message lights up and lifts (shown here as a share; for a WhatsApp message the same sequence starts from Home's "You copied a message · Read it" card); the Thinnava sheet <b>rises</b> from the bottom (400 ms).</li>
+          <li>The <b>Use copied text?</b> banner (or Home's <b>You copied a message · Read it</b> card) lights up as it's tapped; the reading sheet <b>rises</b> from the bottom (400 ms).</li>
           <li>The chef cat <b>climbs up behind the card</b> and hooks its paws over the edge (500 ms).</li>
-          <li>A copy of the message <b>flies into the reading card</b> while the shimmer runs.</li>
+          <li>A copy of the banner text <b>flies into the reading card</b> while the shimmer runs.</li>
           <li>The sheet grows into the confirmation screen; fields <b>fill in one by one</b> (40 ms stagger), the price flag pulses once.</li>
           <li>Typing a friend's name <b>wakes the Save button</b>.</li>
           <li>Save <b>shrinks the screen into a new card</b> that drops into the top of Home; the other cards slide down to make room.</li>
         </ol></div>
     </div>
-    <div class="mo-item" data-play="launch"><button class="play">Play</button><div><b>Launch → welcome</b><span class="mo-meta">Cat lands 500 ms · fade through 300 ms</span><p>The cat settles in, the wordmark follows 100 ms later, then splash fades through to slide 1.</p></div></div>
+    <div class="mo-item" data-play="launch"><button class="play">Play</button><div><b>Launch → welcome</b><span class="mo-meta">Cat lands 500 ms · fade through 300 ms</span><p>The cat settles in, the wordmark follows 100 ms later, then splash fades through to the intro screen.</p></div></div>
     <div class="mo-item" data-play="setup"><button class="play">Play</button><div><b>Peeking cat</b><span class="mo-meta">500 ms · emphasized decelerate</span><p>On Set up profile (and every peeking-cat screen) the cat climbs from behind the card, then its paws come over the edge. The username check spins, then the tick pops in.</p></div></div>
 
     <h3 class="mo-group">Navigation</h3>
-    <div class="mo-item" data-play="slides"><button class="play">Play</button><div><b>Welcome slides</b><span class="mo-meta">Shared axis X · 300 ms</span><p>Slides move sideways together; the active dot stretches into a pill.</p></div></div>
+    <div class="mo-item" data-play="slides"><button class="play">Play</button><div><b>Intro → welcome</b><span class="mo-meta">Shared axis X · 300 ms</span><p>The two onboarding screens move sideways together; the active dot stretches into a pill.</p></div></div>
     <div class="mo-item" data-play="tabs"><button class="play">Play</button><div><b>Switching tabs</b><span class="mo-meta">Soft crossfade · 280 ms</span><p>The new tab settles in on top (from 98% scale) while the old one fades beneath it, so there is never a blank frame. The bar itself never moves, only its pill indicator.</p></div></div>
     <div class="mo-item" data-play="card"><button class="play">Play</button><div><b>Card → place page</b><span class="mo-meta">Title glide 460 ms · content rise 320 ms, 45 ms stagger · back 380 ms</span><p>The place name lifts off the card and glides up to become the page title; the card dims, the page settles in, and the buttons and people rise into place. Back fades the content and glides the title down into its card.</p></div></div>
     <div class="mo-item" data-play="sheet"><button class="play">Play</button><div><b>Bottom sheets</b><span class="mo-meta">Slide up 400 ms · down 250 ms</span><p>Filter, pickers and the map pin card rise from below over a fading scrim; they leave faster than they arrive.</p></div></div>
@@ -262,7 +259,7 @@
       <tr><td>short</td><td>100–150 ms</td><td>Presses, ticks, heart pop, chip in/out</td></tr>
       <tr><td>medium</td><td>250–300 ms</td><td>Tabs, slides, speed dial, toggles</td></tr>
       <tr><td>long</td><td>400–450 ms</td><td>Sheets, container transform</td></tr>
-      <tr><td>signature</td><td>500–900 ms</td><td>Cat climb, share import steps only</td></tr>
+      <tr><td>signature</td><td>500–900 ms</td><td>Cat climb, copy and share import steps only</td></tr>
       <tr><td>standard</td><td><code>cubic-bezier(.2,0,0,1)</code></td><td>Small state changes</td></tr>
       <tr><td>emphasized decelerate</td><td><code>cubic-bezier(.05,.7,.1,1)</code></td><td>Things arriving</td></tr>
       <tr><td>emphasized accelerate</td><td><code>cubic-bezier(.3,0,.8,.15)</code></td><td>Things leaving (always faster)</td></tr>
