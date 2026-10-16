@@ -45,7 +45,7 @@ export function SnackbarHost({ bottom = 96 }: { bottom?: number }) {
 }
 
 const styles = StyleSheet.create({
-  bar: { position: 'absolute', left: 8, right: 8, minHeight: 52, borderRadius: radii.field, backgroundColor: colors.ink, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, gap: 12, zIndex: 50 },
+  bar: { position: 'absolute', left: 12, right: 12, minHeight: 50, borderRadius: 14, backgroundColor: colors.ink, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, gap: 12, zIndex: 50, boxShadow: '0px 10px 24px -10px rgba(0,0,0,0.5)' },
   text: { flex: 1, fontFamily: fonts.bodyBold, fontSize: 14.5 },
   action: { fontFamily: fonts.bodyHeavy, fontSize: 14.5 },
 });

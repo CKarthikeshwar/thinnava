@@ -11,6 +11,8 @@ export type EntryCardProps = {
   kind: 'visit' | 'friend' | 'internet';
   /** Header line: bold name (tappable) + the rest, e.g. {name:'Ananya', text:'went to'}, or just {text:'From a reel'}. */
   who: { name?: string; text: string; avatarUri?: string | null };
+  /** Full name for the avatar initials when the header says "You". */
+  avatarName?: string;
   place: string;
   /** Meta after the pin icon: "Indiranagar · with Arjun", "Koramangala · went Oct 10". */
   meta?: string;
@@ -21,7 +23,8 @@ export type EntryCardProps = {
   pricePerPerson?: number | null;
   isPrivate?: boolean;
   onPress?: () => void;
-  onPressName?: () => void;
+  /** Avatar / mark and name open that person's profile (spec §14 B1). Omitted when there's no account to open. */
+  onPressPerson?: () => void;
 };
 
 /** Home timeline card (DESIGN.md "Entry card"). Leads with who and where; verdict in the footer. */
@@ -30,15 +33,18 @@ export function EntryCard(p: EntryCardProps) {
   return (
     <Pressable onPress={p.onPress} pressScale={0.985} style={styles.card} accessibilityRole="button" accessibilityLabel={label}>
       <View style={styles.top}>
-        {p.kind === 'visit' ? (
-          <Avatar name={p.who.name ?? 'You'} uri={p.who.avatarUri} />
-        ) : (
-          <SourceMark kind={p.kind} />
-        )}
+        <Pressable onPress={p.onPressPerson} disabled={!p.onPressPerson} hitSlop={6}
+          accessibilityRole={p.onPressPerson ? 'button' : undefined} accessibilityLabel={p.onPressPerson ? `Open ${p.who.name}'s profile` : undefined}>
+          {p.kind === 'visit' ? (
+            <Avatar name={p.avatarName ?? p.who.name ?? 'You'} uri={p.who.avatarUri} />
+          ) : (
+            <SourceMark kind={p.kind} />
+          )}
+        </Pressable>
         <View style={styles.head}>
           <T variant="card" numberOfLines={1}>
             {p.who.name ? (
-              <T variant="card" style={styles.name} onPress={p.onPressName}>{p.who.name} </T>
+              <T variant="card" style={styles.name} onPress={p.onPressPerson}>{p.who.name} </T>
             ) : null}
             {p.who.text}
           </T>

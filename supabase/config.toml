@@ -335,6 +335,17 @@ skip_nonce_check = false
 # If enabled, it will allow the user to successfully authenticate when the provider does not return an email address.
 email_optional = false
 
+# Google sign-in (spec §26.3). Native Android sign-in sends an ID token whose audience is this web client.
+[auth.external.google]
+enabled = true
+client_id = "1062640067839-stmra6machv6emfj837ui0pe6im3nenl.apps.googleusercontent.com"
+# DO NOT commit the secret: it comes from supabase/.env (git-ignored).
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+redirect_uri = ""
+url = ""
+skip_nonce_check = true
+email_optional = false
+
 # Allow Solana wallet holders to sign in to your project via the Sign in with Solana (SIWS, EIP-4361) standard.
 # You can configure "web3" rate limit in the [auth.rate_limit] section and set up [auth.captcha] if self-hosting.
 [auth.web3.solana]
@@ -413,3 +424,7 @@ enabled = true
 # formatted with uppercase keywords, indent 2, max width 180, trailing commas,
 # and column/key alignment. Set to "null" to emit raw, unformatted SQL.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
+
+# The push function is called by the notifications trigger (shared secret), not by users.
+[functions.push]
+verify_jwt = false

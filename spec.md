@@ -1,4 +1,4 @@
-# Thinnava?! Specification
+# Thinnava Specification
 
 > **Status:** v1.1 · 2026-10-13 (gap review applied)
 > **This file is the single source of truth for the project.** Everything we build must match it. If code and spec disagree, the code is wrong, or the spec gets changed first.
@@ -19,7 +19,7 @@
 
 ## 1. Summary
 
-**Thinnava?!** (Telugu for "Did you eat?") is a social food memory app for Android.
+**Thinnava** (Telugu for "Did you eat?") is a social food memory app for Android.
 
 - You **connect** (mutually) with people you know and see where they ate and what they thought.
 - You **log your own visits** (Good / Okayish / Bad, dishes you loved / didn't like, price per person).
@@ -186,6 +186,7 @@ Example (A–B connected, B–C connected, A–C not): A and B went together and
 ## 9. Wishlist
 
 - Add from a place page (♡ button), from the confirmation screen ("Save + add to wishlist") or from a connection's wishlist (♡ on their item).
+- **Only places I haven't visited.** The wishlist means "want to go", and saving a visit already removes the place from it, so every ♡ / Wishlist control is hidden for a place I've visited (C1, C2, the map preview, a connection's wishlist item, "Also add to my wishlist"). If such a place is somehow still on my wishlist, the control stays so it can be removed. `set_wishlist` ignores adds for visited places.
 - Adding notifies no one.
 - Visibility: my wishlist has its own audience (default **All connections**), changed from Profile → Wishlist tab → "Who can see this".
 - Shown on: Profile Wishlist tab, map ♡ layer, place page ♡ state.
@@ -304,8 +305,8 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 
 ### A. Launch and onboarding
 - **A1 Splash** `/` — chef cat, wordmark and "Did you eat?" while the session loads. Signed in with profile → Home. Signed in without profile → A3. Otherwise → A1b.
-- **A1b Intro** `/intro` — one screen with three-dot progress (2 of 3) and a **Skip** link (→ A2). The cat offering a dessert, "Remember every place your friends tell you about" / "No more scrolling chats to find 'that biryani place Rahul said'.", then a small map with two friends' pins and the caption "See where your people ate. No strangers, no ads." **Next** → A2.
-- **A2 Welcome** `/welcome` — the last of the three onboarding screens (dots, 3 of 3): "Every place your friends rave about, in one spot." with three lines (Save what friends tell you · Log where you ate · See where your people have been) and **Continue with Google**. How to save a friend's message isn't taught here; the "Use copied text?" chip (§10.4) and the B1a tip do that when it's useful.
+- **A1b Intro** (first page of `/welcome`) — one page; **swipe left**, **Next** or **Skip** goes to A2, with three-dot progress (2 of 3) and a **Skip** link (→ A2). The cat offering a dessert, "Remember every place your friends tell you about" / "No more scrolling chats to find 'that biryani place Rahul said'.", then a small map with two friends' pins and the caption "See where your people ate. No strangers, no ads." **Next** → A2.
+- **A2 Welcome** (second page of `/welcome`; swipe right or Android back returns to A1b) — the last of the three onboarding screens (dots, 3 of 3): "Every place your friends rave about, in one spot." with three lines (Save what friends tell you · Log where you ate · See where your people have been) and **Continue with Google**. How to save a friend's message isn't taught here; the "Use copied text?" chip (§10.4) and the B1a tip do that when it's useful.
   - Under the button: "By continuing you agree to the Terms and Privacy Policy", with both linked (§27.4).
   - *Sign-in error* → snackbar "Couldn't sign in. Try again."
 - **A3 Set up profile** `/setup` — "Set up your profile" / "This is how friends find you."
@@ -316,7 +317,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 - **A7 Permission explainers** — dialogs before the system prompt. Location: first open of Map or D1 ("Show places near you?"). Notifications: first request or tag ("Know when Anand says yes?"). Denial never blocks anything.
 
 ### B. Main tabs (bottom nav: Home · Search · + · Map · Profile)
-- **B1 Home** `/(tabs)` — top bar: wordmark, 🔔 (dot if unread), filter icon. Timeline cards (one per entry, newest first by creation time), infinite scroll (20 per page), pull to refresh. Card: avatar or source mark; header "**Anu** went to" / "**You** went to" / "**Rahul** told you about", or for internet entries "From a reel" (Instagram link), "From a video" (YouTube), "From a link" (other link) or "Found online" (no link); place (Fredoka); meta line: area · "with Arjun" (visits with companions) or "went Oct 10" (friend entries with a date); time ago; ❤ loved line, 👎 didn't-like line; footer: rating pill, ₹/person, "Only you" lock for private entries, "with X" when tagged. Tap card → C2 (title glide motion). Tap name → profile.
+- **B1 Home** `/(tabs)` — top bar: wordmark, filter icon (hidden on a new user's empty feed), 🔔 (dot if unread). Timeline cards (one per entry, newest first by creation time), infinite scroll (20 per page), pull to refresh. Card: avatar or source mark; header "**Anu** went to" / "**You** went to" / "**Rahul** told you about", or for internet entries "From a reel" (Instagram link), "From a video" (YouTube), "From a link" (other link) or "Found online" (no link); place (Fredoka); meta line: area · "with Arjun" (visits with companions) or "went Oct 10" (friend entries with a date); time ago; ❤ loved line, 👎 didn't-like line; footer: rating pill, ₹/person, "Only you" lock for private entries, "with X" when tagged. Tap card → C2 (title glide motion). Tap the **avatar or name** → that person's profile (E1/E2); on my own cards → my Profile tab; on a friend entry → the profile of the connection that friend name is linked to (F4), and nothing if it isn't linked; internet entries have no person.
   - *Copied-message card* (§10.0): at the top of the feed when the clipboard has text. "You copied a message" / "Want us to read it?" with the peeking cat, **Read it** (→ D7) and ✕.
   - *B1a Empty*: cat peeking over a card, "Hi <first name>! Your feed is empty." / "Start with whichever is easiest." Buttons: **Log a place you've been** (→ D1), **Save what a friend told you** (→ D5 friend), **Find people you know** (→ Search · People). Tip: "Copy a friend's WhatsApp message, then open Thinnava".
   - *Filtered empty*: "No entries from friends yet" + the matching action.
@@ -358,12 +359,12 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 
 ### C. Places and entries
 - **C1 Place page** `/place/[placeId]`
-  - Top bar: back and **♡** (wishlist toggle).
+  - Top bar: back and **♡** (wishlist toggle; hidden once I've visited, §9).
   - Title (Fredoka). Meta line: category · area.
   - A small **Google info** row: tapping it loads Google's rating, price level and opening hours (§25.5). In "off" mode, the row reads "See rating and hours on Google Maps" and opens the Directions link instead.
   - Action row: **Directions** · **Swiggy**.
   - **Your visits**: date + pill for each; tap → C2.
-  - **People who've been**: connections' visits I can see plus my own friend/internet entries, newest first. Each shows: avatar or source mark; name or "Rahul told you" / "From a reel"; "with …"; pill; loved / didn't-like lines; ₹/person · date; "Only you" on my private entries.
+  - **People who've been**: connections' visits I can see plus my own friend/internet entries, newest first. Each shows: avatar or source mark; name or "Rahul told you" / "From a reel" (avatar and name open the person's profile, as on B1); "with …"; pill; loved / didn't-like lines; ₹/person · date; "Only you" on my private entries.
   - Primary FAB **Add visit**. ⋮ menu: Open in Google Maps.
   - *C1a Nobody you know has been*: "Nobody you know has been yet." The address shows straight away (basic info). A **Show Google's rating, hours and price** button loads the rest. Tapping ♡ shows the snackbar "Added to your wishlist · Who sees it" (→ D4 for the wishlist).
   - *C1b Closed*: "Permanently closed" label. History stays. Swiggy is hidden; Directions stays.
@@ -372,7 +373,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - Place (tap → C1) with area · category, then the pill.
   - Rows: Loved · Didn't like · Price · Went on. Then "with …" and notes (visits only).
   - Footer line: "Logged by you on Oct 11 · Only you can see this" (saved entries) or "Shared with All connections" (my visits). Internet entries show an "Open link" button.
-  - Buttons: **Edit** (owner only) and **Wishlist** (♡).
+  - Buttons: **Edit** (owner only) and **Wishlist** (♡; only for a place I haven't visited, §9).
   - ⋮ menu: Delete (owner) · Remove me from this visit (tagged person).
 
 ### D. Creating and editing
@@ -380,7 +381,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 - **D2 Add / edit visit** `/visit/new?placeId=` · `/visit/[id]/edit` — place header (tap to change), Date (today), **How was it?** (3 big pills, required), Loved / Didn't like (chip inputs: type, Enter adds), Price per person (₹ numeric), Went with (→ D3), Notes, "Shared with" row (→ D4, shows "All connections"). **Save visit** primary (disabled until a rating is chosen).
 - **D3 Went with** sheet — search my connections + my companion names; selected chips at top; "Add '<text>' as a private name".
 - **D4 Who can see this?** sheet — options per §8 with member counts; [Done].
-- **D5 Friend / internet entry (manual)** `/saved/new?source=friend|internet` · `/saved/[id]/edit` — Source toggle; Friend: Who told you? (→ D6, required); Internet: Link (optional); Place (→ D1); How was it for them? (optional pills); Loved; Didn't like; Price per person; When they went (friend only, optional). If the clipboard has text: a banner "Use copied text?" with a preview and **Use** (runs the AI import). **Save**.
+- **D5 Friend / internet entry (manual)** `/saved/new?source=friend|internet` · `/saved/[id]/edit` — Source toggle; Friend: Who told you? (→ D6, required); Internet: Link (optional); Place (→ D1); How was it for them? (optional pills); Loved; Didn't like; Price per person; When they went (friend only, optional). If the clipboard has text: a banner "Use copied text?" and **Use** (runs the AI import). No preview of the text: reading it for a preview would trigger Android's "pasted" notice before the user asks (§10.0). **Save**.
 - **D6 Who told you?** sheet — autocompletes from my friend names. Each row shows "5 entries", and linked names show "Linked to @rahulk". Last row: "Add '<text>' as a new name". Note: "Names are private to you. Link one to a connection from Settings → Friend names."
 - **D7 Reading** sheet — opens inside Thinnava when the text was copied (over Home after Read it, or over D5 after Use), or over the app that shared it: "Reading this message…" / "Looking for the place, dishes and price." with the cat. Never shows a sender's name, because we don't know it. *Failed*: "Couldn't find a place in that" / "No worries, fill it in yourself." [Fill it in].
 - **D8 Confirmation** `/import` — "Check what we found", "1 of 2"; behaviour per §10.3.
@@ -395,7 +396,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - Photo, name, @username, bio.
   - A "Connected" chip, and a chip naming which of my lists they're in (tap → E5).
   - "24 visited", the 🔔 activity toggle, and ⋮ (Add to lists · Remove connection · Block).
-  - Tabs: **Visited** (visits shared with me) · **Wishlist** (if shared with me; ♡ on an item copies it to mine). Each tab has "Open map".
+  - Tabs: **Visited** (visits shared with me) · **Wishlist** (if shared with me; ♡ on an item copies it to mine, shown only for places I haven't visited). Each tab has "Open map".
 - **E2 Not connected** — name, photo, @username, "Connect to see where Anand eats" / "Once you both say yes, you'll see each other's visits and wishlist." Button **Request to connect**, which becomes **Requested** (tap to cancel); if they asked me, **Accept** + Decline instead. ⋮ Block.
 - **E3 Connections** `/connections` — two tabs: **Connections · N** (list with search) and **Requests · N** ("Want to connect with you" with Accept / ×; "You asked" with Cancel). The person+ icon opens Search · People.
 - **E4 Find people** — same as Search → People (opened from Home empty state).
@@ -473,7 +474,7 @@ Follow `DESIGN.md` → Motion and `design/motion.html`. Curves: standard (.2,0,0
 
 ### 16.8 App icon and splash (interim, until branding)
 - Android adaptive icon: the foreground is the chef cat's face, cropped from `ui-references/7.png` (alpha-matted). The background is `primary` #2350D9. The monochrome layer is the cat's silhouette.
-- Splash: Mist background, sitting cat, "Thinnava?!" wordmark.
+- Splash: Mist background, sitting cat, "Thinnava" wordmark.
 - Both are produced in M1 into `app/assets/`.
 
 ### 16.9 Accessibility
@@ -499,7 +500,7 @@ Every touchable has an accessibility label; rating pills announce "Rating: Good"
  ├─ Postgres: tables + Row Level Security + RPC functions (all privacy rules live here)
  ├─ Auth: Google provider
  ├─ Edge Functions (Deno/TypeScript): places · extract · links · push · delete-account
- ├─ Database webhook: notifications INSERT → push function
+ ├─ pg_net trigger: notifications INSERT → push function (URL + secret in Vault)
  └─ pg_cron: weekly refresh of stale place rows
             │
             ▼
@@ -542,7 +543,7 @@ Principles:
 | Concern | Choice |
 |---|---|
 | Database / Auth / Functions | **Supabase** (free plan), Postgres, Edge Functions on Deno |
-| AI | **Google Gemini, Flash-tier model, free tier only**: the API key comes from a Google Cloud project with **no billing account**, so it can never be charged (§27.5). JSON output with a response schema. Model id in env `GEMINI_MODEL` (start with the current stable Flash model). Called only from the `extract` function. |
+| AI | **Google Gemini, Flash-tier model, free tier only**: the API key comes from a Google Cloud project with **no billing account**, so it can never be charged (§27.5). JSON output with a response schema. Model ids in env: `GEMINI_MODEL` = **`gemini-3.5-flash-lite`** and `GEMINI_FALLBACK_MODEL` = `gemini-flash-lite-latest` (separate free allowance). Not `gemini-3.5-flash`: its free tier allows only 20 requests a day per project (measured 2026-10-16). Called only from the `extract` function. |
 | Places | **Google Places API (New)**: Autocomplete, Place Details, Text Search, Nearby Search. Called only from Edge Functions. |
 | Push | **expo-notifications** + **Expo Push Service** (FCM v1 credentials uploaded to EAS) |
 | Scheduled jobs | pg_cron + pg_net |
@@ -628,6 +629,12 @@ create table blocks (
   blocked    uuid references profiles on delete cascade,
   created_at timestamptz not null default now(),
   primary key (blocker, blocked)
+);
+create table declined_requests (          -- silent declines (§5.1): only the sender can read it, so they keep seeing "Requested"
+  from_user  uuid references profiles on delete cascade,
+  to_user    uuid references profiles on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (from_user, to_user)
 );
 create table list_prompts (               -- "add to lists" sheet still to show
   user_id    uuid references profiles on delete cascade,
@@ -814,6 +821,12 @@ can_see_visit(v_id uuid) → bool          -- me = auth.uid()
     or ( is_connected(me, v.author)
          and in_audience(v.author, me, <list ids from visit_audience for v>) )
 
+can_see_visit_social(v_id, viewer) → bool
+    can_see_visit without the "tagged" clause. Feeds, place pages, profiles,
+    who_went and notification fan-out use it, so a pending or rejected tag
+    shows the visit only on C2 / E8, never in feeds.
+    (can_see_visit_as(v_id, viewer) is the same rule as can_see_visit for any viewer.)
+
 can_see_wishlist(owner uuid) → bool
     owner = me or ( is_connected(me, owner) and in_audience(owner, me, <owner's wishlist_audience>) )
 ```
@@ -876,6 +889,7 @@ Called with `supabase.rpc(name, args)`. All use `auth.uid()`. On a rule violatio
 | `block_user(p_other)` / `unblock_user(p_other)` | Per §5.3. |
 | `set_activity_notifications(p_target, p_on bool)` | Connections only. |
 | `pending_list_prompts() → setof profile` / `dismiss_list_prompt(p_other)` | Drives the E5 sheet. |
+| `my_connections()` · `my_requests()` · `my_blocked()` | E3 and Blocked people. A silently declined request still shows to its sender as "You asked". |
 
 ### 22.3 Lists and wishlist
 | RPC | Does |
@@ -884,7 +898,7 @@ Called with `supabase.rpc(name, args)`. All use `auth.uid()`. On a rule violatio
 | `set_list_members(p_id, p_members uuid[])` | Members must be current connections. |
 | `add_to_lists(p_member, p_list_ids uuid[])` | E5 and E1 "Add to lists". |
 | `set_wishlist_audience(p_list_ids uuid[])` | Same exclusivity rules as §8. |
-| `set_wishlist(p_place_id, p_on bool)` | Idempotent. |
+| `set_wishlist(p_place_id, p_on bool)` | Idempotent. Adding a place I've visited does nothing (§9). |
 
 ### 22.4 Entries
 | RPC | Does |
@@ -893,6 +907,8 @@ Called with `supabase.rpc(name, args)`. All use `auth.uid()`. On a rule violatio
 | `delete_visit(p_id)` | |
 | `respond_tag(p_tag_id, p_action) → uuid?` | `'same'` creates my visit copying the tagger's rating, dishes, price and notes (audience = my All connections), accepts the tag, returns the visit id. `'reject'` deletes the tag. ("Write my review" goes through `save_visit` with `accept_tag_id`.) |
 | `untag_me(p_tag_id)` | Deletes the tag; my own visit stays. |
+| `tag_detail(p_tag_id) → json` | E8, for the tagged person only: tagger, place and the tagger's rating, dishes, price, notes, date; status and my linked visit. |
+| `my_tag_requests()` | My pending tags (tagger name, place, time). |
 | `save_saved_entry(p jsonb) → uuid` | Upsert by id. Fields: id, kind, place_id, friend_name_id **or** new_friend_name {id, name}, source_url, rating, loved, disliked, price_per_person, visited_on. |
 | `delete_saved_entry(p_id)` | |
 | `rename_friend_name` · `merge_friend_names(p_from, p_into)` · `link_friend_name(p_id, p_user?)` · `delete_friend_name` | Merge moves entries then deletes `p_from`. Link only to a current connection. Delete only when unused. |
@@ -901,13 +917,16 @@ Called with `supabase.rpc(name, args)`. All use `auth.uid()`. On a rule violatio
 ### 22.5 Reading
 | RPC | Returns |
 |---|---|
-| `home_feed(p_filter, p_before, p_before_id, p_limit = 20)` | Rows `{entry_type: visit·friend·internet, id, created_at, place{place_id,name,area,category}, person{id,name,avatar}?, friend_name?, rating, loved, disliked, price_per_person, visited_on, companions[], is_mine, is_private}`. Union of my visits, visible connection visits and my saved entries. Filter ∈ all · connections · friends · internet · mine. Keyset pagination on (created_at, id) desc. |
+| `home_feed(p_filter, p_before, p_before_id, p_limit = 20)` | Rows `{entry_type: visit·friend·internet, id, created_at, place{place_id,name,area,category}, person{id,name,avatar}?, friend_name?, friend_user_id? (the linked account, owner-only), rating, loved, disliked, price_per_person, visited_on, companions[], is_mine, is_private}`. Union of my visits, visible connection visits and my saved entries. Filter ∈ all · connections · friends · internet · mine. Keyset pagination on (created_at, id) desc. |
 | `place_page(p_place_id) → json` | `{place, on_wishlist, my_visits[], people_visits[] (connections' visible visits and my saved entries, newest first)}` |
-| `user_visits(p_user, cursor…)` · `user_wishlist(p_user)` | Only what I may see. |
+| `user_visits(p_user, cursor…)` · `user_wishlist(p_user)` | Only what I may see. Wishlist rows carry `on_mine` and `i_went`. |
 | `my_saved(p_kind?, cursor…)` · `my_wishlist()` | Profile tabs. |
-| `entry_detail(p_type, p_id) → json` | C2, incl. companions and (mine only) the audience summary. |
+| `entry_detail(p_type, p_id) → json` | C2, incl. companions, `tags[]` (accepted partners with ids; pending too for the author), `my_tag` (if I'm tagged) and (mine only) the audience summary. |
+| `who_went(p_place_ids text[])` | Search results (B4): per place, ≤ 3 people I know who went, how many, whether I went, and every price I can see there (for the ₹ buckets). |
 | `map_places(p_min_lat, p_min_lng, p_max_lat, p_max_lng, p_layers text[], p_price text, p_categories place_category[], p_person uuid?)` | `(place_id, name, lat, lng, layers text[], people json[≤3], is_mine)`, max 300 rows, most recent first. |
-| `notifications_page(cursor…)` · `mark_notifications_read()` | |
+| `notifications_page(cursor…)` · `mark_notifications_read()` | Rows `{id, type, created_at, read, actor{id,name,avatar,relation}, visit_id, place{id,name}, tag_id, tag_status}`, newest first, keyset paged. An actor who blocked me shows as "Someone" with no photo; blocking someone deletes the notifications between us. |
+| `unread_notifications() → int` | The 🔔 dot. |
+| `register_push_token(p_token)` · `unregister_push_token(p_token)` | Upsert / delete this device's Expo token (a token moves to whoever signs in on it). |
 | `google_info_mode() → text` | `'tap'` or `'off'` (§25.5). Readable by everyone signed in; the app caches it for 1 h. |
 | `consume_google_quota(p_sku text) → bool` | Service role only. Atomically adds 1 to this month's count **only if** it stays under the cap; returns false otherwise (§27.5). |
 
@@ -921,10 +940,10 @@ Every function verifies the JWT, except `push`, which checks the webhook secret.
 
 | Function | Input → Output | Notes |
 |---|---|---|
-| `places` | `{action:'autocomplete', input, sessionToken, lat?, lng?}` → `[{placeId, name, secondary}]`<br>`{action:'details', placeId, sessionToken?}` → `{place}`<br>`{action:'google_info', placeId}` → `{rating, userRatingCount, priceLevel, openNow, hours}` or `{mode:'off'}`<br>`{action:'nearby', lat, lng}` → `[place]`<br>`{action:'refresh_stale'}` (cron, service role) | `details` always **upserts** the `places` row, so a place exists before any entry references it. `google_info` is the only call that requests rich fields, and only when a user taps (§25.5). **Every Google call first calls `consume_google_quota`; if it returns false, the function returns `{ok:false, error:{code:'quota_paused'}}` and never calls Google** (§27.5). Per-user limit: 300 calls/day. |
+| `places` | `{action:'autocomplete', input, sessionToken, lat?, lng?}` → `[{placeId, name, secondary}]`<br>`{action:'search', query, lat?, lng?}` → `[place]` (Search tab keyword search, Text Search Pro)<br>`{action:'details', placeId, sessionToken?}` → `{place}`<br>`{action:'google_info', placeId}` → `{rating, userRatingCount, priceLevel, openNow, hours}` or `{mode:'off'}`<br>`{action:'nearby', lat, lng}` → `[place]`<br>`{action:'refresh_stale'}` (cron, service role) | `details` always **upserts** the `places` row, so a place exists before any entry references it. `google_info` is the only call that requests rich fields, and only when a user taps (§25.5). **Every Google call first calls `consume_google_quota`; if it returns false, the function returns `{ok:false, error:{code:'quota_paused'}}` and never calls Google** (§27.5). Per-user limit: 300 calls/day. |
 | `extract` | `{text, url?, lat?, lng?}` → `{foodRelated, items:[ExtractItem + candidates]}` | §24. 40 calls/user/day. Text capped at 4000 chars. |
 | `links` | `{url, text?}` → `{kind, resolvedUrl, suggestion?, meta?:{title, description}}` | Follows redirects (GET, browser user agent, 5 s). `kind` ∈ maps · instagram · youtube · other. Maps → resolves to a place via text search. Other (including Zomato/District/Swiggy links) → page title and description for `extract`. Its text searches also go through `consume_google_quota`. |
-| `push` | DB webhook on `notifications` INSERT → Expo Push API for each of the recipient's tokens | Builds the §12 text; deletes tokens Expo reports as `DeviceNotRegistered`. |
+| `push` | `pg_net` trigger on `notifications` INSERT (URL and `x-push-secret` read from Vault; missing → no push) → Expo Push API for each of the recipient's tokens | Builds the §12 text; deletes tokens Expo reports as `DeviceNotRegistered`. |
 | `delete-account` | `{}` → `{}` | Deletes the auth user with the service role; FK cascades remove everything. |
 
 ## 24. AI extraction
@@ -936,7 +955,7 @@ Every function verifies the JWT, except `push`, which checks the webhook secret.
    - the user text and today's date (Asia/Kolkata);
    - `responseMimeType: application/json` and the response schema (§24.2).
 
-   Temperature 0, timeout 12 s, one retry on a 5xx.
+   Temperature 0, minimal thinking. Hedged request: if the main model hasn't answered in 5 s, or answers 5xx/429, the fallback model is asked too and the first good answer wins; everything stops at 14 s (the app's D7 limit is 15 s).
 3. Validate with zod. If the response is invalid, return `{foodRelated: false, items: []}`; the app then opens the manual form.
 4. For each item, run a Places **Text Search** for `"<name> <area> <city>"` (through `consume_google_quota`; if paused, return the item with no candidates and the user picks the place by hand).
    - Location bias: the device location if it was given, otherwise Bengaluru with a 50 km radius.
@@ -1048,6 +1067,11 @@ Every rule here serves the zero-cost guarantee (§27.5):
 
 If *basic* Places calls (autocomplete, details, search, nearby) reach their caps, place search pauses: D1 and Search show "Place search is resting until <date>. You can still pick places already in Thinnava." The app keeps working with places already in the database.
 
+### 25.6 Practice mode (development only)
+- When the `places` function has **no `GOOGLE_PLACES_KEY`** (local sandbox before the Google setup), it answers every action from a fixed list of about 30 real Bengaluru food places in `supabase/functions/_shared/practicePlaces.ts`, with the same response shapes. Their place IDs start with `practice:`.
+- It never calls Google and never counts quota. Adding the key switches to real data without any app change.
+- It can't run in production: `thinnava-prod` always has the key set, and the function refuses practice mode when `APP_ENV=prod`.
+
 ## 26. Frontend architecture
 
 ### 26.1 Layers
@@ -1060,7 +1084,6 @@ If *basic* Places calls (autocomplete, details, search, nearby) reach their caps
 src/app/
   _layout.tsx                 providers, fonts, splash, auth gate, share-intent listener
   index.tsx                   A1 splash / redirect
-  intro.tsx                   A1b
   welcome.tsx                 A2
   setup.tsx                   A3
   (tabs)/_layout.tsx          custom tab bar with the + speed dial
@@ -1091,7 +1114,7 @@ src/app/
 
 ### 26.3 Auth gate
 - **Routing:** `_layout.tsx` reads the Supabase session from MMKV.
-  - No session → `/intro` (A1b), then `/welcome` (A2).
+  - No session → `/welcome`, a swipeable pager: A1b Intro, then A2 Welcome.
   - A session but no `profiles` row → `/setup`.
   - Otherwise → `(tabs)`.
 - **Sign-in:** `GoogleSignin.signIn()` → `idToken` → `supabase.auth.signInWithIdToken({ provider: 'google', token })`.
@@ -1151,7 +1174,9 @@ src/app/
 `features/handoff/urls.ts` builds the Directions and Swiggy URLs per §11.1 and opens them with `Linking.openURL`. Both are plain links: free, no API.
 
 ### 26.9 Push
-- On first need (the A7 notifications explainer), request permission, get a token with `Notifications.getExpoPushTokenAsync({ projectId })`, and upsert it into `push_tokens`.
+- On first need (right after the user first sends a request or tags someone), show the A7 notifications explainer once per install ("Know when Anand says yes?"); on "Turn on" request permission, get a token with `Notifications.getExpoPushTokenAsync({ projectId })`, and upsert it with `register_push_token`. "Not now" is respected.
+- Sign-out unregisters this device's token.
+- `projectId` comes from `EAS_PROJECT_ID` (free Expo account); FCM config is `app/google-services.json` from the Firebase project `thinnava-f44c7` (Spark plan, no billing; git-ignored).
 - Refresh the token on every app start.
 - A push carries `data.route` (e.g. `/tag/<id>`); tapping it opens that route.
 - Android channel: "default", high importance.
@@ -1176,15 +1201,15 @@ src/app/
 
 ### 27.1 Identifiers
 - Android package: **`com.thinnava.app`**. It's fixed once testers install the app; the display name can still change later.
-- Display name: **Thinnava?!**
+- Display name: **Thinnava**
 
 ### 27.2 Accounts to create (M0)
 | Service | Plan / card | Setup |
 |---|---|---|
 | Google Cloud project **`thinnava-free`** | **No billing account, ever** | OAuth consent screen (External, basic scopes, published, with the §27.4 links). OAuth clients: **Web** (for Supabase) and one **Android** client per SHA-1 (P1's laptop, P2's laptop, EAS). Firebase (Spark plan) for push: Android app `com.thinnava.app` → `google-services.json`; upload the FCM v1 service account to EAS. **Gemini API key** created in Google AI Studio *on this project*. |
-| Google Cloud project **`thinnava-maps`** | Billing account required by Google Maps Platform, **created as a free trial and never upgraded** | Enable Places API (New) and Maps SDK for Android, nothing else. Keys: a **Maps Android key** restricted to `com.thinnava.app` + all SHA-1s and to Maps SDK for Android only; a **Places server key** restricted to Places API (New) only. Zero-cost locks 2–4 from §27.5. |
+| Google Cloud project **`thinnava-maps`** | **Pay-as-you-go billing account** (owner's decision, 2026-10-14): created through the free trial and **upgraded immediately**, keeping the $300 trial credit for its 90 days. No subscription or fee; only usage beyond Google's free monthly amounts is billed, and our caps stop at 80% of them | Enable Places API (New) and Maps SDK for Android, nothing else. Keys: a **Maps Android key** restricted to `com.thinnava.app` + all SHA-1s and to Maps SDK for Android only; a **Places server key** restricted to Places API (New) only. Zero-cost locks 2–4 from §27.5. |
 | GitHub | Free | Private repo `thinnava` (both owners); public repo `thinnava-legal` for GitHub Pages (§27.4). Branch protection on `main` (§33). |
-| Supabase | **Free plan, no payment method** | **Projects (all ap-south-1):** shared `thinnava-prod` in the team organisation (both owners as members), plus **one personal dev project each** (`thinnava-dev-p1`, `thinnava-dev-p2`, each in its owner's own free account) so migrations never collide (§33.4). **Google provider:** Web client ID + secret; "Skip nonce check" on; every Android client ID in the authorized client IDs. |
+| Supabase | **Free plan, no payment method** | **Development: a local sandbox on each laptop** (Supabase CLI in Docker, `npm run backend`, see `docs/dev-setup.md`), so migrations never collide and no free hosted slot is used. **Hosted (ap-south-1 Mumbai): only `thinnava-prod`**, in the owner's organisation (both owners as members), created before the first APK for other people (§33.4). **Google provider:** Web client ID + secret; "Skip nonce check" on; every Android client ID in the authorized client IDs. |
 | Expo / EAS | **Free plan, no payment method** | One Expo organisation with both owners; project linked to the repo. Android keystore managed by EAS; add its SHA-1 to `thinnava-free` (OAuth) and `thinnava-maps` (Maps key). |
 
 ### 27.3 Environment variables
@@ -1198,7 +1223,7 @@ src/app/
 | `GOOGLE_MAPS_ANDROID_KEY` | Build time only, injected by `app.config.ts` |
 | `APP_ENV` | `dev` or `prod` |
 
-**Edge Function secrets:** `GEMINI_API_KEY`, `GEMINI_MODEL`, `GOOGLE_PLACES_KEY`, `PUSH_WEBHOOK_SECRET`, and optionally `EXPO_ACCESS_TOKEN`.
+**Edge Function secrets:** `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_FALLBACK_MODEL`, `GOOGLE_PLACES_KEY`, `PUSH_WEBHOOK_SECRET`, and optionally `EXPO_ACCESS_TOKEN`.
 
 `.env*` files, `google-services.json` and keystores are git-ignored. `.env.example` lists every variable. Each person's `.env` points at their own dev project; real values are shared privately (never in git or chat logs that are public).
 
@@ -1231,21 +1256,30 @@ src/app/
 
 **The four locks for `thinnava-maps`** (all four are in place before the first real API call):
 1. **Our hard cap (primary).**
-   - Only the `places`, `extract` and `links` functions call Places, using a secret server key.
-   - Before **every** call they run `consume_google_quota(sku)`. This atomically counts the call for the month (UTC) and **refuses** once the SKU reaches its cap in `usage_caps`.
-   - Caps are set to **80% of each SKU's free monthly allowance**, read from Google's pricing page in M0 and recorded in `changelog.md`. Until then every cap defaults to **500**.
-   - When a cap is reached, the feature pauses (§25.5) until the 1st of next month.
-2. **Google-side quota limits (backstop).** In the Cloud console, under Places API (New) → Quotas, lower every method's limit so that a full month at the limit stays inside the free allowance. This holds even if our counter has a bug.
-3. **Automatic billing shut-off (backstop).**
-   - A budget on the billing account of ₹100, with alerts at 1%, 50% and 100%.
-   - The budget sends Pub/Sub notifications to a small Cloud Run function that **detaches billing from `thinnava-maps`** as soon as any cost appears (Google's documented "disable billing to cap costs" pattern).
-   - Detaching stops every paid API on that project. Google's cost reports can lag by hours, so this lock exists as a backup; lock 1 is what actually keeps us at zero.
-4. **Free trial, never upgraded (backstop).**
-   - The billing account is a Google Cloud free trial. During the trial Google can't charge the card unless someone clicks **"Activate full account" / "Upgrade"**. **Never click it.**
-   - When the trial ends (90 days, or when the credit is used up), Places stops. The app keeps working with places already in the database, and place search shows the "resting" message.
-   - Continuing after that is an owners' decision. The safe default is to stay stopped.
+   - Only the `places`, `extract` and `links` functions call Places, using a secret server key restricted to Places API (New).
+   - Before **every** call they run `consume_google_quota(sku)`, which atomically counts the call for the month (UTC) and **refuses** once the SKU reaches its cap in `usage_caps`.
+   - Caps are **80% of each SKU's free monthly amount**, checked on Google's official pricing page on 2026-10-14:
 
-What would have to go wrong to be charged: lock 1 fails **and** the Google quotas are set wrong **and** the shut-off function fails **and** someone upgraded the trial. Each lock is tested in M0, by temporarily setting a cap to 1 and checking that the feature pauses.
+     | SKU | Free | Cap |
+     |---|---|---|
+     | Autocomplete Requests | 10,000 | 8,000 |
+     | Place Details Pro (`details`) | 5,000 | 4,000 |
+     | Place Details Enterprise (`details_rich`) | 1,000 | 800 |
+     | Text Search Pro | 5,000 | 4,000 |
+     | Nearby Search Pro | 5,000 | 4,000 |
+
+     Maps SDK for Android is free and unlimited **as long as no Map ID is used**, so we style the map with JSON only.
+   - When a cap is reached, the feature pauses (§25.5) until the 1st of next month.
+2. **Google-side quota limits (backstop).** Places API (New) only offers per-minute limits. Lowering them slows a runaway bug or a leaked key, but can't cap a whole month.
+3. **Automatic billing shut-off (backstop, built before the first key is used).**
+   - A budget on `thinnava-maps` counts **gross cost, before credits**, so any usage beyond the free amounts shows up even while trial credit would cover it.
+   - The budget publishes to a Pub/Sub topic. A small Cloud Run function (`infra/billing-killswitch/`) **detaches billing from the project** once gross cost passes **₹50**. That stops every paid API at once, and billing has to be re-linked by hand.
+   - The budget also emails alerts at ₹50 and ₹100.
+   - Cloud Run, Pub/Sub, Cloud Build and Artifact Registry all stay inside their own free tiers at this scale.
+4. **Trial credit cushion.** For the first 90 days the leftover $300 trial credit absorbs any charge before it reaches the card.
+
+
+What would have to go wrong for a real charge: lock 1 fails (a bug, or a leaked server key bypasses it) **and** the shut-off doesn't fire in time (Google's budget data can lag by hours) **and**, in the first 90 days, the $300 credit is used up. Each lock is tested in M0, by temporarily setting a cap to 1 and checking that the feature pauses.
 
 ## 28. Testing
 
@@ -1266,7 +1300,7 @@ What would have to go wrong to be charged: lock 1 fails **and** the Google quota
   - `eas.json` profiles: `development` (developmentClient, apk) and `preview` (apk, `APP_ENV=prod`).
   - Version `0.MINOR.PATCH`; EAS auto-increments `versionCode`.
 - **Backend:**
-  - Each person applies migrations to **their own** dev project while working. Only code merged into `main` is ever pushed to `thinnava-prod` (§33.4).
+  - Each person applies migrations to **their own** local sandbox while working (`npm run backend:reset`). Only code merged into `main` is ever pushed to `thinnava-prod` (§33.4).
   - Deploy functions with `supabase functions deploy <name>`.
 - **Before any APK goes to users:**
   - pgTAP and Jest pass;
@@ -1403,7 +1437,7 @@ Each account is created only when a milestone needs it, so the account-dependent
 | Swiggy search URL changes | It's one constant in `handoff/urls.ts`. Re-test it before each release. |
 | The Gemini free tier may use prompts for training | Accepted for the course demo and disclosed in the privacy policy. The paid tier is **not** an option (§27.5). |
 | Any charge on a card | Not allowed. The zero-cost guarantee (§27.5): no card anywhere except the `thinnava-maps` free trial, which has four locks. |
-| Google free trial ends | Places pauses, and the app works with places already in the database. The owners decide whether to continue (§27.5 lock 4). |
+| Card charged on the paid account | Very unlikely: 80% caps (lock 1), the billing shut-off at ₹50 gross (lock 3), and the trial credit for the first 90 days (lock 4). |
 | Free limits too small for the demo | Features pause rather than bill. Reduce use (fewer test searches), or wait for the monthly reset. |
 | expo-share-intent / map library vs the chosen Expo SDK | Checked in the M0 spikes before anything else is built. |
 | Supabase free projects pause | Open the prod app at least weekly; no paid plan needed for the course. |
@@ -1462,17 +1496,17 @@ Two people can work in parallel safely. Git keeps each person's work separate un
 **Changing a SQL function you don't own** (for example P2 adding tags to `save_visit`) is allowed. Do it in a new migration with `create or replace`, and the owner reviews the PR.
 
 ### 33.4 Database: no collisions
-- **Separate dev databases.** Each person has their own Supabase dev project (`thinnava-dev-p1`, `thinnava-dev-p2`) and points their `.env` at it. You can reset or experiment freely without breaking the other person.
+- **Separate dev databases.** Each person runs their **own local Supabase sandbox** in Docker (`npm run backend`) and points `app/.env` at it (`http://127.0.0.1:54321`, reached from the phone over USB). You can reset or experiment freely without breaking the other person, and no hosted project slot is used.
 - **Creating migrations.** Only use `supabase migration new <name>`. The timestamped file names mean two people never create the same file.
 - **Never edit a migration that's already on `main`.** Fix it with a new migration.
 - **Before opening a PR:**
   1. Pull `main`.
   2. If `main` has a migration newer than yours, give yours a fresh timestamp (re-create it with `supabase migration new` and move the SQL in), so the order on `main` stays correct.
-  3. Run `supabase db reset --linked` on **your own** dev project. This replays every migration from scratch plus the seed, proving the whole history applies cleanly.
+  3. Run `npm run backend:reset` on **your own** local sandbox. This replays every migration from scratch plus the seed, proving the whole history applies cleanly.
   4. Run the pgTAP tests.
 - **Generated types (`types/db.ts`).** Never merge them by hand. After pulling, regenerate them from your freshly reset dev project.
 - **Prod (`thinnava-prod`).** Only one person, the **release keeper** (P2 by default), runs `supabase db push` and `supabase functions deploy`, and only from an up-to-date `main` at a merge point.
-- **Edge Function secrets.** Each person sets the same secret names on their own dev project. The release keeper sets them on prod.
+- **Edge Function secrets.** Each person keeps the same secret names in their local `supabase/.env` (git-ignored). The release keeper sets them on prod.
 
 ### 33.5 Git workflow
 - **Branches:** `p1/<milestone>-<topic>` and `p2/<milestone>-<topic>`, for example `p1/m3-places` or `p2/m2-auth`.

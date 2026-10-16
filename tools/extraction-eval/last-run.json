@@ -1,0 +1,180 @@
+{
+  "at": "2026-10-16T07:41:22.725Z",
+  "score": {
+    "place": 1,
+    "review": 0.8888888888888888,
+    "price": 1,
+    "invented": 0,
+    "nonFood": 1,
+    "errors": 0,
+    "medianMs": 3519
+  },
+  "pass": true,
+  "rows": [
+    {
+      "id": 1,
+      "ms": 4527,
+      "notes": []
+    },
+    {
+      "id": 2,
+      "ms": 4432,
+      "notes": []
+    },
+    {
+      "id": 3,
+      "ms": 4062,
+      "notes": []
+    },
+    {
+      "id": 4,
+      "ms": 7902,
+      "notes": []
+    },
+    {
+      "id": 5,
+      "ms": 1964,
+      "notes": []
+    },
+    {
+      "id": 6,
+      "ms": 3961,
+      "notes": []
+    },
+    {
+      "id": 7,
+      "ms": 4705,
+      "notes": []
+    },
+    {
+      "id": 8,
+      "ms": 2926,
+      "notes": []
+    },
+    {
+      "id": 9,
+      "ms": 3322,
+      "notes": []
+    },
+    {
+      "id": 10,
+      "ms": 3849,
+      "notes": [
+        "Third Wave review: got okayish want bad"
+      ]
+    },
+    {
+      "id": 11,
+      "ms": 2906,
+      "notes": []
+    },
+    {
+      "id": 12,
+      "ms": 2646,
+      "notes": []
+    },
+    {
+      "id": 13,
+      "ms": 6641,
+      "notes": []
+    },
+    {
+      "id": 14,
+      "ms": 6577,
+      "notes": []
+    },
+    {
+      "id": 15,
+      "ms": 3115,
+      "notes": []
+    },
+    {
+      "id": 16,
+      "ms": 2810,
+      "notes": []
+    },
+    {
+      "id": 17,
+      "ms": 7458,
+      "notes": []
+    },
+    {
+      "id": 18,
+      "ms": 2965,
+      "notes": []
+    },
+    {
+      "id": 19,
+      "ms": 2089,
+      "notes": []
+    },
+    {
+      "id": 20,
+      "ms": 3301,
+      "notes": []
+    },
+    {
+      "id": 21,
+      "ms": 2915,
+      "notes": []
+    },
+    {
+      "id": 22,
+      "ms": 3884,
+      "notes": []
+    },
+    {
+      "id": 23,
+      "ms": 5583,
+      "notes": []
+    },
+    {
+      "id": 24,
+      "ms": 7243,
+      "notes": []
+    },
+    {
+      "id": 25,
+      "ms": 2980,
+      "notes": []
+    },
+    {
+      "id": 26,
+      "ms": 3513,
+      "notes": []
+    },
+    {
+      "id": 27,
+      "ms": 1774,
+      "notes": []
+    },
+    {
+      "id": 28,
+      "ms": 3519,
+      "notes": []
+    },
+    {
+      "id": 29,
+      "ms": 3214,
+      "notes": []
+    },
+    {
+      "id": 30,
+      "ms": 4255,
+      "notes": []
+    },
+    {
+      "id": 31,
+      "ms": 3226,
+      "notes": [
+        "Empire review: got good want null",
+        "Nagarjuna review: got good want null"
+      ]
+    },
+    {
+      "id": 32,
+      "ms": 6298,
+      "notes": []
+    }
+  ]
+}

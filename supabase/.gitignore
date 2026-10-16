@@ -6,3 +6,6 @@
 .env.keys
 .env.local
 .env.*.local
+
+# Local secrets (Google OAuth client secret etc.)
+.env

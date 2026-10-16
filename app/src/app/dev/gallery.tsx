@@ -6,7 +6,7 @@ import { Globe, Heart, Layers, MapPin as MapPinIcon, MessageCircle, Navigation, 
 import {
   Avatar, AvatarStack, Button, CatPeek, Chip, ChipInput, Cluster, Dialog, Divider, EmptyState, EntryCard, GoogleMark,
   IconButton, ListRow, ListSurface, MapPin, OfflineBanner, Panel, ReviewPill, Screen, SearchBar, SectionLabel,
-  Segmented, Sheet, SheetOption, SnackbarHost, SourceMark, T, TextField, Thumb, TopBar, YouDot, showSnack,
+  Segmented, Sheet, SheetOption, SourceMark, T, TextField, Thumb, TopBar, YouDot, showSnack,
 } from '@/components';
 import { colors, space } from '@/theme';
 
@@ -28,7 +28,7 @@ function Gallery() {
     <View style={{ flex: 1 }}>
       <Screen header={<TopBar title="Design gallery" onBack={() => router.back()} />} contentStyle={styles.body}>
         <Section title="Type">
-          <T variant="display">Thinnava?!</T>
+          <T variant="display">Thinnava</T>
           <T variant="headline">Remember every place your friends tell you about</T>
           <T variant="title">Sheet and screen titles</T>
           <T variant="place">Burger Factory</T>
@@ -146,7 +146,6 @@ function Gallery() {
       </Sheet>
       <Dialog visible={dialog} title="Delete this visit?" body="It'll disappear for everyone you shared it with." confirmLabel="Delete" destructive
         onCancel={() => setDialog(false)} onConfirm={() => { setDialog(false); showSnack({ text: 'Deleted' }); }} />
-      <SnackbarHost bottom={24} />
     </View>
   );
 }

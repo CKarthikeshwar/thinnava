@@ -6,7 +6,7 @@ import { colors, radii, size, strokes } from '@/theme';
 import { Pressable } from './Pressable';
 import { T } from './T';
 
-type Variant = 'primary' | 'tonal' | 'outline' | 'white' | 'strong';
+type Variant = 'primary' | 'tonal' | 'outline' | 'white' | 'strong' | 'dangerText';
 
 type Props = {
   label: string;
@@ -15,6 +15,8 @@ type Props = {
   small?: boolean;
   disabled?: boolean;
   icon?: ComponentType<LucideProps>;
+  /** Icon after the label (e.g. Next →). */
+  trailingIcon?: ComponentType<LucideProps>;
   /** Custom leading element (e.g. the Google mark). */
   leading?: ReactNode;
   style?: StyleProp<ViewStyle>;
@@ -26,11 +28,13 @@ const look: Record<Variant, { bg: string; fg: string; shadow?: string }> = {
   strong: { bg: colors.primaryStrong, fg: colors.onPrimary },
   tonal: { bg: colors.primaryContainer, fg: colors.onPrimaryContainer },
   outline: { bg: 'transparent', fg: colors.primary, shadow: strokes.field },
+  /** Plain red text button (E8 "Not me, reject"). */
+  dangerText: { bg: 'transparent', fg: colors.bad, shadow: undefined },
   white: { bg: colors.surface, fg: '#1F1F1F' },
 };
 
 /** Full-pill button (DESIGN.md "Buttons"). One primary per screen. Disabled = 40% opacity. */
-export function Button({ label, onPress, variant = 'primary', small, disabled, icon: Icon, leading, style, accessibilityHint }: Props) {
+export function Button({ label, onPress, variant = 'primary', small, disabled, icon: Icon, trailingIcon: Trailing, leading, style, accessibilityHint }: Props) {
   const l = look[variant];
   return (
     <Pressable
@@ -52,6 +56,7 @@ export function Button({ label, onPress, variant = 'primary', small, disabled, i
       <T variant={small ? 'buttonSmall' : 'button'} color={l.fg} numberOfLines={1}>
         {label}
       </T>
+      {Trailing ? <Trailing size={small ? 18 : 20} color={l.fg} strokeWidth={2} /> : null}
     </Pressable>
   );
 }

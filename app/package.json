@@ -65,7 +65,13 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "doctor": "expo-doctor",
-    "phone": "adb reverse tcp:8081 tcp:8081 && expo start --dev-client --port 8081"
+    "phone": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:54321 tcp:54321 && expo start --dev-client --port 8081",
+    "backend": "cd .. && npx supabase start -x studio,imgproxy,vector,logflare,realtime,storage-api,mailpit,supavisor,postgres-meta",
+    "backend:functions": "cd .. && npx supabase functions serve --env-file supabase/.env",
+    "backend:stop": "cd .. && npx supabase stop",
+    "backend:status": "cd .. && npx supabase status",
+    "backend:test": "cd .. && npx supabase test db",
+    "backend:reset": "cd .. && npx supabase db reset"
   },
   "private": true,
   "jest": {

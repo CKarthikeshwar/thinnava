@@ -78,7 +78,7 @@ function AddButton({ open, onPress }: { open: boolean; onPress: () => void }) {
   const icon = useAnimatedStyle(() => ({ transform: [{ rotate: `${135 * t.value}deg` }] }));
   return (
     <Pressable onPress={onPress} pressScale={0.92} style={styles.addWrap} accessibilityRole="button" accessibilityLabel={open ? 'Close add menu' : 'Add'} accessibilityState={{ expanded: open }}>
-      <Animated.View style={[styles.add, box, !open && { boxShadow: shadows.addButton }]}>
+      <Animated.View style={[styles.add, box, { boxShadow: open ? shadows.dialCircle : shadows.addButton }]}>
         <Animated.View style={icon}>
           <Plus size={26} color={open ? colors.primaryStrong : colors.onPrimary} strokeWidth={2.2} />
         </Animated.View>

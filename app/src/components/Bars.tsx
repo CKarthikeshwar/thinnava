@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ArrowLeft, Search, WifiOff } from 'lucide-react-native';
+import { ArrowLeft, Search, WifiOff, X, type LucideProps } from 'lucide-react-native';
 import { colors, fonts, radii, shadows, size, space } from '@/theme';
 import { IconButton } from './IconButton';
 import { Pressable } from './Pressable';
@@ -11,19 +11,23 @@ type TopBarProps = {
   wordmark?: boolean;
   title?: string;
   onBack?: () => void;
+  /** Show × instead of ← (forms that are dismissed, e.g. D2, F3). */
+  close?: boolean;
+  /** 19 dp title for flow screens (Add visit, Your visit, pickers), as in the phase2 mockups. */
+  compact?: boolean;
   actions?: ReactNode;
 };
 
 /** 56 dp top app bar: wordmark or Fredoka title, 48 dp round actions on the right. */
-export function TopBar({ wordmark, title, onBack, actions }: TopBarProps) {
+export function TopBar({ wordmark, title, onBack, close, compact, actions }: TopBarProps) {
   return (
     <View style={[styles.bar, onBack && styles.withBack]}>
-      {onBack ? <IconButton icon={ArrowLeft} label="Back" ghost onPress={onBack} /> : null}
+      {onBack ? <IconButton icon={close ? X : ArrowLeft} label={close ? 'Close' : 'Back'} ghost onPress={onBack} /> : null}
       <View style={styles.titleWrap}>
         {wordmark ? (
-          <T variant="wordmark" accessibilityRole="header">Thinnava?!</T>
+          <T variant="wordmark" accessibilityRole="header">Thinnava</T>
         ) : title ? (
-          <T variant="screenTitle" numberOfLines={1} accessibilityRole="header">{title}</T>
+          <T variant="screenTitle" style={compact ? { fontSize: 19, lineHeight: 23 } : undefined} numberOfLines={1} accessibilityRole="header">{title}</T>
         ) : null}
       </View>
       {actions ? <View style={styles.actions}>{actions}</View> : null}
@@ -43,7 +47,7 @@ export function SearchBar({ placeholder, value, onPress, trailing }: { placehold
 }
 
 /** Segmented control: Surface Tint track, white selected segment. */
-export function Segmented<K extends string>({ options, value, onChange }: { options: { key: K; label: string }[]; value: K; onChange: (k: K) => void }) {
+export function Segmented<K extends string>({ options, value, onChange }: { options: { key: K; label: string; icon?: ComponentType<LucideProps> }[]; value: K; onChange: (k: K) => void }) {
   return (
     <View style={styles.seg} accessibilityRole="tablist">
       {options.map((o) => {
@@ -57,6 +61,7 @@ export function Segmented<K extends string>({ options, value, onChange }: { opti
             accessibilityState={{ selected: on }}
             style={[styles.segItem, on && styles.segOn]}
           >
+            {o.icon ? <o.icon size={18} color={on ? colors.ink : colors.inkSoft} strokeWidth={2} /> : null}
             <T style={styles.segText} color={on ? colors.ink : colors.inkSoft}>{o.label}</T>
           </Pressable>
         );
@@ -83,7 +88,7 @@ const styles = StyleSheet.create({
   search: { height: 52, borderRadius: radii.pill, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', gap: 10, paddingLeft: 18, paddingRight: 8, marginHorizontal: space.gutter, boxShadow: shadows.search },
   searchText: { flex: 1, fontFamily: fonts.bodySemi, fontSize: 15.5 },
   seg: { flexDirection: 'row', backgroundColor: colors.surfaceTint, borderRadius: radii.pill, padding: 4, marginHorizontal: space.gutter },
-  segItem: { flex: 1, height: 40, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center' },
+  segItem: { flex: 1, height: 40, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6 },
   segOn: { backgroundColor: colors.surface, boxShadow: shadows.segment },
   segText: { fontFamily: fonts.bodyHeavy, fontSize: 14 },
   offline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, height: 34, backgroundColor: colors.ink },

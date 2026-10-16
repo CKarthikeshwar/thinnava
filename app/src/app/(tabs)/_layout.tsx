@@ -1,16 +1,15 @@
 import { View } from 'react-native';
-import { Tabs } from 'expo-router';
-import { NavBar, SnackbarHost, SpeedDial, showSnack, NAV_HEIGHT, type DialAction } from '@/components';
+import { router, Tabs } from 'expo-router';
+import { NavBar, SpeedDial, type DialAction } from '@/components';
+import { ListPromptHost } from '@/features/people/ListPromptHost';
 import { colors, curves, durations } from '@/theme';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Main tabs (spec §14 B): Home · Search · + · Map · Profile.
 export default function TabsLayout() {
-  const insets = useSafeAreaInsets();
   const onPick = (a: DialAction) => {
-    // The real flows arrive in M4 (visit) and M5 (friend / internet).
-    const what = { visit: 'Adding a visit', friend: "Logging a friend's experience", internet: 'Logging an internet find' }[a];
-    showSnack({ text: `${what} arrives in a later milestone.` });
+    if (a === 'visit') return router.push({ pathname: '/pick-place', params: { for: 'visit' } });
+    // D5 by hand; it offers "Use copied text?" when something is copied (spec §10.4).
+    router.push({ pathname: '/saved/new', params: { source: a } });
   };
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -30,7 +29,7 @@ export default function TabsLayout() {
         <Tabs.Screen name="profile" />
       </Tabs>
       <SpeedDial onPick={onPick} />
-      <SnackbarHost bottom={NAV_HEIGHT + insets.bottom + 10} />
+      <ListPromptHost />
     </View>
   );
 }

@@ -14,7 +14,7 @@ export const colors = {
   inkMuted: '#5C668C',
   hairline: '#D9E0F7',
   scrim: 'rgba(10,20,60,0.42)',
-  dialScrim: 'rgba(22,52,143,0.84)', // primaryStrong at 84%, behind the + speed dial
+  dialScrim: 'rgba(14,24,44,0.78)', // navy, behind the + speed dial (phase1 B3 mockup)
   rings: '#CAD5F8', // primary mixed 18% into the ground
   // Fixed verdict colours (never decorative)
   good: '#17703E',
@@ -23,6 +23,10 @@ export const colors = {
   okayishWash: '#FBEFD2',
   bad: '#A8301F',
   badWash: '#FADFDB',
+  // Import (D8): the original message bubble and the amber "Please check this" outline (phase2 mockup)
+  quote: '#E5F5DA',
+  onQuote: '#1F2D1A',
+  check: '#E2A417',
   // Map
   mapLand: '#EEF1FB',
   mapWater: '#BCCBF5',

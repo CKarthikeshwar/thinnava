@@ -7,7 +7,7 @@ import {
   useBottomSheetTimingConfigs,
   type BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
-import type { LucideProps } from 'lucide-react-native';
+import { Check, type LucideProps } from 'lucide-react-native';
 import { colors, curves, durations, radii, shadows, space, useMotion } from '@/theme';
 import { Pressable } from './Pressable';
 import { T } from './T';
@@ -60,13 +60,15 @@ type OptionProps = {
   label: string;
   hint?: string;
   selected?: boolean;
+  /** Square checkbox instead of a radio (multi-select). */
+  check?: boolean;
   onPress?: () => void;
 };
 
 /** Sheet option row with a 40 dp mark, label, one-line hint and a trailing radio. */
-export function SheetOption({ icon: Icon, leading, label, hint, selected, onPress }: OptionProps) {
+export function SheetOption({ icon: Icon, leading, label, hint, selected, check, onPress }: OptionProps) {
   return (
-    <Pressable onPress={onPress} pressScale={0.99} style={styles.opt} accessibilityRole="radio" accessibilityState={{ checked: !!selected }} accessibilityLabel={hint ? `${label}, ${hint}` : label}>
+    <Pressable onPress={onPress} pressScale={0.99} style={styles.opt} accessibilityRole={check ? 'checkbox' : 'radio'} accessibilityState={{ checked: !!selected }} accessibilityLabel={hint ? `${label}, ${hint}` : label}>
       {leading ?? (Icon ? (
         <View style={styles.mark}><Icon size={20} color={colors.primaryStrong} strokeWidth={2} /></View>
       ) : null)}
@@ -74,9 +76,13 @@ export function SheetOption({ icon: Icon, leading, label, hint, selected, onPres
         <T variant="bodyStrong" style={styles.optLabel}>{label}</T>
         {hint ? <T variant="meta" style={styles.hint}>{hint}</T> : null}
       </View>
-      <Radio on={!!selected} />
+      {check ? <CheckBox on={!!selected} /> : <Radio on={!!selected} />}
     </Pressable>
   );
+}
+
+export function CheckBox({ on }: { on: boolean }) {
+  return <View style={[styles.check, on && styles.checkOn]}>{on ? <Check size={16} color={colors.onPrimary} strokeWidth={3} /> : null}</View>;
 }
 
 export function Radio({ on }: { on: boolean }) {
@@ -94,6 +100,8 @@ const styles = StyleSheet.create({
   optLabel: { fontFamily: 'Nunito_700Bold' },
   hint: { fontSize: 13, marginTop: 1 },
   radio: { width: 22, height: 22, borderRadius: 11 },
+  check: { width: 24, height: 24, borderRadius: 8, boxShadow: `inset 0px 0px 0px 2px ${colors.inkMuted}`, alignItems: 'center', justifyContent: 'center' },
+  checkOn: { backgroundColor: colors.primary, boxShadow: 'none' },
   radioOff: { boxShadow: `inset 0px 0px 0px 2px ${colors.inkMuted}` },
   radioOn: { backgroundColor: colors.primary, boxShadow: `inset 0px 0px 0px 2px ${colors.primary}, inset 0px 0px 0px 6px ${colors.surface}` },
 });

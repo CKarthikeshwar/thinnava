@@ -54,8 +54,8 @@ export function ListRow({ leading, title, subtitle, trailing, chevron, onPress }
 }
 
 /** 48 dp rounded-square thumbnail with an icon (places). */
-export function Thumb({ children }: { children: ReactNode }) {
-  return <View style={styles.thumb}>{children}</View>;
+export function Thumb({ children, size }: { children: ReactNode; size?: number }) {
+  return <View style={[styles.thumb, size ? { width: size, height: size, borderRadius: size > 44 ? radii.thumb : 12 } : null]}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

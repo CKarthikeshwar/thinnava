@@ -1,8 +1,8 @@
-# Thinnava?! Privacy Policy
+# Thinnava Privacy Policy
 
-_Last updated: DRAFT, not yet published. Contact: <CONTACT EMAIL>_
+_Last updated: DRAFT, not yet published. Contact: 921019chimirelakarthik@gmail.com_
 
-Thinnava?! ("Thinnava", "we") is a student project built at the Indian Institute of Science (IISc). It helps you remember where you and the people you know have eaten. This policy explains what we collect and why, in plain words.
+Thinnava ("Thinnava", "we") is a student project built at the Indian Institute of Science (IISc). It helps you remember where you and the people you know have eaten. This policy explains what we collect and why, in plain words.
 
 ## What we collect
 - **From your Google account, when you sign in:** your name, email address and profile photo. We use them to create your account. We never see your Google password.
@@ -34,4 +34,4 @@ You can delete your account at any time from **Settings → Delete account**. Th
 If this policy changes, we'll update this page and the date above.
 
 ## Contact
-Questions: <CONTACT EMAIL>
+Questions: 921019chimirelakarthik@gmail.com

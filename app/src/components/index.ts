@@ -20,3 +20,5 @@ export * from './MapPin';
 export * from './NavBar';
 export * from './SpeedDial';
 export * from './Screen';
+export * from './Dots';
+export * from './RatingPicker';

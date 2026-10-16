@@ -1,12 +1,16 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { existsSync } = require('fs') as { existsSync: (p: string) => boolean };
 import type { ExpoConfig, ConfigContext } from 'expo/config';
 
-// Thinnava?! app config. See spec.md §18, §27.
+// Thinnava app config. See spec.md §18, §27.
 // Secrets/keys come from env (app/.env, never committed). See .env.example.
 const APP_ENV = process.env.APP_ENV ?? 'dev';
+// Push (spec §26.9): Firebase config from the free `thinnava-f44c7` project (Spark) (git-ignored) and the Expo project id.
+const GOOGLE_SERVICES = './google-services.json';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: APP_ENV === 'prod' ? 'Thinnava?!' : 'Thinnava?! (dev)',
+  name: APP_ENV === 'prod' ? 'Thinnava' : 'Thinnava (dev)',
   slug: 'thinnava',
   scheme: 'thinnava',
   version: '0.1.0',
@@ -21,6 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       monochromeImage: './assets/android-icon-monochrome.png',
     },
     predictiveBackGestureEnabled: false,
+    ...(existsSync(GOOGLE_SERVICES) ? { googleServicesFile: GOOGLE_SERVICES } : {}),
   },
   plugins: [
     'expo-router',
@@ -29,6 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     // Android share target for text and URLs (spec §10.1, §26.6). iOS is out of scope.
     ['expo-share-intent', { androidIntentFilters: ['text/*'], disableIOS: true }],
     '@react-native-google-signin/google-signin',
+    ['expo-notifications', { color: '#2350D9' }],
     ['react-native-maps', { androidGoogleMapsApiKey: process.env.GOOGLE_MAPS_ANDROID_KEY ?? '' }],
     [
       'expo-location',
@@ -36,5 +42,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   ],
   experiments: { typedRoutes: true },
-  extra: { APP_ENV },
+  extra: { APP_ENV, ...(process.env.EAS_PROJECT_ID ? { eas: { projectId: process.env.EAS_PROJECT_ID } } : {}) },
 });

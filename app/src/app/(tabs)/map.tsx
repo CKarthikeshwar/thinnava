@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { router } from 'expo-router';
 import { Chip, Cluster, MapPin, Screen, SearchBar, T, YouDot } from '@/components';
 import { colors, space } from '@/theme';
 
@@ -20,7 +21,7 @@ export default function MapTab() {
         <View style={[styles.at, { top: 400, left: 300 }]}><YouDot /></View>
       </View>
       <View style={styles.top}>
-        <SearchBar placeholder="Search places" />
+        <SearchBar placeholder="Search places" onPress={() => router.push('/search')} />
         <View style={styles.chips}>
           <Chip label="All" selected />
           <Chip label="Visited" />

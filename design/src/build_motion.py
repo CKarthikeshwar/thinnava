@@ -39,7 +39,7 @@ CSS = r"""
 .tapcard,.tappin,[data-go]{cursor:pointer}
 .sheet-scrim,#wa-scrim,.dial-scrim{opacity:0;pointer-events:none}
 .sheet-scrim.open,#wa-scrim.open,.dial-scrim.open{opacity:1;pointer-events:auto}
-.dial-scrim{z-index:19;background:color-mix(in srgb,var(--p-strong) 84%,transparent)}
+.dial-scrim{z-index:19;background:rgba(14,24,44,.78);backdrop-filter:blur(3px)}
 .fsheet,.pincard,#wa-sheet{transform:translateY(110%)}
 .fsheet.open,.pincard.open,#wa-sheet.open{transform:none}
 .pincard{bottom:78px;left:8px;right:8px;border-radius:28px;padding-bottom:18px;z-index:21}
@@ -391,7 +391,7 @@ run(launch)();
 """
 
 contract = """<!--
-THESIS: Motion for Thinnava?! that explains, never decorates: fast Material transitions for everyday navigation, one authored moment where a friend's message becomes a saved entry.
+THESIS: Motion for Thinnava that explains, never decorates: fast Material transitions for everyday navigation, one authored moment where a friend's message becomes a saved entry.
 OWN-WORLD: Inherited from DESIGN.md (Cobalt, Mist ground, Rings on main tabs, white cards, Fredoka + Nunito, chef cat). Motion material: Material 3 emphasized curves; the chef cat climbing over card edges is the brand's motion signature.
 STORY: Launch -> welcome -> profile -> Home; card expands into place; a copied message is read by the cat, fields fill, Save drops a new card into Home.
 FIRST VIEWPORT: Phone prototype (left, sticky) auto-playing launch; motion spec with Play buttons and tokens (right).
@@ -412,7 +412,7 @@ html = f"""<!doctype html>
 <body data-palette="cobalt" data-ground="rings">
 {contract}
 <header class="gal-head"><div class="in">
-  <h1 class="gal-title"><img src="assets/cat-peek.png" alt="">Thinnava?! <small>Motion &amp; transitions · clickable prototype</small></h1>
+  <h1 class="gal-title"><img src="assets/cat-peek.png" alt="">Thinnava <small>Motion &amp; transitions · clickable prototype</small></h1>
   <a href="phase1.html" style="margin-left:auto;font-weight:800;font-size:14px;color:#1b2333">Phase 1</a>
   <a href="phase2.html" style="font-weight:800;font-size:14px;color:#1b2333">Phase 2</a>
 </div></header>

@@ -37,7 +37,7 @@ Used on Android phones, often one-handed, often right after reading a WhatsApp m
 
 ## Brand Commitments
 
-- Name (working): **Thinnava?!** with the "?!" punctuation.
+- Name (working): **Thinnava** (no "?!"; dropped 2026-10-14 by the owner).
 - Mascot: a grey-blue chef cat (chef hat, neckerchief), source art at `ui-references/7.png`. The owner explicitly likes it and wants it kept.
 - Palette: **Cobalt** blue (chosen by the owner). Background: flat ground with minimal **Rings** art (chosen); no gradients (owner rejected them as "vibecoded").
 - Design north star: intuitive, clear, clutter-free, frictionless.

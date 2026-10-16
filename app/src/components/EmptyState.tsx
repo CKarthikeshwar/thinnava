@@ -10,7 +10,7 @@ type Props = { title: string; body?: string; children?: ReactNode; cat?: boolean
 export function EmptyState({ title, body, children, cat = true }: Props) {
   return (
     <View style={styles.wrap}>
-      {cat ? <CatPeek width={150} /> : null}
+      {cat ? <CatPeek width={170} /> : null}
       <View style={styles.card}>
         <T variant="title" style={styles.center}>{title}</T>
         {body ? <T variant="body" style={[styles.center, styles.body]}>{body}</T> : null}
@@ -22,8 +22,8 @@ export function EmptyState({ title, body, children, cat = true }: Props) {
 
 const styles = StyleSheet.create({
   wrap: { paddingHorizontal: 14 },
-  card: { backgroundColor: colors.surface, borderRadius: radii.surface, padding: 22, paddingTop: 24, boxShadow: shadows.panel, zIndex: 1 },
+  card: { backgroundColor: colors.surface, borderRadius: radii.surface, padding: 18, paddingTop: 34, boxShadow: shadows.panel, zIndex: 1 },
   center: { textAlign: 'center' },
-  body: { marginTop: 6 },
+  body: { marginTop: 8 },
   actions: { marginTop: 18, gap: 10 },
 });

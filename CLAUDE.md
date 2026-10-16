@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## Project
 
-**Thinnava?!** (working name) is a social food memory app for Android: connect mutually with people you know, see where they ate and what they thought, privately log what friends tell you (copy a WhatsApp message and tap "Read it", or share text/links from apps that allow it; AI fills the form, you confirm) and internet finds, and jump out to Google Maps / Swiggy (Zomato / District in v2). IISc course project, **team of 2**, demo with real users, distributed as an APK.
+**Thinnava** (working name) is a social food memory app for Android: connect mutually with people you know, see where they ate and what they thought, privately log what friends tell you (copy a WhatsApp message and tap "Read it", or share text/links from apps that allow it; AI fills the form, you confirm) and internet finds, and jump out to Google Maps / Swiggy (Zomato / District in v2). IISc course project, **team of 2**, demo with real users, distributed as an APK.
 
 ## Source of truth: `spec.md`
 
@@ -32,7 +32,8 @@ The app must be **intuitive, clear, clutter-free, easy and frictionless**:
 
 ## Two people, two laptops (spec §33)
 
-- **Current setup (2026-10-13):** one owner is doing both P1 and P2 work, in milestone order (spec §30), on a single dev Supabase project. When a second person joins, switch to the full §33 split.
+- **Current setup:** one owner is doing both P1 and P2 work, in milestone order (spec §30). Development uses a **local Supabase sandbox** in Docker on each laptop (`docs/dev-setup.md`); hosted Supabase is only for `thinnava-prod`. When a second person joins, switch to the full §33 split.
+- **Reminder (owner asked):** when the owner starts working on **another laptop/device**, remind them to set up the local sandbox there first: follow `docs/dev-setup.md` (Docker Desktop, `app/.env`, `supabase/.env`, `npm run backend`).
 - If two people are working, ask who the user is (**P1** or **P2**) and which step they're on, unless they've said.
 - Change only that person's folders, tables and functions (spec §33.3). Shared files (components, theme, layouts, `lib/supabase.ts`, config, `package.json`, `types/db.ts`, `spec.md`, `changelog.md`) only after the user confirms, in a small separate change.
 - Work on the person's branch (`p1/...` / `p2/...`), never directly on `main`. Migrations only via `supabase migration new`; never edit a migration already on `main`.

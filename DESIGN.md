@@ -1,5 +1,5 @@
 ---
-name: Thinnava?!
+name: Thinnava
 description: A friends-first food diary that feels like a friendly kitchen, not a review site.
 colors:
   cobalt-blue: "#2350D9"
@@ -173,7 +173,7 @@ components:
     height: "52px"
 ---
 
-# Design System: Thinnava?!
+# Design System: Thinnava
 
 ## Overview
 
@@ -200,7 +200,7 @@ The palette is **Cobalt**, chosen by the owner after comparing Sky, Cobalt, Ceru
 
 ### Primary
 - **Cobalt Blue** (`cobalt-blue`): primary buttons, the + add button in the nav bar, focus rings on fields, the selected radio, the active onboarding dot, the user's own map pins and location dot. White text on it.
-- **Deep Cobalt** (`deep-cobalt`): the wordmark, the welcome hero card, map cluster circles, icons inside source marks and thumbnails, Continue with Google on the onboarding slides, and the speed-dial scrim (mixed 84% with transparency).
+- **Deep Cobalt** (`deep-cobalt`): the wordmark, the welcome hero card, map cluster circles, icons inside source marks and thumbnails, and Continue with Google on the onboarding slides.
 
 ### Secondary
 - **Pale Cobalt** (`pale-cobalt`) with **Deep Cobalt Ink** (`on-pale-cobalt`): tonal buttons, selected chips, the nav-bar active indicator, text selection.
@@ -234,7 +234,7 @@ The palette is **Cobalt**, chosen by the owner after comparing Sky, Cobalt, Ceru
 **Character:** Fredoka's rounded geometry gives the wordmark and headings the cat's friendliness; Nunito's soft terminals keep body text warm and very legible, and its heavy weights do the work of hierarchy inside cards.
 
 ### Hierarchy
-- **Display** (Fredoka 600, 42px): the Thinnava?! wordmark on splash and welcome only. In the top app bar the wordmark runs at 24px; on onboarding slides at 22px.
+- **Display** (Fredoka 600, 42px): the Thinnava wordmark on splash and welcome only. In the top app bar the wordmark runs at 24px; on onboarding slides at 22px.
 - **Headline** (Fredoka 600, 26px, 1.15, balanced wrap): onboarding promises, setup titles.
 - **Title** (Fredoka 600, 20px, 1.2): sheet titles, profile name, empty-state title, count numerals. Top-bar screen titles run at 22px.
 - **Place title** (Fredoka 600, 17.5px, 1.2): the place name on every timeline card. Places are always set in the display face.
@@ -307,9 +307,9 @@ Round, full-width and confident.
 - **Error:** 2px inset Bad red stroke, red caret and trailing x-circle; helper line in red 700 with an x icon. Success helper in Good green with a check. Neutral helper in Muted Ink.
 
 ### Navigation
-- **Top app bar:** 56px; the wordmark (Deep Cobalt, 24px) on Home or a 22px Fredoka title elsewhere; 48px round white icon buttons on the right with a 9px Bad-red notification dot.
+- **Top app bar:** 56px; the wordmark (Deep Cobalt, 24px) on Home, a 22px Fredoka title on main screens, or a 19px title on flow screens (Add visit, Your visit, pickers); a ghost ← (or × for forms you dismiss, like Add visit and Edit profile); 48px round white icon buttons on the right with a 9px Bad-red notification dot.
 - **Navigation bar:** 78px white bar with a hairline top border; four destinations (Home, Search, Map, Profile) around a centre add button. Labels Nunito 700 12px in Slate Ink, active in Night Ink with a 56x30 Pale Cobalt pill indicator behind the icon.
-- **Add button:** 52px Cobalt Blue rounded square (18px) with a primary-tinted glow. Tapping opens a speed dial of three white 62px circles with plain-word labels over a navy scrim; the + becomes a white x.
+- **Add button:** 52px Cobalt Blue rounded square (18px) with a primary-tinted glow. Tapping opens a speed dial of three white 62px circles with plain-word labels over a navy scrim (`rgba(14,24,44,.78)`, the phase1 B3 mockup); the + becomes a white rounded square with a Deep Cobalt x and a soft shadow.
 - **Segmented control:** Surface Tint pill track, 4px inset, 36px segments; selected segment is white with a faint shadow.
 
 ### Bottom Sheet
