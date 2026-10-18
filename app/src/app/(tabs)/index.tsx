@@ -13,13 +13,13 @@ import { CopiedMessageCard } from '@/features/import/CopiedBanners';
 import { useNet } from '@/lib/net';
 import { clearFresh, useFresh } from '@/lib/fresh';
 import { removePendingShare, useDrafts } from '@/lib/drafts';
-import { markClipboardHandled, PASTE_TEXT, readClipboard, useCopiedText } from '@/features/import/clipboard';
+import { hidePasteCard, markClipboardHandled, PASTE_TEXT, readClipboard, useCopiedText } from '@/features/import/clipboard';
 import { internetLabel } from '@/features/saved/labels';
 import { openPerson } from '@/features/people/components';
 import { unreadNotifications } from '@/features/notifications/api';
 import { friendlyDate, timeAgo, todayIST } from '@/lib/dates';
 import { PAGE_MAX, useLayoutMode } from '@/lib/layout';
-import { HomeSide, PasteHero } from '@/features/web/HomeParts';
+import { CardHoverActions, HomeSide, PasteHero } from '@/features/web/HomeParts';
 import { InstallCard } from '@/features/web/InstallCard';
 import { dotJoin } from '@/lib/format';
 import { colors, fonts, radii, space } from '@/theme';
@@ -125,7 +125,7 @@ export default function Home() {
         data={items}
         keyExtractor={(i) => i.id}
         renderItem={({ item, index }) => {
-          const card = <Card item={item} meName={profile?.display_name} meAvatar={profile?.avatar_url} />;
+          const card = <Card item={item} meName={profile?.display_name} meAvatar={profile?.avatar_url} hover={mode === 'laptop'} />;
           if (mode === 'app') return card;
           // Web: Today · This week · Earlier headings between cards (spec §18.3).
           const day = dayGroup(item.created_at);
@@ -142,7 +142,7 @@ export default function Home() {
           </View>
         ) : mode === 'phone' ? (
           <View style={{ gap: 12, marginBottom: 12 }}>
-            {copied.has ? <PasteHero onDismiss={() => { markClipboardHandled(); copied.hide(); }} /> : null}
+            {copied.has ? <PasteHero onDismiss={() => { hidePasteCard(); copied.hide(); }} /> : null}
             <InstallCard />
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
               {FILTERS.map((f) => <Chip key={f.key} label={f.label} selected={filter === f.key} onPress={() => setFilter(f.key)} />)}
@@ -211,7 +211,7 @@ function personOf(item: FeedItem): (() => void) | undefined {
   return undefined;
 }
 
-function Card({ item, meName, meAvatar }: { item: FeedItem; meName?: string; meAvatar?: string | null }) {
+function Card({ item, meName, meAvatar, hover }: { item: FeedItem; meName?: string; meAvatar?: string | null; hover?: boolean }) {
   const fresh = useFresh((s) => s.id);
   const loggedOn = item.created_at.slice(0, 10);
   const went = item.visited_on && (item.entry_type !== 'visit' || item.visited_on !== loggedOn) ? `went ${friendlyDate(item.visited_on).replace(/^(Today|Yesterday)$/, (w) => w.toLowerCase())}` : null;
@@ -237,6 +237,7 @@ function Card({ item, meName, meAvatar }: { item: FeedItem; meName?: string; meA
       onPressPerson={personOf(item)}
       fresh={fresh === item.id}
       onFreshDone={clearFresh}
+      hoverActions={hover ? <CardHoverActions placeId={item.place_id} placeName={item.place_name} wishlist={!(item.entry_type === 'visit' && item.is_mine)} /> : undefined}
     />
   );
 }

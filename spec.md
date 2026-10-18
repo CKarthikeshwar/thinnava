@@ -578,7 +578,7 @@ Principles:
 - Hover states on everything tappable (a light dim).
 
 *Laptop (≥ 1024 px wide):* content is centred, max ≈ 1160 px.
-- **Home:** the feed in a main column with the B1b filters as a segmented control in its heading ("What your people ate": Everything · Connections · From friends · Internet · Mine) and day headings (Today · This week · Earlier). A side column (≈ 360 px): **Got a tip from a friend?** paste box (with the Ctrl+V hint) → **Notifications** (newest 3, inline Accept / Add your review, "See all" → F1; reading them here does not mark them read) → **Your wishlist** (newest 3, "See all" → Profile · Wishlist).
+- **Home:** the feed in a main column with the B1b filters as a segmented control in its heading ("What your people ate": Everything · Connections · From friends · Internet · Mine) and day headings (Today · This week · Earlier). Hovering a card shows three small actions on it: **♡ Wishlist** (not on my own visits; adds the place, same rules as C1), **Directions** and **Swiggy** (§11.1 links). Clicking elsewhere on the card still opens it. A side column (≈ 360 px): **Got a tip from a friend?** paste box (with the Ctrl+V hint) → **Notifications** (newest 3, inline Accept / Add your review, "See all" → F1; reading them here does not mark them read) → **Your wishlist** (newest 3, "See all" → Profile · Wishlist).
 - **Search:** one large search box, Places | People under it, then a left filter sidebar (Someone I know went · Type · Price per person, same rules as B4) and the results as a table (Place · Who went · Area · Price), "Your people went" first, then "Nobody you know has been". The search area shows as "Near you" / "Near Bengaluru"; tapping it asks for location (A7).
 - **Map:** a left panel (≈ 420 px) with the layer chips, filters and the list of places; the map fills the rest. Until `thinnava-maps` has a key the right side shows the "The map turns on once Google Maps is set up" note and the list stays in the panel.
 - **Profile:** a tinted cover band with Rings, then photo, name, @username, bio and counts (Visited · Wishlist · Connections) on one row with **Connections** and **Settings** buttons; the three tabs (Visited · Wishlist · Saved) as underlined tabs with "Open on map"; entries as a 3-column grid of cards.
@@ -590,7 +590,7 @@ Principles:
 
 *Signed out (front page, replaces A1b/A2 on web):* one headline ("Every place your friends rave about, in one spot."), one line of what it does, **Continue with Google** with the Terms / Privacy line, "Already use Thinnava on Android? Same Google account, same places.", an example of a friend's WhatsApp message turning into a saved place, three short lines (Save what friends tell you · Log where you ate · See where your people went) and a footer with Privacy and Terms. "Sign in" in the corner is the same Google button. New accounts continue to A3; existing ones land on Home.
 
-**Hosting:** Cloudflare Pages (free, no card), address `thinnava.pages.dev` until a custom domain is chosen. The site's origin is added to the Google OAuth client and Supabase redirect URLs at release.
+**Hosting:** Cloudflare Pages (free, no card), address `thinnava.pages.dev` until a custom domain is chosen. The site's origin is added to the Google OAuth client and Supabase redirect URLs at release. `app/public/_headers` tells browsers not to show the site inside other sites' frames (`X-Frame-Options: DENY`, `frame-ancestors 'none'`) and limits browser features to what Thinnava uses (location only).
 
 ## 19. Repository layout
 
@@ -871,11 +871,17 @@ can_see_wishlist(owner uuid) → bool
     owner = me or ( is_connected(me, owner) and in_audience(owner, me, <owner's wishlist_audience>) )
 ```
 
+**Who may call functions (security review, 2026-10-18).**
+- Signed-out visitors (`anon`) may call **no** function in `public`; nothing in the app needs one before sign-in. The default `PUBLIC` execute grant is revoked too, for existing and future functions.
+- The helpers that take *any* two people (`is_connected`, `has_blocked`, `in_audience`, `resolve_audience`, `can_see_visit_as`, `can_see_visit_social`) are callable only by other functions (they run as the owner), never through the API, so nobody can probe who is connected, blocked or in which list.
+- Policies that need such a check use small helpers about the signed-in user only, in a `private` schema the API doesn't expose: `private.blocked_me(user)` and `private.connected_to(user)`.
+- A saved entry's link (`source_url`) must start with `http://` or `https://`, and the app opens nothing else.
+
 ### 21.2 Policies (RLS is enabled on every table)
 | Table | select | insert / update / delete |
 |---|---|---|
-| profiles | everyone signed in, **except** rows whose owner has blocked me | own row only |
-| profile_details | own, or `is_connected(me, user_id)` | own |
+| profiles | everyone signed in, **except** rows whose owner has blocked me (`private.blocked_me`) | own row only |
+| profile_details | own, or connected to me (`private.connected_to`) | own |
 | connection_requests | rows where I'm from or to | RPC only |
 | connections | rows I'm in | RPC only |
 | blocks | blocker = me | RPC only |
@@ -904,7 +910,8 @@ pgTAP tests in `supabase/tests/` cover at least:
 - a pending tag is visible only to the tagger and the tagged user;
 - disconnecting hides content but keeps tag names;
 - deleting a list makes its visits fall back to Only me;
-- bio is hidden from non-connections.
+- bio is hidden from non-connections;
+- signed-out visitors can't call any function, and nobody can call the two-person helpers (`is_connected`, `has_blocked`, `in_audience`…) through the API.
 
 ## 22. Database API (RPCs)
 
@@ -982,7 +989,7 @@ Every function verifies the JWT, except `push`, which checks the webhook secret.
 |---|---|---|
 | `places` | `{action:'autocomplete', input, sessionToken, lat?, lng?}` → `[{placeId, name, secondary}]`<br>`{action:'search', query, lat?, lng?}` → `[place]` (Search tab keyword search, Text Search Pro)<br>`{action:'details', placeId, sessionToken?}` → `{place}`<br>`{action:'google_info', placeId}` → `{rating, userRatingCount, priceLevel, openNow, hours}` or `{mode:'off'}`<br>`{action:'nearby', lat, lng}` → `[place]`<br>`{action:'refresh_stale'}` (cron, service role) | `details` always **upserts** the `places` row, so a place exists before any entry references it. `google_info` is the only call that requests rich fields, and only when a user taps (§25.5). **Every Google call first calls `consume_google_quota`; if it returns false, the function returns `{ok:false, error:{code:'quota_paused'}}` and never calls Google** (§27.5). Per-user limit: 300 calls/day. |
 | `extract` | `{text, url?, lat?, lng?}` → `{foodRelated, items:[ExtractItem + candidates]}` | §24. 40 calls/user/day. Text capped at 4000 chars. |
-| `links` | `{url, text?}` → `{kind, resolvedUrl, suggestion?, meta?:{title, description}}` | Follows redirects (GET, browser user agent, 5 s). `kind` ∈ maps · instagram · youtube · other. Maps → resolves to a place via text search. Other (including Zomato/District/Swiggy links) → page title and description for `extract`. Its text searches also go through `consume_google_quota`. |
+| `links` | `{url, text?}` → `{kind, resolvedUrl, suggestion?, meta?:{title, description}}` | Follows redirects (GET, browser user agent, 5 s). `kind` ∈ maps · instagram · youtube · other. Maps → resolves to a place via text search. Other (including Zomato/District/Swiggy links) → page title and description for `extract`. Its text searches also go through `consume_google_quota`. Only public `http(s)` addresses: before each hop the hostname is resolved and refused if any address is private, loopback, link-local or shared (no probing internal services). |
 | `push` | `pg_net` trigger on `notifications` INSERT (URL and `x-push-secret` read from Vault; missing → no push) → Expo Push API for each of the recipient's tokens | Builds the §12 text; deletes tokens Expo reports as `DeviceNotRegistered`. |
 | `delete-account` | `{}` → `{}` | Deletes the auth user with the service role; FK cascades remove everything. |
 

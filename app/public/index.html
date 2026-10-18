@@ -24,6 +24,18 @@
       body {
         overflow: hidden;
       }
+      /* Our fields draw their own focus border; hide the browser's extra box inside them. */
+      input:focus,
+      textarea:focus {
+        outline: none;
+      }
+      /* Keyboard users: a clear ring on whatever has focus (mouse clicks don't show it). Brand cobalt. */
+      [tabindex]:focus-visible,
+      button:focus-visible,
+      a:focus-visible {
+        outline: 2px solid #2350D9;
+        outline-offset: 2px;
+      }
       #root {
         display: flex;
         height: 100%;

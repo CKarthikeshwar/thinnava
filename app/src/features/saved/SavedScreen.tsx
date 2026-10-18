@@ -72,7 +72,7 @@ export function SavedScreen({ source = 'friend', placeId, editId }: Props) {
   };
 
   const title = editId ? 'Edit entry' : d.kind === 'friend' ? 'A friend told me' : 'Found it online';
-  if (editId && !existing.data) {
+  if (editId && (!existing.data || (existing.isFetching && !existing.isFetchedAfterMount))) {
     return (
       <SafeAreaView style={styles.root} edges={['top']}>
         <TopBar close compact title={title} onBack={() => router.back()} />

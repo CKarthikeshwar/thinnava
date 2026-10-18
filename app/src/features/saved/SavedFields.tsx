@@ -10,6 +10,7 @@ import { friendlyDate, todayIST } from '@/lib/dates';
 import { colors, fonts, radii, strokes, useMotion } from '@/theme';
 import type { FriendName, SavedKind } from './api';
 import { FriendNameSheet, type PickedFriend } from './FriendNameSheet';
+import { IS_WEB } from '@/lib/layout';
 
 export type SavedDraft = {
   kind: SavedKind;
@@ -159,9 +160,12 @@ export function SavedFields({ value: d, onChange, names, onChangePlace, flags = 
   );
 }
 
-/** One field arriving: fades up 8 px, 40 ms after the previous one. Just the children when not animating. */
+/**
+ * One field arriving: fades up 8 px, 40 ms after the previous one. Just the children when not animating.
+ * Not on web: there the entering animation leaves the fields absolutely positioned, so they overlap (spec §18.3: simpler animations).
+ */
 function Fill({ i, on, children }: { i: number; on: boolean; children: ReactNode }) {
-  if (!on) return <>{children}</>;
+  if (!on || IS_WEB) return <>{children}</>;
   return <Animated.View entering={FadeInDown.duration(250).delay(i * 40).withInitialValues({ transform: [{ translateY: 8 }] })}>{children}</Animated.View>;
 }
 

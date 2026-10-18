@@ -8,7 +8,7 @@ import { storage } from '@/lib/storage';
 import { IS_WEB } from '@/lib/layout';
 import { colors, fonts, radii, shadows } from '@/theme';
 
-const WAVE = require('../../../assets/images/cat-waving.png');
+const WAVE = require('../../../assets/images/cat-waving-small.png');
 const KEY = 'installCardGone';
 
 type InstallEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> };

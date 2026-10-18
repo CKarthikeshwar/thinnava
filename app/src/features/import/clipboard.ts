@@ -19,6 +19,9 @@ export function markClipboardHandled() {
   try { storage.set(KEY, Date.now()); } catch { /* best effort */ }
 }
 
+/** ✕ on the Home card: hide it for 6 hours. */
+export const hidePasteCard = markClipboardHandled;
+
 /** Reads the copied text (this is what shows Android's "pasted from clipboard" notice). */
 export async function readClipboard(): Promise<string> {
   return (await Clipboard.getStringAsync()).trim();

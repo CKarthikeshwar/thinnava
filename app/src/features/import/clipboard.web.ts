@@ -12,7 +12,11 @@ const recentlyHandled = () => {
   try { return Date.now() - (storage.getNumber(KEY) ?? 0) < QUIET_MS; } catch { return false; }
 };
 
-export function markClipboardHandled() {
+/** Web never notices a copy by itself, so pasting doesn't hide anything: Home stays paste-first (spec §18.3). */
+export function markClipboardHandled() {}
+
+/** ✕ on the Home paste card: hide it for 6 hours, as on Android. */
+export function hidePasteCard() {
   try { storage.set(KEY, Date.now()); } catch { /* best effort */ }
 }
 

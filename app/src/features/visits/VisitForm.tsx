@@ -71,7 +71,7 @@ export function VisitForm({ placeId, existing, date: initialDate, acceptTagId }:
         id, place_id: placeId, visited_on: date, rating, loved, disliked, price_per_person: priceNum,
         notes: notes.trim() || null, audience: effectiveAudience, companion_name_ids: companions.ids, new_companion_names: companions.newNames,
         tag_user_ids: companions.tags, ...(acceptTagId ? { accept_tag_id: acceptTagId } : {}),
-      }, `Visit to ${place.data?.name ?? 'a place'}`);
+      }, `Visit to ${place.data?.name ?? existing?.place_name ?? 'a place'}`);
       if (r.draft) {
         showSnack({ text: 'Saved as a draft · pick the place in Offline drafts' });
       } else if (r.queued) {
@@ -79,8 +79,8 @@ export function VisitForm({ placeId, existing, date: initialDate, acceptTagId }:
         const me = useAuth.getState().profile;
         showInFeed({
           entry_type: 'visit', id, created_at: new Date().toISOString(), author_id: me?.id ?? null, author_name: me?.display_name ?? null,
-          author_avatar: me?.avatar_url ?? null, is_mine: true, place_id: placeId, place_name: place.data?.name ?? '', place_area: place.data?.area ?? null,
-          place_category: place.data?.category ?? null, rating, loved, disliked, price_per_person: priceNum, visited_on: date,
+          author_avatar: me?.avatar_url ?? null, is_mine: true, place_id: placeId, place_name: place.data?.name ?? existing?.place_name ?? '', place_area: place.data?.area ?? existing?.place_area ?? null,
+          place_category: place.data?.category ?? existing?.place_category ?? null, rating, loved, disliked, price_per_person: priceNum, visited_on: date,
           companions: companionNames, is_private: !!onlyMe, friend_name: null, source_url: null, friend_user_id: null,
         }, ['all', 'mine']);
         showSnack({ text: "Saved · it'll sync when you're online" });
@@ -97,7 +97,8 @@ export function VisitForm({ placeId, existing, date: initialDate, acceptTagId }:
     }
   };
 
-  const p = place.data;
+  // If the place lookup is slow or fails (offline, no Google key), editing still shows the saved name.
+  const p = place.data ?? (existing ? { name: existing.place_name, area: existing.place_area, category: existing.place_category } : undefined);
   const audienceText = allLists.length ? audienceSummary(effectiveAudience, allLists) : 'All connections';
   return (
     <SafeAreaView style={styles.root} edges={['top']}>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { Heart, Lock, MapPin, ThumbsDown } from 'lucide-react-native';
@@ -30,6 +30,8 @@ export type EntryCardProps = {
   /** Just saved: starts tinted Pale Cobalt and fades to white (DESIGN.md "Share import"). */
   fresh?: boolean;
   onFreshDone?: () => void;
+  /** Laptop web: small actions shown on the card while the mouse is over it (spec §18.3). */
+  hoverActions?: ReactNode;
 };
 
 /** Pale Cobalt wash under the card's content that fades out after the card lands. */
@@ -45,9 +47,11 @@ function FreshTint({ onDone }: { onDone?: () => void }) {
 
 /** Home timeline card (DESIGN.md "Entry card"). Leads with who and where; verdict in the footer. */
 export function EntryCard(p: EntryCardProps) {
+  const [hovered, setHovered] = useState(false);
   const label = [[p.who.name, p.who.text].filter(Boolean).join(' '), p.place, p.rating ? `Rating ${p.rating}` : null].filter(Boolean).join(', ');
   return (
-    <Pressable onPress={p.onPress} pressScale={0.985} style={styles.card} accessibilityRole="button" accessibilityLabel={label}>
+    <Pressable onPress={p.onPress} pressScale={0.985} style={styles.card} accessibilityRole="button" accessibilityLabel={label}
+      onHoverIn={p.hoverActions ? () => setHovered(true) : undefined} onHoverOut={p.hoverActions ? () => setHovered(false) : undefined}>
       {p.fresh ? <FreshTint onDone={p.onFreshDone} /> : null}
       <View style={styles.top}>
         <Pressable onPress={p.onPressPerson} disabled={!p.onPressPerson} hitSlop={6}
@@ -105,6 +109,7 @@ export function EntryCard(p: EntryCardProps) {
           ) : null}
         </View>
       ) : null}
+      {hovered && p.hoverActions ? <View style={styles.hover}>{p.hoverActions}</View> : null}
     </Pressable>
   );
 }
@@ -112,6 +117,7 @@ export function EntryCard(p: EntryCardProps) {
 const INDENT = 51; // align lines under the name, past the 40 dp avatar
 
 const styles = StyleSheet.create({
+  hover: { position: 'absolute', right: 12, bottom: 11, flexDirection: 'row', gap: 6 },
   fresh: { backgroundColor: colors.primaryContainer, borderRadius: radii.card },
   card: { backgroundColor: colors.surface, borderRadius: radii.card, paddingTop: 14, paddingHorizontal: 14, paddingBottom: 13, boxShadow: shadows.card },
   top: { flexDirection: 'row', gap: 11, alignItems: 'flex-start' },

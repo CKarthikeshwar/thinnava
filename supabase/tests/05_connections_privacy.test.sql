@@ -33,7 +33,7 @@ select pg_temp.as_user('00000000-0000-0000-0000-0000000000b3');
 select is((select relation from public.search_people('anu3')), 'incoming', 'B sees an incoming request');
 select is((public.profile_page('00000000-0000-0000-0000-0000000000a3') ->> 'bio'), null, 'bio is hidden from non-connections');
 select public.respond_request('00000000-0000-0000-0000-0000000000a3', true);
-select is(public.is_connected('00000000-0000-0000-0000-0000000000a3', '00000000-0000-0000-0000-0000000000b3'), true, 'accepting connects');
+set local role postgres; select is(public.is_connected('00000000-0000-0000-0000-0000000000a3', '00000000-0000-0000-0000-0000000000b3'), true, 'accepting connects'); set local role authenticated;
 select is((public.profile_page('00000000-0000-0000-0000-0000000000a3') ->> 'bio'), 'Will travel for dosa', 'connections see the bio');
 select is((select count(*)::int from public.pending_list_prompts()), 1, 'accepting queues the E5 sheet for B');
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a3');
@@ -100,14 +100,14 @@ select is((public.profile_page('00000000-0000-0000-0000-0000000000a3') ->> 'bio'
 -- Block (§5.3)
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a3');
 select public.block_user('00000000-0000-0000-0000-0000000000d3');
-select is(public.is_connected('00000000-0000-0000-0000-0000000000a3', '00000000-0000-0000-0000-0000000000d3'), false, 'blocking removes the connection');
+set local role postgres; select is(public.is_connected('00000000-0000-0000-0000-0000000000a3', '00000000-0000-0000-0000-0000000000d3'), false, 'blocking removes the connection'); set local role authenticated;
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000d3');
 select is((select count(*)::int from public.search_people('anu')), 0, 'a blocked user cannot find me in search');
 select is(public.profile_page('00000000-0000-0000-0000-0000000000a3'), null, '…or open my profile');
 select throws_ok($$ select public.send_request('00000000-0000-0000-0000-0000000000a3') $$, 'P0001', 'blocked', '…or send me a request');
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a3');
 select public.unblock_user('00000000-0000-0000-0000-0000000000d3');
-select is(public.is_connected('00000000-0000-0000-0000-0000000000a3', '00000000-0000-0000-0000-0000000000d3'), false, 'unblocking does not restore the connection');
+set local role postgres; select is(public.is_connected('00000000-0000-0000-0000-0000000000a3', '00000000-0000-0000-0000-0000000000d3'), false, 'unblocking does not restore the connection'); set local role authenticated;
 
 select * from finish();
 rollback;

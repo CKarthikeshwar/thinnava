@@ -122,6 +122,8 @@ function Frame({ children }: { children: React.ReactNode }) {
   const mode = useLayoutMode();
   const status = useAuth((s) => s.status);
   const path = usePathname();
+  // Each page gets its own browser-tab title ("Search · Thinnava"), for tabs, history and screen readers.
+  useEffect(() => { if (mode !== 'app') document.title = pageTitle(path); }, [mode, path]);
   if (mode === 'app') return <>{children}</>;
   const tab = isTabPath(path);
   const bar = status === 'ready' && (mode === 'laptop' || tab);
@@ -134,6 +136,18 @@ function Frame({ children }: { children: React.ReactNode }) {
       </View>
     </View>
   );
+}
+
+const TITLES: [RegExp, string][] = [
+  [/^\/$/, 'Home'], [/^\/search/, 'Search'], [/^\/map/, 'Map'], [/^\/profile/, 'Profile'], [/^\/notifications/, 'Notifications'],
+  [/^\/connections/, 'Connections'], [/^\/lists/, 'Lists'], [/^\/settings/, 'Settings'], [/^\/people\//, 'Profile'],
+  [/^\/place\//, 'Place'], [/^\/entry\//, 'Entry'], [/^\/(visit|saved)\/(new|.+\/edit)/, 'Edit'], [/^\/pick-place/, 'Pick a place'],
+  [/^\/import/, 'Check what we found'], [/^\/tag\//, 'Tagged visit'], [/^\/setup/, 'Set up your profile'],
+];
+function pageTitle(path: string) {
+  if (path === '/welcome') return 'Thinnava · Every place your friends rave about';
+  const hit = TITLES.find(([re]) => re.test(path));
+  return hit ? `${hit[1]} · Thinnava` : 'Thinnava';
 }
 
 /** One snackbar host for the whole app, sitting just above the nav bar (web: no nav bar). */

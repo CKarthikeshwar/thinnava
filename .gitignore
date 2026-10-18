@@ -29,3 +29,5 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+# Non-secret production build switches (see the file)
+!app/.env.production

@@ -6,6 +6,7 @@ import { Avatar, Button, Dialog, Panel, Pressable, Screen, T, TopBar, showSnack 
 import { signOut } from '@/features/auth/api';
 import { useDraftCount, useOutbox } from '@/lib/outbox';
 import { useDrafts } from '@/lib/drafts';
+import { IS_WEB } from '@/lib/layout';
 import { hasNotificationSettings, openNotificationSettings } from '@/platform/settings/notifications';
 import { useAuth } from '@/features/auth/session';
 import { colors, fonts, shadows } from '@/theme';
@@ -29,7 +30,8 @@ export default function Settings() {
     [
       { icon: MessageCircle, label: 'Friend names', onPress: () => router.push('/settings/friend-names') },
       { icon: UserRound, label: 'Private companion names', onPress: () => router.push('/settings/companion-names') },
-      { icon: CloudOff, label: 'Offline drafts', onPress: () => router.push('/settings/drafts'), count: drafts },
+      // Offline saving isn't on the web yet (spec §18.3), so no drafts row there.
+      ...(IS_WEB ? [] : [{ icon: CloudOff, label: 'Offline drafts', onPress: () => router.push('/settings/drafts'), count: drafts }]),
     ],
     [
       ...(hasNotificationSettings ? [{ icon: Bell, label: 'Notifications', onPress: openNotificationSettings }] : []),

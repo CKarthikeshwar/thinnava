@@ -142,7 +142,8 @@ export default function EntryScreen() {
             {!e.rating && !e.loved.length && !e.disliked.length && !e.price && !e.date ? <T variant="meta">Nothing else was saved about it.</T> : null}
           </View>
         </Panel>
-        {e.link ? (
+        {/* Only web addresses are ever opened (spec §21.1); the database refuses anything else too. */}
+        {e.link && /^https?:\/\//i.test(e.link) ? (
           <Button label="Open link" variant="outline" icon={ExternalLink} small style={styles.link}
             onPress={() => Linking.openURL(e.link!).catch(() => showSnack({ text: "Couldn't open that link. Check it in your browser." }))} />
         ) : null}

@@ -12,6 +12,57 @@ Entry format:
 
 ---
 
+## 2026-10-18 · Website speed, accessibility and hover actions
+- **Speed:** production web builds now drop unused code (`app/.env.production` turns on Expo's tree shaking; it holds build switches only, no secrets, and is tracked through a `.gitignore` exception). The website's code went from 5.6 MB to 3.3 MB (1.0 MB → 0.76 MB compressed); every icon of the icon library used to ship, now only the ones we use do. The top bar and front page use a 14 KB logo (`assets/images/mark.png`) instead of the 470 KB app icon, the Add to Home Screen card a 41 KB cat (`cat-waving-small.png`) instead of 232 KB, and the cat illustrations were recompressed losslessly (−6%; their size is right for Android's high-density screens, so not shrunk). On a simulated slow phone connection the front page appeared after 22 s instead of 35 s on an uncompressed local server; Cloudflare also compresses, so the live site is faster than both. Every screen of the trimmed build was re-checked at laptop and phone width with no errors. Note for the release APK: the same switch applies to Android release bundles, so check the APK carefully when it's built.
+- **Accessibility (web):** a clear 2 px cobalt focus ring for keyboard users (mouse clicks don't show it), and each page has its own browser-tab title ("Search · Thinnava"). Checked: Tab order follows the top bar then the page, every button has a spoken name, the page language is English.
+- **Hover actions** (laptop Home, spec §18.3 updated): hovering a feed card shows Wishlist (not on my own visits), Directions and Swiggy. Wishlist checks the place first: "You've been to X, so it stays off your wishlist" or "X is already on your wishlist" instead of a misleading "Added" (the server already skips visited places).
+- **Spec:** §18.3.
+
+## 2026-10-18 · Setup guide updated for the web version and production
+- **What:** `docs/dev-setup.md` now covers every secret file the app needs (names and where to get them, never values: `app/.env` incl. `EAS_PROJECT_ID` and the empty Maps key, `app/google-services.json`, `supabase/.env` incl. `PUSH_WEBHOOK_SECRET`), the optional map seed, running the web version (`npm run web`, new script in `app/package.json`) and checking a Cloudflare-style build, the checks to run before committing, how to update the privacy policy and terms, where each production piece lives (Supabase prod, Cloudflare Pages, Google Auth Platform, Firebase, legal pages) with the release keeper's commands, and a second-laptop checklist.
+- **Why:** the guide predated push, the web version and production; needed when the owner switches laptops or a second person joins (CLAUDE.md reminder).
+- **Spec:** none (process doc).
+
+## 2026-10-18 · Security fixes applied (local and production)
+- **What:** the four findings from the review, with the owner's OK (including the production push):
+  1. **Privacy leak closed.** New migration `20261018134450_security_lockdown.sql`: signed-out visitors (`anon`) and the default `PUBLIC` role can no longer execute any of our functions (extension functions untouched; future functions too, via default privileges). `is_connected`, `has_blocked`, `in_audience`, `resolve_audience`, `can_see_visit_as` and `can_see_visit_social` are no longer callable through the API at all (other functions still use them as the owner). The two table rules that used them now call `private.blocked_me(user)` and `private.connected_to(user)`, which only answer about the signed-in user and live in a `private` schema the API doesn't expose.
+  2. **Link reader** (`links`): before each fetch and redirect it resolves the hostname and refuses private, loopback, link-local or shared addresses (tested: `localtest.me` → refused; `example.com` → works).
+  3. **Saved links:** database rule `saved_entries_link_http` (`source_url` must start with `http://` or `https://`); the entry screen only shows "Open link" for such links.
+  4. **Website headers:** `app/public/_headers` (X-Frame-Options DENY, frame-ancestors 'none', nosniff, referrer policy, Permissions-Policy allowing location only). Goes live with the next deploy.
+- **Tests:** new `supabase/tests/10_function_access.test.sql` (18 checks: signed-out refused, two-person helpers refused, bio / block rules still work, `javascript:` links refused); three checks in `05_connections_privacy` now call `is_connected` as the owner. **166 / 166 pass locally and on production.** On production, signed-out calls to `is_connected` / `has_blocked` now return "permission denied". Type-check and the web build pass.
+- **Production:** `supabase db push` (this migration only) and `supabase functions deploy links`. Note: on production `places`, `extract` and `links` still stop at startup until the Google Places key is added (production refuses practice data by design); unchanged by this work.
+- **Spec:** §21.1 ("Who may call functions"), §21.2 (profiles / profile_details rows), §21.3 (new test line), §23 (`links` address check), §18.3 (headers).
+
+## 2026-10-18 · Security review (findings; fixes waiting for the owner's OK)
+- **What:** read-only review against the local sandbox (same migrations as prod): table rules, database functions, a signed-out visitor and a signed-in stranger trying to read or change someone's data, the Edge Functions, the published website and git history.
+- **Fine:** every table has row-level security; a stranger sees none of another user's visits, wishlist, map, details, saved entries, lists or notifications, and can't insert, edit or delete their rows (`save_visit` with someone else's id saves as the caller); every security-definer function pins its search path; Edge Functions require sign-in (push requires its secret; delete-account only deletes the caller), with per-user daily limits and the global Google quota; no secret keys in the website or in git history.
+- **Found:**
+  1. **Privacy leak (high):** database functions were executable by everyone (the default PUBLIC grant), including signed-out visitors, and six internal helpers were also open to signed-in users. Given two user ids, anyone could learn whether they are connected (`is_connected`), whether one blocked the other (`has_blocked`) and whether someone is in a person's private lists (`in_audience`, `resolve_audience`, `can_see_visit_as`, `can_see_visit_social`). Ids are visible to signed-in users through search. Breaks §5 / §6 (lists and blocks are private).
+  2. **Low:** `links` blocks private addresses by name and on every redirect, but doesn't check what a public hostname resolves to.
+  3. **Low:** no database rule that a saved link is `http(s)`; the entry screen opens it directly (only the owner sees it, and links are only taken from messages when they start with http).
+  4. **Low:** the website doesn't tell browsers not to show it inside other sites' frames (clickjacking headers).
+- **Spec:** §5, §6, §21 (no change yet).
+
+## 2026-10-18 · Web check of every screen; four web fixes
+- **What:** every screen (22 routes) screenshotted at laptop (1440 × 900) and phone (390 × 844) width against the local sandbox, plus three real flows: log a visit with the `N` key (pick place → rate → price → save → shows on Home), paste a friend's WhatsApp message with Ctrl+V (read → "Which one?" → pick friend name → save → "Rahul told you about…" on Home), and sign out (→ front page). `/` focuses Search; Esc closes sheets. No page errors, nothing wider than the screen.
+- **Fixed:**
+  1. **Fields piled on top of each other** on the import screen (web only): the staggered fade-in of the filled fields left them absolutely positioned. The fade-in is off on web (Android keeps it).
+  2. **Edit forms could start from a stale cached copy** (seen on the web after a reload, would happen on Android too): Edit visit and Edit entry now wait for the fresh copy when online (offline they still use the cached one), and Edit visit shows the saved place name if the place lookup is slow or fails.
+  3. **"Offline drafts" row hidden on web**, where offline saving isn't available yet (§18.3).
+  4. **Phone-browser paste card** now only hides when ✕ is tapped (for 6 hours); pasting no longer hides it, so Home stays paste-first. The browser's own focus box inside text fields is hidden (our fields already show a blue focus border).
+- **Spec:** §18.3 (no change in behaviour beyond what it already says).
+
+## 2026-10-18 · Google sign-in set up for the website; consent screen published
+- **What (owner, in the consoles):** prod Supabase Site URL and redirect URL set to `https://thinnava.pages.dev`; Google provider in Supabase has the web client's secret; the `thinnava-free` web OAuth client lists `https://thinnava.pages.dev` as a JavaScript origin and the Supabase callback as a redirect URI. Sign-in on the live site works. The OAuth consent screen (Google Auth Platform) now has the site as home page, the privacy policy and terms on the owner's site, authorized domains `thinnava.pages.dev`, `ckarthikeshwar.github.io` and the prod Supabase domain, no logo (a logo triggers brand review), no extra scopes, and is **published (In production)** for external users.
+- **Why:** anyone with a Google account can now sign in on the app and the website, not only listed test users.
+- **Spec:** §27.4 (consent screen and legal pages), §18.3.
+
+## 2026-10-18 · Web version deployed to Cloudflare Pages
+- **What:** the owner created a free Cloudflare account (no card) and a Pages project connected to the GitHub repo: root `app`, build `npx expo export -p web`, output `dist`, branch `main`; build variables `APP_ENV=prod`, `NODE_VERSION=22`, the prod Supabase URL and publishable key (both public by design). Live at **https://thinnava.pages.dev**; every push to `main` redeploys. Checked: the page, `manifest.json` and deep links (`/search`) load, and the built app points at the prod backend, not the sandbox.
+- **Still to do for sign-in on the site:** prod Supabase Site URL and redirect URL → `https://thinnava.pages.dev`; Google provider in Supabase needs the client secret; the Google web client needs the site as a JavaScript origin and the Supabase callback as a redirect URI. While the OAuth consent screen is in Testing, only listed test users can sign in.
+- **Why:** M10 step 8 (release), owner's choice of Cloudflare.
+- **Spec:** §18.3 (hosting already recorded).
+
 ## 2026-10-18 · Web version built to the approved design (M10 step 6)
 - **What:** the web layout from §18.3 / `design/web.html`, replacing the earlier left-rail build. Android is unchanged (every change checks `useLayoutMode()`, which is always `'app'` on Android).
   - `lib/layout.ts`: `useLayoutMode()` → `app` · `phone` (browser < 1024 px) · `laptop`; `PAGE_MAX` 1160, `COLUMN_MAX` 720. The rail and centred-frame constants are gone.

@@ -59,18 +59,37 @@ function safeUrl(s: string) {
   const h = u.hostname.toLowerCase();
   if (h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) return false;
   if (/^\[?[0-9a-f:]+\]?$/.test(h) && h.includes(':')) return false; // IPv6 literal
-  const m = h.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
-  if (m) {
-    const [a, b] = [Number(m[1]), Number(m[2])];
-    if (a === 10 || a === 127 || a === 0 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127)) return false;
-  }
-  return true;
+  return !privateV4(h);
+}
+
+/** 10/8, 127/8, 0/8, 169.254/16, 172.16/12, 192.168/16, 100.64/10. Anything that isn't a dotted IPv4 address is false. */
+function privateV4(ip: string) {
+  const m = ip.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+  if (!m) return false;
+  const [a, b] = [Number(m[1]), Number(m[2])];
+  return a === 10 || a === 127 || a === 0 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127);
+}
+
+/**
+ * A public name can still point at a private address. Resolve it and refuse if any address is private (IPv4) or not a
+ * normal public IPv6 address (loopback, link-local fe80::/10, unique-local fc00::/7, IPv4-mapped).
+ */
+async function resolvesPublic(host: string) {
+  if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) return true; // a literal, already checked by safeUrl
+  const [v4, v6] = await Promise.all([
+    Deno.resolveDns(host, 'A').catch(() => [] as string[]),
+    Deno.resolveDns(host, 'AAAA').catch(() => [] as string[]),
+  ]);
+  if (!v4.length && !v6.length) return false;
+  if (v4.some(privateV4)) return false;
+  return !v6.some((ip) => { const x = ip.toLowerCase(); return x === '::1' || x === '::' || /^fe[89ab]/.test(x) || /^f[cd]/.test(x) || x.startsWith('::ffff:'); });
 }
 
 /** Follows redirects by hand (each hop re-checked), then reads up to 512 KB of HTML when asked. */
 async function follow(start: string, wantHtml: boolean) {
   let url = start;
   for (let hop = 0; hop <= MAX_HOPS; hop++) {
+    if (!(await resolvesPublic(new URL(url).hostname))) throw new Error('unsafe_address');
     const res = await fetch(url, { redirect: 'manual', headers: { 'User-Agent': UA, Accept: 'text/html,*/*' }, signal: AbortSignal.timeout(5000) });
     const loc = res.headers.get('location');
     if (res.status >= 300 && res.status < 400 && loc) {

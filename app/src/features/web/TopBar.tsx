@@ -11,7 +11,7 @@ import { openImport, pasteMessage } from '@/features/import/paste';
 import { useEscape, type LayoutMode } from '@/lib/layout';
 import { colors, fonts, radii, shadows } from '@/theme';
 
-const ICON = require('../../../assets/icon.png');
+const ICON = require('../../../assets/images/mark.png');
 
 export const TABS = [
   { path: '/', label: 'Home' },

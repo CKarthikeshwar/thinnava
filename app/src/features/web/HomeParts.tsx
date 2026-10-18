@@ -1,12 +1,14 @@
 import type { ReactNode } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ClipboardPaste, Heart, X } from 'lucide-react-native';
-import { Pressable, T } from '@/components';
+import { Pressable, T, showSnack } from '@/components';
 import { notificationsPage } from '@/features/notifications/api';
 import { NotifRow, useAnswerRequest } from '@/features/notifications/NotifRow';
-import { myWishlist } from '@/features/visits/api';
+import { myWishlist, placePage, setWishlist } from '@/features/visits/api';
+import { directionsUrl, open, swiggyUrl } from '@/features/handoff/urls';
+import { friendlyError } from '@/lib/errors';
 import { pasteMessage } from '@/features/import/paste';
 import { PASTE_TEXT } from '@/features/import/clipboard';
 import { colors, fonts, radii, shadows, space } from '@/theme';
@@ -125,4 +127,41 @@ const styles = StyleSheet.create({
   heroText: { fontFamily: fonts.body, fontSize: 14, lineHeight: 19, color: colors.onPrimary, opacity: 0.9, marginTop: 3 },
   heroBtn: { height: 48, borderRadius: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
   heroBtnText: { fontFamily: fonts.bodyHeavy, fontSize: 15.5, color: colors.primaryStrong },
+});
+
+/**
+ * Laptop Home: the actions shown on a feed card while the mouse is over it (spec §18.3). Wishlist only on other people's
+ * entries; Directions and Swiggy are the §11.1 links.
+ */
+export function CardHoverActions({ placeId, placeName, wishlist }: { placeId: string; placeName: string; wishlist: boolean }) {
+  const qc = useQueryClient();
+  const add = async () => {
+    try {
+      // Places I've been to never go on my wishlist (the server skips them too), so say so instead of "Added".
+      const page = await qc.fetchQuery({ queryKey: ['placePage', placeId], queryFn: () => placePage(placeId), staleTime: 0 });
+      if (page.my_visits.length) return showSnack({ text: `You've been to ${placeName}, so it stays off your wishlist` });
+      if (page.on_wishlist) return showSnack({ text: `${placeName} is already on your wishlist` });
+      await setWishlist(placeId, true, placeName);
+      await Promise.all([qc.invalidateQueries({ queryKey: ['myWishlist'] }), qc.invalidateQueries({ queryKey: ['placePage', placeId] })]);
+      showSnack({ text: `Added ${placeName} to your wishlist` });
+    } catch (e) { showSnack({ text: friendlyError(e) }); }
+  };
+  const chip = (label: string, onPress: () => void, Icon?: typeof Heart) => (
+    <Pressable key={label} onPress={onPress} pressScale={0.95} style={actStyles.act} accessibilityLabel={`${label}: ${placeName}`}>
+      {Icon ? <Icon size={14} color={colors.onPrimaryContainer} strokeWidth={2.2} /> : null}
+      <T style={actStyles.actText}>{label}</T>
+    </Pressable>
+  );
+  return (
+    <>
+      {wishlist ? chip('Wishlist', add, Heart) : null}
+      {chip('Directions', () => open(directionsUrl(placeName, placeId)))}
+      {chip('Swiggy', () => open(swiggyUrl(placeName)))}
+    </>
+  );
+}
+
+const actStyles = StyleSheet.create({
+  act: { flexDirection: 'row', alignItems: 'center', gap: 5, height: 32, paddingHorizontal: 11, borderRadius: 10, backgroundColor: colors.surfaceTint },
+  actText: { fontFamily: fonts.bodyHeavy, fontSize: 13, color: colors.onPrimaryContainer },
 });
