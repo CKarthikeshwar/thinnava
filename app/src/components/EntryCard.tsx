@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { Heart, Lock, MapPin, ThumbsDown } from 'lucide-react-native';
-import { colors, radii, shadows } from '@/theme';
+import { colors, curves, radii, shadows, useMotion } from '@/theme';
 import { Avatar, SourceMark } from './Avatar';
 import { Pressable } from './Pressable';
 import { ReviewPill, type Rating } from './ReviewPill';
@@ -25,13 +27,28 @@ export type EntryCardProps = {
   onPress?: () => void;
   /** Avatar / mark and name open that person's profile (spec §14 B1). Omitted when there's no account to open. */
   onPressPerson?: () => void;
+  /** Just saved: starts tinted Pale Cobalt and fades to white (DESIGN.md "Share import"). */
+  fresh?: boolean;
+  onFreshDone?: () => void;
 };
+
+/** Pale Cobalt wash under the card's content that fades out after the card lands. */
+function FreshTint({ onDone }: { onDone?: () => void }) {
+  const { d } = useMotion();
+  const o = useSharedValue(1);
+  useEffect(() => {
+    o.value = withDelay(d(400), withTiming(0, { duration: d(900), easing: curves.standard }, (ok) => { if (ok && onDone) runOnJS(onDone)(); }));
+  }, []);
+  const style = useAnimatedStyle(() => ({ opacity: o.value }));
+  return <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.fresh, style]} />;
+}
 
 /** Home timeline card (DESIGN.md "Entry card"). Leads with who and where; verdict in the footer. */
 export function EntryCard(p: EntryCardProps) {
   const label = [[p.who.name, p.who.text].filter(Boolean).join(' '), p.place, p.rating ? `Rating ${p.rating}` : null].filter(Boolean).join(', ');
   return (
     <Pressable onPress={p.onPress} pressScale={0.985} style={styles.card} accessibilityRole="button" accessibilityLabel={label}>
+      {p.fresh ? <FreshTint onDone={p.onFreshDone} /> : null}
       <View style={styles.top}>
         <Pressable onPress={p.onPressPerson} disabled={!p.onPressPerson} hitSlop={6}
           accessibilityRole={p.onPressPerson ? 'button' : undefined} accessibilityLabel={p.onPressPerson ? `Open ${p.who.name}'s profile` : undefined}>
@@ -95,6 +112,7 @@ export function EntryCard(p: EntryCardProps) {
 const INDENT = 51; // align lines under the name, past the 40 dp avatar
 
 const styles = StyleSheet.create({
+  fresh: { backgroundColor: colors.primaryContainer, borderRadius: radii.card },
   card: { backgroundColor: colors.surface, borderRadius: radii.card, paddingTop: 14, paddingHorizontal: 14, paddingBottom: 13, boxShadow: shadows.card },
   top: { flexDirection: 'row', gap: 11, alignItems: 'flex-start' },
   head: { flex: 1, minWidth: 0 },

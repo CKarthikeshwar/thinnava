@@ -1,6 +1,10 @@
 -- Connections, blocks and lists (spec §5, §8, §21.3).
 begin;
 create extension if not exists pgtap with schema extensions;
+-- Run as postgres with pgTAP's schema on the path, so the tests also run on the hosted project, where the CLI's
+-- temporary login role is a member of postgres but doesn't use its rights by default.
+set local role postgres;
+set search_path to public, extensions;
 select plan(32);
 
 insert into auth.users (id, email) values

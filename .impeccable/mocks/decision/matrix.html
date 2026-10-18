@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Who-said-what grid</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2350D9;--ps:#16348F;--pc:#DBE4FF;--opc:#0E2266;--bg:#EEF2FF;--s:#fff;--tint:#E6ECFF;--ink:#10183A;--soft:#46507A;--mut:#5C668C;--hair:#D9E0F7;--good:#17703E;--gw:#DDF2E4;--ok:#845300;--ow:#FBEFD2;--bad:#A8301F;--bw:#FADFDB}
+*{box-sizing:border-box}body{margin:0;width:1440px;height:900px;overflow:hidden;background:var(--bg);font-family:Nunito,sans-serif;color:var(--ink);display:flex}
+.rail{width:96px;background:var(--s);border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:22px}
+.add{width:52px;height:52px;border-radius:18px;background:var(--p);color:#fff;font-size:30px;display:grid;place-items:center}
+.nav{display:flex;flex-direction:column;gap:14px;align-items:center}.nav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--soft)}
+.ic{width:56px;height:30px;border-radius:16px;display:grid;place-items:center}.on .ic{background:var(--pc)}.on{color:var(--ink)!important;font-weight:800!important}
+main{flex:1;padding:18px 24px;display:flex;flex-direction:column;min-width:0;gap:14px}
+.top{display:flex;align-items:center;gap:12px}h1{font-family:Fredoka;font-weight:600;font-size:26px;margin:0 6px 0 0;color:var(--ps)}
+.chip{height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--hair);display:flex;align-items:center;font-weight:700;font-size:13.5px;color:var(--soft);background:var(--s)}.chip.s{background:var(--pc);border-color:var(--pc);color:var(--opc)}
+.q{font-family:Fredoka;font-weight:600;font-size:17px;margin-right:2px}.sp{flex:1}
+.paste{height:42px;padding:0 18px;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center}
+.wrap{flex:1;display:flex;gap:16px;min-height:0}
+.grid{flex:1;background:var(--s);border-radius:24px;overflow:hidden;box-shadow:0 1px 2px rgba(20,30,50,.05),0 10px 28px -16px rgba(20,30,50,.3)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--hair);vertical-align:top}
+th{font-size:12.5px;color:var(--mut);font-weight:800;background:#FAFBFF;position:sticky;top:0}
+.who{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:14px}.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:800}
+.pl{font-family:Fredoka;font-weight:600;font-size:16.5px}.ps{font-size:12.5px;color:var(--mut);font-weight:600}
+.pill{font-size:12.5px;font-weight:800;border-radius:999px;padding:3px 10px;display:inline-block}.g{background:var(--gw);color:var(--good)}.o{background:var(--ow);color:var(--ok)}.bd{background:var(--bw);color:var(--bad)}
+.d{font-size:12.5px;color:var(--soft);margin-top:5px}.none{color:#B4BCD8;font-weight:800}
+tr.on td{background:#F4F7FF}.agree{font-size:12px;font-weight:800;color:var(--good)}.split{font-size:12px;font-weight:800;color:var(--ok)}
+.drawer{width:340px;background:var(--s);border-radius:24px;padding:20px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 10px 28px -16px rgba(20,30,50,.3)}
+.drawer h3{font-family:Fredoka;font-weight:600;font-size:23px;margin:0}.sub{font-size:13.5px;color:var(--mut);font-weight:700}
+.take{padding:12px 0;border-top:1px solid var(--hair);font-size:14px;color:var(--soft)}.take:first-of-type{margin-top:14px}.take b{color:var(--ink)}
+.acts{display:flex;gap:8px;margin-top:12px}.acts span{flex:1;height:44px;border-radius:999px;display:grid;place-items:center;font-weight:800;font-size:14px}
+</style></head><body>
+<nav class="rail"><div class="add">+</div><div class="nav"><div class="on"><span class="ic">⌂</span>Home</div><div><span class="ic">⌕</span>Search</div><div><span class="ic">◫</span>Map</div><div><span class="ic">☰</span>Lists</div><div><span class="ic">◉</span>Profile</div></div></nav>
+<main>
+<div class="top"><h1>Thinnava</h1><span class="q">Where tonight?</span><span class="chip s">Indiranagar ✕</span><span class="chip">Under ₹500</span><span class="chip">Any type ▾</span><span class="chip">Sort: most agreed ▾</span><span class="sp"></span><span class="paste">⎘ Paste a message</span></div>
+<div class="wrap"><div class="grid"><table>
+<tr><th style="width:260px">Place</th><th><span class="who"><span class="av" style="background:#4D76B0">C</span>You</span></th><th><span class="who"><span class="av" style="background:#CB4A27">TF</span>Test</span></th><th><span class="who"><span class="av" style="background:#567F43">CR</span>Chitra</span></th><th><span class="who"><span class="av" style="background:var(--tint);color:var(--ps)">☺</span>Rahul (tips)</span></th><th>Verdict</th></tr>
+<tr class="on"><td><div class="pl">Third Wave Coffee</div><div class="ps">Café · ₹300–350</div></td><td class="none">–</td><td><span class="pill g">☺ Good</span><div class="d">♡ Cold brew tonic</div></td><td><span class="pill o">◔ Okayish</span><div class="d">👎 Loud on weekends</div></td><td class="none">–</td><td><span class="split">Split</span></td></tr>
+<tr><td><div class="pl">Hatti Kaapi</div><div class="ps">Café · ₹120</div></td><td><span class="pill g">☺ Good</span><div class="d">♡ Filter coffee</div></td><td><span class="pill g">☺ Good</span><div class="d">♡ Bun maska</div></td><td class="none">–</td><td class="none">–</td><td><span class="agree">Both liked</span></td></tr>
+<tr><td><div class="pl">Burma Burma</div><div class="ps">Restaurant · ₹450</div></td><td class="none">–</td><td><span class="pill o">◔ Okayish</span><div class="d">♡ Tea leaf salad</div></td><td><span class="pill g">☺ Good</span><div class="d">♡ Khow suey</div></td><td><span class="pill g">☺ Good</span><div class="d">♡ Samosa soup</div></td><td><span class="agree">2 of 3 liked</span></td></tr>
+<tr><td><div class="pl">Glen's Bakehouse</div><div class="ps">Bakery · ₹280</div></td><td class="none">–</td><td class="none">–</td><td><span class="pill g">☺ Good</span><div class="d">♡ Red velvet</div></td><td class="none">–</td><td><span class="agree">Liked</span></td></tr>
+<tr><td><div class="pl">Leon Grill</div><div class="ps">Fast food · ₹250</div></td><td><span class="pill bd">☹ Bad</span><div class="d">👎 Soggy fries</div></td><td class="none">–</td><td class="none">–</td><td><span class="pill g">☺ Good</span><div class="d">♡ Peri peri fries</div></td><td><span class="split">Split</span></td></tr>
+<tr><td><div class="pl">Chai Point</div><div class="ps">Tea shop · ₹90</div></td><td class="none">–</td><td class="none">–</td><td><span class="pill g">☺ Good</span><div class="d">♡ Ginger chai</div></td><td class="none">–</td><td><span class="agree">Liked</span></td></tr>
+</table></div>
+<aside class="drawer"><h3>Third Wave Coffee</h3><div class="sub">Indiranagar · Café · 1.2 km</div>
+<div class="take"><b>Test</b> · ☺ Good · loved the cold brew tonic · ₹350 · Oct 13</div>
+<div class="take"><b>Chitra</b> · ◔ Okayish · too loud on weekends · ₹300 · Oct 2</div>
+<div class="acts"><span style="background:var(--p);color:#fff">Open place</span><span style="background:var(--pc);color:var(--opc)">Directions</span></div>
+<div class="acts"><span style="background:var(--pc);color:var(--opc)">♡ Wishlist</span><span style="background:var(--pc);color:var(--opc)">+ Log a visit</span></div></aside></div>
+</main></body></html>

@@ -47,7 +47,7 @@ export function ProfileForm({ initial, ownUsername, showBio = true, submitLabel,
   }, [username, ownUsername]);
 
   const status: FieldStatus =
-    check === 'checking' ? { kind: 'neutral', text: 'Checking…' }
+    check === 'checking' ? { kind: 'checking', text: 'Checking…' }
     // Your own unchanged username just shows the ✓ (F3 mockup); a new one says it's available.
     : check === 'available' ? { kind: 'success', text: ownUsername && username === ownUsername ? '' : `@${username} is available` }
     : check === 'taken' ? { kind: 'error', text: `@${username} is taken. Try another.` }

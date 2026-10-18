@@ -10,7 +10,7 @@ import { createList } from '@/features/people/api';
 import { useRefreshPeople } from '@/features/people/components';
 import { myLists } from '@/features/visits/api';
 import { friendlyError } from '@/lib/errors';
-import { colors, fonts, radii, shadows, space } from '@/theme';
+import { colors, fonts, radii, shadows, space, MAX_FONT_SCALE } from '@/theme';
 
 /** E6 My lists (spec §8, §14): All connections (count, automatic), custom lists, Only me, + New list. Max 20 custom lists. */
 export default function MyLists() {
@@ -55,7 +55,7 @@ export default function MyLists() {
       <Sheet ref={sheet} title="New list">
         <View style={styles.newBox}>
           <View style={styles.field}>
-            <BottomSheetTextInput value={name} onChangeText={(t) => setName(t.slice(0, 30))} placeholder="Close friends, College, Office…" placeholderTextColor={colors.inkMuted}
+            <BottomSheetTextInput maxFontSizeMultiplier={MAX_FONT_SCALE} value={name} onChangeText={(t) => setName(t.slice(0, 30))} placeholder="Close friends, College, Office…" placeholderTextColor={colors.inkMuted}
               style={styles.input} autoCapitalize="words" returnKeyType="done" onSubmitEditing={() => name.trim() && create()} />
           </View>
           <Button label="Create list" disabled={!name.trim()} onPress={create} />

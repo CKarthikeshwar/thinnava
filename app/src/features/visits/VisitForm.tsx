@@ -12,7 +12,9 @@ import { CategoryThumb } from '@/features/places/components';
 import { friendlyError } from '@/lib/errors';
 import { friendlyDate, todayIST } from '@/lib/dates';
 import { colors, fonts, radii, space, strokes } from '@/theme';
-import { ENTRY_KEYS, myCompanionNames, myLists, saveVisit, type EntryDetail } from './api';
+import { ENTRY_KEYS, myCompanionNames, myLists, saveVisit, showInFeed, type EntryDetail } from './api';
+import { useAuth } from '@/features/auth/session';
+import { markFresh } from '@/lib/fresh';
 import { myConnections } from '@/features/people/api';
 import { AudienceSheet, audienceSummary } from './AudienceSheet';
 import { CompanionSheet, type Companions } from './CompanionSheet';
@@ -69,9 +71,24 @@ export function VisitForm({ placeId, existing, date: initialDate, acceptTagId }:
         id, place_id: placeId, visited_on: date, rating, loved, disliked, price_per_person: priceNum,
         notes: notes.trim() || null, audience: effectiveAudience, companion_name_ids: companions.ids, new_companion_names: companions.newNames,
         tag_user_ids: companions.tags, ...(acceptTagId ? { accept_tag_id: acceptTagId } : {}),
-      });
-      await Promise.all(ENTRY_KEYS.map((k) => qc.invalidateQueries({ queryKey: k })));
-      showSnack({ text: acceptTagId ? 'Saved · tag accepted' : r.removed_from_wishlist ? 'Saved · moved from your wishlist' : existing ? 'Saved' : 'Visit saved' });
+      }, `Visit to ${place.data?.name ?? 'a place'}`);
+      if (r.draft) {
+        showSnack({ text: 'Saved as a draft · pick the place in Offline drafts' });
+      } else if (r.queued) {
+        // Offline (spec §13): it shows on Home now and syncs when the phone is back online.
+        const me = useAuth.getState().profile;
+        showInFeed({
+          entry_type: 'visit', id, created_at: new Date().toISOString(), author_id: me?.id ?? null, author_name: me?.display_name ?? null,
+          author_avatar: me?.avatar_url ?? null, is_mine: true, place_id: placeId, place_name: place.data?.name ?? '', place_area: place.data?.area ?? null,
+          place_category: place.data?.category ?? null, rating, loved, disliked, price_per_person: priceNum, visited_on: date,
+          companions: companionNames, is_private: !!onlyMe, friend_name: null, source_url: null, friend_user_id: null,
+        }, ['all', 'mine']);
+        showSnack({ text: "Saved · it'll sync when you're online" });
+      } else {
+        await Promise.all(ENTRY_KEYS.map((k) => qc.invalidateQueries({ queryKey: k })));
+        showSnack({ text: acceptTagId ? 'Saved · tag accepted' : r.data?.removed_from_wishlist ? 'Saved · moved from your wishlist' : existing ? 'Saved' : 'Visit saved' });
+      }
+      if (!existing && !r.draft) markFresh(id);
       router.back();
       if (companions.tags.length) askPushInContext();
     } catch (e) {

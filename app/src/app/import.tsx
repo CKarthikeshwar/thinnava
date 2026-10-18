@@ -4,6 +4,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { randomUUID } from 'expo-crypto';
+import { isOnline } from '@/lib/net';
+import { markFresh } from '@/lib/fresh';
+import { addPendingShare } from '@/lib/drafts';
 import { Image } from 'expo-image';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
@@ -17,9 +20,9 @@ import {
   extractText, findUrl, LOW_CONFIDENCE, myFriendNames, resolveLink, SAVED_KEYS, saveSaved,
   type ExtractedItem, type SavedKind,
 } from '@/features/saved/api';
-import { toInput } from '@/features/saved/draft';
+import { toFeedItem, toInput } from '@/features/saved/draft';
 import { canSave, emptyDraft, SavedFields, type Flags, type SavedDraft } from '@/features/saved/SavedFields';
-import { placePage, setWishlist } from '@/features/visits/api';
+import { placePage, setWishlist, showInFeed } from '@/features/visits/api';
 import { FnError } from '@/lib/functions';
 import { getNear } from '@/lib/location';
 import { formatDistance } from '@/lib/format';
@@ -69,6 +72,13 @@ function Import() {
     if (started.current) return;
     started.current = true;
     markClipboardHandled();
+    // Offline (spec §13): AI can't read it now, so keep it on the phone and read it on the next online open.
+    if (!isOnline()) {
+      addPendingShare(text);
+      showSnack({ text: "Saved. We'll read it when you're online." });
+      router.back();
+      return;
+    }
     read(text, params.url ?? findUrl(text), params.source).then(setPhaseFromRead);
   }, []);
 
@@ -119,11 +129,15 @@ function Import() {
     setBusy(true);
     try {
       const d = current.draft;
-      const r = await saveSaved(toInput(randomUUID(), d));
-      if (alsoWishlist && !beenThere && d.place) await setWishlist(d.place.placeId, true);
-      // A friend name created by this save is now a normal name for the next items.
-      if (d.friend?.isNew && r.friend_name_id) {
-        const items = phase.items.map((it) => it.draft.friend?.id === d.friend!.id ? { ...it, draft: { ...it.draft, friend: { ...it.draft.friend!, id: r.friend_name_id!, isNew: false } } } : it);
+      const newId = randomUUID();
+      const r = await saveSaved(toInput(newId, d), d.kind === 'friend' ? `${d.friend!.name}'s tip about ${d.place!.name}` : `${d.place!.name}, found online`);
+      if (r.queued) showInFeed(toFeedItem(newId, d), ['all', d.kind === 'friend' ? 'friends' : 'internet']);
+      markFresh(newId);
+      if (alsoWishlist && !beenThere && d.place) await setWishlist(d.place.placeId, true, d.place.name);
+      // A friend name created by this save is now a normal name for the next items (offline: it keeps the id made here).
+      const friendId = r.data?.friend_name_id ?? (r.queued ? d.friend?.id : null);
+      if (d.friend?.isNew && friendId) {
+        const items = phase.items.map((it) => it.draft.friend?.id === d.friend!.id ? { ...it, draft: { ...it.draft, friend: { ...it.draft.friend!, id: friendId, isNew: false } } } : it);
         setPhase({ ...phase, items });
       }
       await Promise.all([...SAVED_KEYS, ['myWishlist']].map((k) => qc.invalidateQueries({ queryKey: k })));
@@ -178,7 +192,7 @@ function Import() {
               {caption.trim() ? <Button label="Read caption" variant="tonal" small onPress={readCaption} style={{ alignSelf: 'flex-start' }} /> : null}
             </View>
           ) : null}
-          <SavedFields value={current.draft} onChange={patch} names={names.data ?? []} flags={current.flags}
+          <SavedFields value={current.draft} onChange={patch} names={names.data ?? []} flags={current.flags} fillIn
             onChangePlace={() => {
               if (current.candidates.length > 1) setPhase({ ...phase, kind: 'which' });
               else router.push({ pathname: '/pick-place', params: { for: 'select', q: current.draft.place?.name ?? '' } });

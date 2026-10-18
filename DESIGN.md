@@ -322,7 +322,7 @@ White, 28px top corners, 36x4 hairline handle, title in Fredoka 20px, option row
 White pill bubbles with a rotated-square tail: a 24px avatar (who) or a 24px Surface Tint glyph circle (heart = wishlist, check = went, globe = internet), then the place name in 12.5px 800. The user's own pins invert to Cobalt Blue with white text. Busy areas collapse to a 38px Deep Cobalt cluster with a white halo; the user's location is a Cobalt Blue dot with white and translucent primary rings.
 
 ### Avatars and Source Marks
-Initials avatars are 40px circles (28px small, 24px in stacks with a 2px surface ring and -7px overlap) in five fixed tints (`#E07A5F`, `#6C8EBF`, `#7FB069`, `#B07AA1`, `#E3A73B`). Entries not posted by a person use a 40px Surface Tint source mark with a Deep Cobalt icon: person for "friend told you", globe for internet.
+Initials avatars are 40px circles (28px small, 24px in stacks with a 2px surface ring and -7px overlap) in five fixed tints (`#CB4A27`, `#4D76B0`, `#567F43`, `#A05F8E`, `#9A6B16`; darkened on 2026-10-17 so white initials reach 4.5:1). Entries not posted by a person use a 40px Surface Tint source mark with a Deep Cobalt icon: person for "friend told you", globe for internet.
 
 ## Motion
 

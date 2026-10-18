@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Three-pane desk</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2350D9;--ps:#16348F;--pc:#DBE4FF;--opc:#0E2266;--bg:#EEF2FF;--s:#fff;--tint:#E6ECFF;--ink:#10183A;--soft:#46507A;--mut:#5C668C;--hair:#D9E0F7;--good:#17703E;--gw:#DDF2E4;--ok:#845300;--ow:#FBEFD2;--bad:#A8301F;--bw:#FADFDB}
+*{box-sizing:border-box}body{margin:0;width:1440px;height:900px;overflow:hidden;background:var(--bg);font-family:Nunito,sans-serif;color:var(--ink);display:flex}
+.side{width:260px;padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.brand{font-family:Fredoka;font-weight:600;font-size:26px;color:var(--ps);padding:0 10px 14px}
+.new{height:46px;border-radius:16px;background:var(--p);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px}
+.paste{height:42px;border-radius:16px;background:var(--ink);color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.it{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:14px;font-weight:700;font-size:14.5px;color:var(--soft)}.it.on{background:var(--pc);color:var(--opc);font-weight:800}.it .c{margin-left:auto;font-size:12.5px;color:var(--mut)}
+.lab{font-size:12px;font-weight:800;color:var(--mut);padding:14px 12px 4px}
+.list{width:440px;background:var(--s);border-left:1px solid var(--hair);border-right:1px solid var(--hair);display:flex;flex-direction:column}
+.lh{padding:18px 18px 10px}.lh h2{font-family:Fredoka;font-weight:600;font-size:24px;margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{height:32px;padding:0 12px;border-radius:10px;border:1px solid var(--hair);display:flex;align-items:center;font-weight:700;font-size:13px;color:var(--soft)}.chip.s{background:var(--pc);border-color:var(--pc);color:var(--opc)}
+.row{display:flex;gap:12px;padding:13px 18px;border-top:1px solid var(--hair)}.row.on{background:#F4F7FF;box-shadow:inset 3px 0 0 var(--p)}
+.th{width:46px;height:46px;border-radius:14px;background:var(--tint);display:grid;place-items:center;font-size:19px;flex:none}
+.rn{font-weight:800;font-size:15.5px}.rs{font-size:12.5px;color:var(--mut);font-weight:600}.rd{font-size:13px;color:var(--soft);margin-top:3px}
+.rr{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}.faces{display:flex}.faces i{width:24px;height:24px;border-radius:50%;border:2px solid #fff;margin-left:-7px;color:#fff;font-style:normal;font-size:10px;display:grid;place-items:center}
+.pill{font-size:12px;font-weight:800;border-radius:999px;padding:3px 9px}.g{background:var(--gw);color:var(--good)}.o{background:var(--ow);color:var(--ok)}
+.det{flex:1;padding:24px 30px;min-width:0}
+.det h1{font-family:Fredoka;font-weight:600;font-size:34px;margin:0}.sub{font-size:14px;color:var(--mut);font-weight:700;margin-top:2px}
+.acts{display:flex;gap:8px;margin-top:16px}.acts span{height:44px;padding:0 18px;border-radius:999px;display:flex;align-items:center;font-weight:800;font-size:14px;background:var(--pc);color:var(--opc)}.acts .p{background:var(--p);color:#fff}
+.sec{font-family:Fredoka;font-weight:600;font-size:20px;margin:24px 0 10px}
+.take{background:#fff;border-radius:20px;padding:16px 18px;margin-bottom:10px;display:flex;gap:12px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 8px 22px -16px rgba(20,30,50,.3)}
+.take>i{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-style:normal;font-weight:800;font-size:13px}
+.tw{font-size:15px}.tw b{font-weight:800}.tl{font-size:14px;color:var(--soft);margin-top:6px}.tm{font-size:12.5px;color:var(--mut);font-weight:700;margin-top:8px}
+</style></head><body>
+<aside class="side"><div class="brand">Thinnava</div><div class="new">+ Log a visit</div><div class="paste">⎘ Paste a message</div>
+<div class="it on">⌂ Where tonight?</div><div class="it">≋ Feed <span class="c">12 new</span></div><div class="it">◫ Map</div><div class="it">♡ Wishlist <span class="c">25</span></div><div class="it">☺ Friend tips <span class="c">15</span></div>
+<div class="lab">Lists</div><div class="it">● Close friends <span class="c">3</span></div><div class="it">● College</div>
+<div class="lab">People</div><div class="it">TF · Test</div><div class="it">CR · Chitra</div></aside>
+<section class="list"><div class="lh"><h2>Where tonight?</h2><div class="chips"><span class="chip s">Indiranagar ✕</span><span class="chip">Under ₹500</span><span class="chip">Any type ▾</span><span class="chip s">People I know</span></div></div>
+<div class="row on"><span class="th">☕</span><div><div class="rn">Third Wave Coffee</div><div class="rs">Café · ₹300–350 · 1.2 km</div><div class="rd">Test loved the cold brew tonic</div></div><div class="rr"><span class="faces"><i style="background:#CB4A27">TF</i><i style="background:#567F43">CR</i></span><span class="pill o">Split</span></div></div>
+<div class="row"><span class="th">☕</span><div><div class="rn">Hatti Kaapi</div><div class="rs">Café · ₹120 · 0.8 km</div><div class="rd">Test loved the bun maska</div></div><div class="rr"><span class="faces"><i style="background:#CB4A27">TF</i><i style="background:#4D76B0">C</i></span><span class="pill g">2 Good</span></div></div>
+<div class="row"><span class="th">🍜</span><div><div class="rn">Burma Burma</div><div class="rs">Restaurant · ₹450 · 1.4 km</div><div class="rd">Chitra loved the khow suey</div></div><div class="rr"><span class="faces"><i style="background:#567F43">CR</i><i style="background:#CB4A27">TF</i></span><span class="pill g">1 Good</span></div></div>
+<div class="row"><span class="th">🧁</span><div><div class="rn">Glen's Bakehouse</div><div class="rs">Bakery · ₹280 · 1.1 km</div><div class="rd">Chitra loved the red velvet</div></div><div class="rr"><span class="faces"><i style="background:#567F43">CR</i></span><span class="pill g">Good</span></div></div>
+<div class="row"><span class="th">🫖</span><div><div class="rn">Chai Point</div><div class="rs">Tea shop · ₹90 · 0.5 km</div><div class="rd">Chitra loved the ginger chai</div></div><div class="rr"><span class="faces"><i style="background:#567F43">CR</i></span><span class="pill g">Good</span></div></div>
+</section>
+<section class="det"><h1>Third Wave Coffee</h1><div class="sub">Indiranagar · Café · 100 Feet Road</div>
+<div class="acts"><span class="p">Directions</span><span>Swiggy</span><span>♡ Wishlist</span><span>+ I went here</span></div>
+<div class="sec">What your people said</div>
+<div class="take"><i style="background:#CB4A27">TF</i><div><div class="tw"><b>Test</b> · <span class="pill g">☺ Good</span></div><div class="tl">♡ Cold brew tonic, avocado toast</div><div class="tm">₹350 / person · Oct 13</div></div></div>
+<div class="take"><i style="background:#567F43">CR</i><div><div class="tw"><b>Chitra</b> · <span class="pill o">◔ Okayish</span></div><div class="tl">👎 Too loud on weekends</div><div class="tm">₹300 / person · Oct 2</div></div></div>
+</section></body></html>

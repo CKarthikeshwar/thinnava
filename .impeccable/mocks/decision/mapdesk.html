@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Map desk</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2350D9;--ps:#16348F;--pc:#DBE4FF;--opc:#0E2266;--bg:#EEF2FF;--s:#fff;--tint:#E6ECFF;--ink:#10183A;--soft:#46507A;--mut:#5C668C;--hair:#D9E0F7;--good:#17703E;--gw:#DDF2E4;--ok:#845300;--ow:#FBEFD2;--land:#EEF1FB;--water:#BCCBF5;--park:#D3EBD6}
+*{box-sizing:border-box}body{margin:0;width:1440px;height:900px;overflow:hidden;background:var(--land);font-family:Nunito,sans-serif;color:var(--ink);position:relative}
+.map{position:absolute;inset:0;background:var(--land)}
+.road{position:absolute;background:#fff;border:1px solid #D8DEF0}.park{position:absolute;background:var(--park);border-radius:40px}.lake{position:absolute;background:var(--water);border-radius:50%}
+.pin{position:absolute;display:flex;flex-direction:column;align-items:center}.bub{display:flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:4px 11px 4px 4px;font-weight:800;font-size:12.5px;box-shadow:0 6px 14px -6px rgba(10,20,40,.35)}
+.bub i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-style:normal;font-size:10.5px}.tail{width:10px;height:10px;background:#fff;transform:rotate(45deg);margin-top:-6px}
+.sel .bub{box-shadow:0 0 0 3px var(--p),0 6px 16px -4px rgba(10,20,40,.4)}
+.cl{position:absolute;width:38px;height:38px;border-radius:50%;background:var(--ps);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;box-shadow:0 0 0 5px rgba(255,255,255,.7)}
+.top{position:absolute;top:16px;left:16px;right:16px;display:flex;align-items:center;gap:12px}
+.brand{font-family:Fredoka;font-weight:600;font-size:24px;color:var(--ps);background:#fff;border-radius:16px;padding:8px 16px;box-shadow:0 6px 16px -10px rgba(20,30,50,.3)}
+.tabs{display:flex;gap:4px;background:#fff;border-radius:999px;padding:4px;box-shadow:0 6px 16px -10px rgba(20,30,50,.3)}.tabs span{padding:8px 16px;border-radius:999px;font-weight:800;font-size:13.5px;color:var(--soft)}.tabs .on{background:var(--pc);color:var(--opc)}
+.sp{flex:1}.btn{height:44px;padding:0 18px;border-radius:999px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 16px -10px rgba(20,30,50,.4)}.dark{background:var(--ink);color:#fff}.pri{background:var(--p);color:#fff}
+.left{position:absolute;top:84px;left:16px;bottom:16px;width:360px;background:#fff;border-radius:24px;box-shadow:0 12px 30px -16px rgba(20,30,50,.35);display:flex;flex-direction:column;overflow:hidden}
+.lh{padding:18px 18px 10px}.lh h2{font-family:Fredoka;font-weight:600;font-size:22px;margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{height:32px;padding:0 12px;border-radius:10px;border:1px solid var(--hair);display:flex;align-items:center;font-weight:700;font-size:13px;color:var(--soft)}.chip.s{background:var(--pc);border-color:var(--pc);color:var(--opc)}
+.cnt{padding:6px 18px 6px;font-size:13px;font-weight:800;color:var(--mut)}
+.row{display:flex;gap:12px;padding:11px 18px;align-items:center;border-top:1px solid var(--hair)}.row.on{background:var(--tint)}
+.th{width:44px;height:44px;border-radius:14px;background:var(--tint);display:grid;place-items:center;font-size:18px}.rn{font-weight:800;font-size:15px}.rs{font-size:12.5px;color:var(--mut);font-weight:600}
+.faces{display:flex;margin-left:auto}.faces i{width:24px;height:24px;border-radius:50%;border:2px solid #fff;margin-left:-7px;color:#fff;font-style:normal;font-size:10px;display:grid;place-items:center}
+.right{position:absolute;top:84px;right:16px;width:380px;background:#fff;border-radius:24px;box-shadow:0 12px 30px -16px rgba(20,30,50,.35);padding:20px}
+.right h3{font-family:Fredoka;font-weight:600;font-size:24px;margin:0}.sub{font-size:13.5px;color:var(--mut);font-weight:700;margin-top:2px}
+.take{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--hair)}.take:first-of-type{margin-top:14px}
+.take i{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-style:normal;font-size:11.5px;font-weight:800}
+.tt{font-size:14px;color:var(--soft);flex:1}.tt b{color:var(--ink)}.pill{font-size:12.5px;font-weight:800;border-radius:999px;padding:3px 10px;white-space:nowrap}.g{background:var(--gw);color:var(--good)}.o{background:var(--ow);color:var(--ok)}
+.acts{display:flex;gap:8px;margin-top:14px}.acts span{flex:1;height:44px;border-radius:999px;display:grid;place-items:center;font-weight:800;font-size:14px}
+</style></head><body>
+<div class="map">
+ <div class="road" style="left:0;right:0;top:300px;height:16px"></div><div class="road" style="left:0;right:0;top:610px;height:14px"></div>
+ <div class="road" style="top:0;bottom:0;left:620px;width:16px"></div><div class="road" style="top:0;bottom:0;left:900px;width:14px"></div>
+ <div class="park" style="left:700px;top:380px;width:160px;height:120px"></div><div class="lake" style="left:960px;top:660px;width:200px;height:140px"></div>
+ <div class="pin sel" style="left:660px;top:228px"><div class="bub"><i style="background:#CB4A27">TF</i>Third Wave Coffee</div><div class="tail"></div></div>
+ <div class="pin" style="left:540px;top:400px"><div class="bub"><i style="background:#567F43">CR</i>Glen's Bakehouse</div><div class="tail"></div></div>
+ <div class="pin" style="left:780px;top:540px"><div class="bub"><i style="background:var(--tint);color:var(--ps)">♡</i>Brik Oven</div><div class="tail"></div></div>
+ <div class="pin" style="left:930px;top:250px"><div class="bub"><i style="background:var(--tint);color:var(--ps)">☺</i>Toit</div><div class="tail"></div></div>
+ <div class="cl" style="left:560px;top:690px">6</div><div class="cl" style="left:860px;top:150px">3</div>
+</div>
+<div class="top"><span class="brand">Thinnava</span><div class="tabs"><span>Home</span><span class="on">Map</span><span>Search</span><span>Lists</span><span>Profile</span></div><span class="sp"></span><span class="btn dark">⎘ Paste a message</span><span class="btn pri">+ Log a visit</span></div>
+<aside class="left"><div class="lh"><h2>Where tonight?</h2><div class="chips"><span class="chip s">Indiranagar ✕</span><span class="chip">Under ₹500</span><span class="chip">Café</span><span class="chip s">Someone I trust went</span></div></div>
+ <div class="cnt">9 places in view</div>
+ <div class="row on"><span class="th">☕</span><div><div class="rn">Third Wave Coffee</div><div class="rs">Café · ₹300–350</div></div><span class="faces"><i style="background:#CB4A27">TF</i><i style="background:#567F43">CR</i></span></div>
+ <div class="row"><span class="th">☕</span><div><div class="rn">Hatti Kaapi</div><div class="rs">Café · ₹120</div></div><span class="faces"><i style="background:#CB4A27">TF</i></span></div>
+ <div class="row"><span class="th">🧁</span><div><div class="rn">Glen's Bakehouse</div><div class="rs">Bakery · ₹280</div></div><span class="faces"><i style="background:#567F43">CR</i></span></div>
+ <div class="row"><span class="th">🍜</span><div><div class="rn">Burma Burma</div><div class="rs">Restaurant · ₹450</div></div><span class="faces"><i style="background:#CB4A27">TF</i></span></div>
+ <div class="row"><span class="th">🫖</span><div><div class="rn">Chai Point</div><div class="rs">Tea shop · ₹90</div></div><span class="faces"><i style="background:#567F43">CR</i></span></div>
+</aside>
+<aside class="right"><h3>Third Wave Coffee</h3><div class="sub">Indiranagar · Café · 1.2 km</div>
+ <div class="take"><i style="background:#CB4A27">TF</i><div class="tt"><b>Test</b> loved the cold brew tonic · ₹350</div><span class="pill g">☺ Good</span></div>
+ <div class="take"><i style="background:#567F43">CR</i><div class="tt"><b>Chitra</b> said it's too loud on weekends · ₹300</div><span class="pill o">◔ Okayish</span></div>
+ <div class="acts"><span style="background:var(--p);color:#fff">Open place</span><span style="background:var(--pc);color:var(--opc)">Directions</span><span style="background:var(--pc);color:var(--opc)">♡</span></div></aside>
+</body></html>

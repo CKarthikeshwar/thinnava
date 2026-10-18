@@ -1,6 +1,10 @@
 -- Wishlist = places I haven't visited (spec §9): set_wishlist ignores adds for visited places; user_wishlist says i_went.
 begin;
 create extension if not exists pgtap with schema extensions;
+-- Run as postgres with pgTAP's schema on the path, so the tests also run on the hosted project, where the CLI's
+-- temporary login role is a member of postgres but doesn't use its rights by default.
+set local role postgres;
+set search_path to public, extensions;
 select plan(6);
 
 insert into auth.users (id, email) values
@@ -15,7 +19,7 @@ $$;
 set local role authenticated;
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a7'); select public.create_profile('anu7', 'Anu');
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000b7'); select public.create_profile('bala7', 'Bala');
-reset role;
+set local role postgres;
 insert into public.connections (user_a, user_b) values ('00000000-0000-0000-0000-0000000000a7', '00000000-0000-0000-0000-0000000000b7');
 insert into public.visits (id, author, place_id, visited_on, rating)
   values ('00000000-0000-0000-0000-00000000a701', '00000000-0000-0000-0000-0000000000a7', 'test:w1', current_date - 2, 'good');

@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { Clipboard as ClipIcon, X } from 'lucide-react-native';
 import { Button, IconButton, Pressable, T } from '@/components';
 import { colors, fonts, radii, shadows, space } from '@/theme';
+import { PASTE_TEXT } from './clipboard';
 
 const PEEK = require('../../../assets/images/cat-peek.png');
 
@@ -12,26 +13,27 @@ const PEEK = require('../../../assets/images/cat-peek.png');
  */
 export function UseCopiedBanner({ onUse }: { onUse: () => void }) {
   return (
-    <Pressable onPress={onUse} pressScale={0.98} style={styles.clip} accessibilityRole="button" accessibilityLabel="Use copied text. Reads what you copied">
+    <Pressable onPress={onUse} pressScale={0.98} style={styles.clip} accessibilityRole="button" accessibilityLabel={`${PASTE_TEXT.chipTitle} Reads what you copied`}>
       <ClipIcon size={20} color={colors.onPrimary} strokeWidth={2} />
       <View style={{ flex: 1 }}>
-        <T style={styles.clipTitle}>Use copied text?</T>
-        <T style={styles.clipSub} numberOfLines={1}>We'll read it and fill this in for you</T>
+        <T style={styles.clipTitle}>{PASTE_TEXT.chipTitle}</T>
+        <T style={styles.clipSub} numberOfLines={1}>{PASTE_TEXT.chipSub}</T>
       </View>
-      <T style={styles.clipUse}>Use</T>
+      <T style={styles.clipUse}>{PASTE_TEXT.chipAction}</T>
     </Pressable>
   );
 }
 
 /** B1 Home card "You copied a message" (spec §10.0, §14 B1): Read it opens the import; ✕ hides it for 6 hours. */
-export function CopiedMessageCard({ onRead, onDismiss }: { onRead: () => void; onDismiss: () => void }) {
+export function CopiedMessageCard({ onRead, onDismiss, title = PASTE_TEXT.cardTitle, sub = PASTE_TEXT.cardSub, action = PASTE_TEXT.cardAction }:
+  { onRead: () => void; onDismiss: () => void; title?: string; sub?: string; action?: string }) {
   return (
     <View style={styles.card}>
       <Image source={PEEK} style={styles.cat} contentFit="contain" accessibilityElementsHidden />
       <View style={{ flex: 1, gap: 2 }}>
-        <T style={styles.cardTitle}>You copied a message</T>
-        <T variant="meta" style={styles.cardSub}>Want us to read it?</T>
-        <Button label="Read it" small onPress={onRead} style={styles.read} />
+        <T style={styles.cardTitle}>{title}</T>
+        <T variant="meta" style={styles.cardSub}>{sub}</T>
+        <Button label={action} small onPress={onRead} style={styles.read} />
       </View>
       <IconButton icon={X} label="Not now" ghost onPress={onDismiss} style={styles.close} />
     </View>

@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## Project
 
-**Thinnava** (working name) is a social food memory app for Android: connect mutually with people you know, see where they ate and what they thought, privately log what friends tell you (copy a WhatsApp message and tap "Read it", or share text/links from apps that allow it; AI fills the form, you confirm) and internet finds, and jump out to Google Maps / Swiggy (Zomato / District in v2). IISc course project, **team of 2**, demo with real users, distributed as an APK.
+**Thinnava** (working name) is a social food memory app for Android, plus a web version for iPhone and laptop users (spec §18.3, M10): connect mutually with people you know, see where they ate and what they thought, privately log what friends tell you (copy a WhatsApp message and tap "Read it", or share text/links from apps that allow it; AI fills the form, you confirm) and internet finds, and jump out to Google Maps / Swiggy (Zomato / District in v2). IISc course project, **team of 2**, demo with real users, distributed as an APK and a website.
 
 ## Source of truth: `spec.md`
 

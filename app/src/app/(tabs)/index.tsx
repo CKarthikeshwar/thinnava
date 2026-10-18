@@ -1,20 +1,26 @@
-import { useRef, useState } from 'react';
-import { ActivityIndicator, RefreshControl, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Bell, Globe, Layers, Lightbulb, MessageCircle, SlidersHorizontal, UserPlus, UserRound, UsersRound, Utensils, type LucideProps } from 'lucide-react-native';
 import type { ComponentType } from 'react';
-import { Button, Chip, EmptyState, EntryCard, IconButton, Screen, Sheet, SheetOption, T, TopBar, showSnack } from '@/components';
+import { Button, Chip, EmptyState, EntryCard, IconButton, Screen, Segmented, Sheet, SheetOption, T, TopBar, showSnack } from '@/components';
 import { useAuth } from '@/features/auth/session';
 import { homeFeed, PAGE, type FeedFilter, type FeedItem } from '@/features/visits/api';
 import { CopiedMessageCard } from '@/features/import/CopiedBanners';
-import { markClipboardHandled, readClipboard, useCopiedText } from '@/features/import/clipboard';
+import { useNet } from '@/lib/net';
+import { clearFresh, useFresh } from '@/lib/fresh';
+import { removePendingShare, useDrafts } from '@/lib/drafts';
+import { markClipboardHandled, PASTE_TEXT, readClipboard, useCopiedText } from '@/features/import/clipboard';
 import { internetLabel } from '@/features/saved/labels';
 import { openPerson } from '@/features/people/components';
 import { unreadNotifications } from '@/features/notifications/api';
-import { friendlyDate, timeAgo } from '@/lib/dates';
+import { friendlyDate, timeAgo, todayIST } from '@/lib/dates';
+import { PAGE_MAX, useLayoutMode } from '@/lib/layout';
+import { HomeSide, PasteHero } from '@/features/web/HomeParts';
+import { InstallCard } from '@/features/web/InstallCard';
 import { dotJoin } from '@/lib/format';
 import { colors, fonts, radii, space } from '@/theme';
 
@@ -37,17 +43,25 @@ const EMPTY_TEXT: Record<FeedFilter, string> = {
 /** B1 Home (spec §14): one card per entry, newest first, filter sheet, empty state for new users. */
 export default function Home() {
   const profile = useAuth((s) => s.profile);
+  const mode = useLayoutMode();
   const first = profile?.display_name.split(' ')[0];
   const [filter, setFilter] = useState<FeedFilter>('all');
   const sheet = useRef<BottomSheetModal>(null);
+  // A just-saved entry goes to the top of the feed; the list keeps its old anchor, so bring the top into view.
+  const list = useRef<FlashListRef<FeedItem>>(null);
+  const freshId = useFresh((s) => s.id);
+  useEffect(() => { if (freshId) setTimeout(() => list.current?.scrollToOffset({ offset: 0, animated: true }), 150); }, [freshId]);
   const soon = (m: string) => () => showSnack({ text: `This arrives in ${m}.` });
   const copied = useCopiedText(true);
+  const online = useNet((s) => s.online);
+  const shares = useDrafts((s) => s.shares);
+  const [waitingHidden, setWaitingHidden] = useState(false);
   const unread = useQuery({ queryKey: ['unread'], queryFn: unreadNotifications, refetchInterval: 60_000 });
   const readCopied = async () => {
     markClipboardHandled();
     copied.hide();
     const text = await readClipboard().catch(() => '');
-    if (!text) return showSnack({ text: 'Nothing copied right now.' });
+    if (!text) return showSnack({ text: PASTE_TEXT.empty });
     router.push({ pathname: '/import', params: { text } });
   };
 
@@ -61,7 +75,8 @@ export default function Home() {
   const active = FILTERS.find((f) => f.key === filter)!;
   const newUser = filter === 'all' && feed.isSuccess && items.length === 0;
 
-  const header = (
+  // Web: the top bar (root layout) carries the wordmark and 🔔; the filters sit on the page (spec §18.3).
+  const header = mode !== 'app' ? null : (
     <TopBar
       wordmark
       actions={
@@ -104,19 +119,43 @@ export default function Home() {
     );
   };
 
-  return (
-    <Screen rings={0} scroll={false} header={header}>
-      {filter !== 'all' ? (
-        <View style={styles.chipRow}><Chip label={active.label} selected removable onPress={() => setFilter('all')} /></View>
-      ) : null}
-      <FlashList
+  const feedList = (
+    <FlashList
+        ref={list}
         data={items}
         keyExtractor={(i) => i.id}
-        renderItem={({ item }) => <Card item={item} meName={profile?.display_name} meAvatar={profile?.avatar_url} />}
+        renderItem={({ item, index }) => {
+          const card = <Card item={item} meName={profile?.display_name} meAvatar={profile?.avatar_url} />;
+          if (mode === 'app') return card;
+          // Web: Today · This week · Earlier headings between cards (spec §18.3).
+          const day = dayGroup(item.created_at);
+          return index === 0 || dayGroup(items[index - 1].created_at) !== day ? <View><T style={styles.day}>{day}</T>{card}</View> : card;
+        }}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={mode === 'laptop' ? styles.listWide : styles.list}
+        showsVerticalScrollIndicator={mode === 'app'}
         ListEmptyComponent={empty}
-        ListHeaderComponent={copied.has && filter === 'all' ? (
+        ListHeaderComponent={mode === 'laptop' ? (
+          <View style={styles.feedHead}>
+            <T style={styles.feedTitle} accessibilityRole="header">What your people ate</T>
+            <Segmented compact options={FILTERS.map((f) => ({ key: f.key, label: f.label }))} value={filter} onChange={setFilter} />
+          </View>
+        ) : mode === 'phone' ? (
+          <View style={{ gap: 12, marginBottom: 12 }}>
+            {copied.has ? <PasteHero onDismiss={() => { markClipboardHandled(); copied.hide(); }} /> : null}
+            <InstallCard />
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+              {FILTERS.map((f) => <Chip key={f.key} label={f.label} selected={filter === f.key} onPress={() => setFilter(f.key)} />)}
+            </ScrollView>
+          </View>
+        ) : filter === 'all' && online && shares.length && !waitingHidden ? (
+          // Messages shared or copied while offline (spec §26.5): "1 message waiting · Review".
+          <View style={{ marginBottom: 10 }}>
+            <CopiedMessageCard title={shares.length === 1 ? '1 message waiting' : `${shares.length} messages waiting`} sub="Saved while you were offline" action="Review"
+              onRead={() => { const s = shares[0]; removePendingShare(s.id); router.push({ pathname: '/import', params: { text: s.text } }); }}
+              onDismiss={() => setWaitingHidden(true)} />
+          </View>
+        ) : copied.has && filter === 'all' ? (
           <View style={{ marginBottom: 10 }}>
             <CopiedMessageCard onRead={readCopied} onDismiss={() => { markClipboardHandled(); copied.hide(); }} />
           </View>
@@ -126,6 +165,23 @@ export default function Home() {
         ListFooterComponent={feed.isFetchingNextPage ? <ActivityIndicator color={colors.primary} style={{ margin: 16 }} /> : null}
         refreshControl={<RefreshControl refreshing={feed.isRefetching && !feed.isFetchingNextPage} onRefresh={() => feed.refetch()} colors={[colors.primary]} />}
       />
+  );
+
+  return (
+    <Screen rings={0} scroll={false} header={header}>
+      {filter !== 'all' && mode === 'app' ? (
+        <View style={styles.chipRow}><Chip label={active.label} selected removable onPress={() => setFilter('all')} /></View>
+      ) : null}
+      {mode === 'laptop' ? (
+        <View style={styles.page}>
+          <View style={{ flex: 1 }}>
+            {feedList}
+          </View>
+          <ScrollView style={styles.side} contentContainerStyle={{ paddingTop: 26, paddingBottom: 24 }} showsVerticalScrollIndicator={false}>
+            <HomeSide />
+          </ScrollView>
+        </View>
+      ) : feedList}
       <Sheet ref={sheet} title="Show">
         {FILTERS.map((f) => (
           <SheetOption key={f.key} icon={f.icon} label={f.label} hint={f.hint} selected={filter === f.key}
@@ -134,6 +190,14 @@ export default function Home() {
       </Sheet>
     </Screen>
   );
+}
+
+/** Web feed headings: Today · This week · Earlier (by when the entry was added, India time). */
+function dayGroup(createdAt: string) {
+  const day = new Date(new Date(createdAt).getTime() + 5.5 * 3600_000).toISOString().slice(0, 10);
+  const today = todayIST();
+  if (day === today) return 'TODAY';
+  return (Date.parse(today) - Date.parse(day)) / 86_400_000 < 7 ? 'THIS WEEK' : 'EARLIER';
 }
 
 /**
@@ -148,6 +212,7 @@ function personOf(item: FeedItem): (() => void) | undefined {
 }
 
 function Card({ item, meName, meAvatar }: { item: FeedItem; meName?: string; meAvatar?: string | null }) {
+  const fresh = useFresh((s) => s.id);
   const loggedOn = item.created_at.slice(0, 10);
   const went = item.visited_on && (item.entry_type !== 'visit' || item.visited_on !== loggedOn) ? `went ${friendlyDate(item.visited_on).replace(/^(Today|Yesterday)$/, (w) => w.toLowerCase())}` : null;
   const meta = dotJoin(item.place_area, item.companions.length ? `with ${item.companions.join(', ')}` : null, went);
@@ -170,12 +235,20 @@ function Card({ item, meName, meAvatar }: { item: FeedItem; meName?: string; meA
       isPrivate={item.is_private}
       onPress={() => router.push({ pathname: '/entry/[type]/[id]', params: { type: item.entry_type === 'visit' ? 'visit' : 'saved', id: item.id } })}
       onPressPerson={personOf(item)}
+      fresh={fresh === item.id}
+      onFreshDone={clearFresh}
     />
   );
 }
 
 const styles = StyleSheet.create({
   list: { paddingHorizontal: 14, paddingTop: 4, paddingBottom: 24 },
+  listWide: { paddingTop: 26, paddingBottom: 32 },
+  page: { flex: 1, flexDirection: 'row', gap: 28, width: '100%', maxWidth: PAGE_MAX, alignSelf: 'center', paddingHorizontal: 24 },
+  side: { width: 360, flexGrow: 0 },
+  feedHead: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 14, marginBottom: 4 },
+  feedTitle: { fontFamily: fonts.display, fontSize: 26, color: colors.ink },
+  day: { fontFamily: fonts.bodyHeavy, fontSize: 12.5, letterSpacing: 0.3, color: colors.inkMuted, marginTop: 14, marginBottom: 8 },
   chipRow: { paddingHorizontal: space.gutter, paddingBottom: 8 },
   msg: { textAlign: 'center', padding: 32, paddingBottom: 16 },
   filteredEmpty: { paddingHorizontal: space.gutter, gap: 4 },

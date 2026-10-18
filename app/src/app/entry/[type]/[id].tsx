@@ -11,7 +11,7 @@ import { CategoryThumb } from '@/features/places/components';
 import { deleteSaved, SAVED_KEYS, savedDetail } from '@/features/saved/api';
 import { untagMe } from '@/features/notifications/api';
 import { openPerson } from '@/features/people/components';
-import { deleteVisit, entryDetail, ENTRY_KEYS, placePage, setWishlist } from '@/features/visits/api';
+import { deleteVisit, entryDetail, ENTRY_KEYS, hideFromFeed, placePage, setWishlist } from '@/features/visits/api';
 import { friendlyDate } from '@/lib/dates';
 import { friendlyError } from '@/lib/errors';
 import { dotJoin } from '@/lib/format';
@@ -81,7 +81,7 @@ export default function EntryScreen() {
   const refresh = () => Promise.all([...ENTRY_KEYS, ...SAVED_KEYS].map((k) => qc.invalidateQueries({ queryKey: k })));
   const toggleWishlist = async () => {
     try {
-      await setWishlist(e.placeId, !onWishlist);
+      await setWishlist(e.placeId, !onWishlist, e.placeName);
       await refresh();
       showSnack({ text: onWishlist ? 'Removed from your wishlist' : 'Added to your wishlist' });
     } catch (err) { showSnack({ text: friendlyError(err) }); }
@@ -89,9 +89,10 @@ export default function EntryScreen() {
   const remove = async () => {
     setConfirm(false);
     try {
-      if (saved) await deleteSaved(e.id); else await deleteVisit(e.id);
-      await refresh();
-      showSnack({ text: saved ? 'Entry deleted' : 'Visit deleted' });
+      const label = `Delete ${saved ? 'entry' : 'visit'} at ${e.placeName}`;
+      const r = saved ? await deleteSaved(e.id, label) : await deleteVisit(e.id, label);
+      if (r.queued) hideFromFeed(e.id); else await refresh();
+      showSnack({ text: r.queued ? "Deleted · it'll sync when you're online" : saved ? 'Entry deleted' : 'Visit deleted' });
       router.back();
     } catch (err) { showSnack({ text: friendlyError(err, "Couldn't delete. Try again.") }); }
   };
@@ -143,7 +144,7 @@ export default function EntryScreen() {
         </Panel>
         {e.link ? (
           <Button label="Open link" variant="outline" icon={ExternalLink} small style={styles.link}
-            onPress={() => Linking.openURL(e.link!).catch(() => showSnack({ text: "Couldn't open that link." }))} />
+            onPress={() => Linking.openURL(e.link!).catch(() => showSnack({ text: "Couldn't open that link. Check it in your browser." }))} />
         ) : null}
         {e.people.length ? (
           <View style={styles.withRow}>

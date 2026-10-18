@@ -1,7 +1,7 @@
 // places (spec §23, §25): the only way the app reaches Google Places.
 // Every Google call is counted by consume_google_quota first (zero-cost lock 1, §27.5).
 // With no GOOGLE_PLACES_KEY it runs in practice mode on fixtures (§25.6).
-import { admin, fail, ok, requireUser } from '../_shared/http.ts';
+import { admin, fail, ok, requireUser, preflight } from '../_shared/http.ts';
 import { distanceM, practiceAutocomplete, practiceById, PRACTICE_PLACES } from '../_shared/practicePlaces.ts';
 import {
   BASIC_FIELDS, BLR, fromGoogle, fromPractice, google, LIST_FIELDS, PRACTICE, quota, textSearch, upsert, upsertMany, userQuota, type PlaceDTO,
@@ -11,6 +11,8 @@ const USER_DAILY_LIMIT = 300;
 const RICH_FIELDS = 'rating,userRatingCount,priceLevel,regularOpeningHours,currentOpeningHours';
 
 Deno.serve(async (req) => {
+  const pre = preflight(req);
+  if (pre) return pre;
   if (req.method !== 'POST') return fail('method_not_allowed', 'Use POST', 405);
   const user = await requireUser(req);
   if (!user) return fail('not_signed_in', 'Sign in first', 401);

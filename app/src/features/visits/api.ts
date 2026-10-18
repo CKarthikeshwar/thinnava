@@ -1,4 +1,6 @@
 import { supabase } from '@/lib/supabase';
+import { runWrite } from '@/lib/outbox';
+import { queryClient } from '@/lib/queryClient';
 import type { Category } from '@/features/places/api';
 import type { Rating } from '@/components';
 
@@ -102,11 +104,32 @@ export const PAGE = 20;
 export const homeFeed = (filter: FeedFilter, before?: { created_at: string; id: string }) =>
   rpc<FeedItem[]>('home_feed', { p_filter: filter, p_before: before?.created_at ?? null, p_before_id: before?.id ?? null, p_limit: PAGE });
 
-export const saveVisit = (v: VisitInput) => rpc<{ id: string; removed_from_wishlist: boolean }>('save_visit', { p: v });
-export const deleteVisit = (id: string) => rpc<void>('delete_visit', { p_id: id });
+// Offline-capable writes (spec §13, §26.5): `queued` means it waits in the outbox and syncs later.
+export const saveVisit = (v: VisitInput, label: string) => runWrite<{ id: string; removed_from_wishlist: boolean }>('save_visit', { p: v }, label);
+export const deleteVisit = (id: string, label = 'Delete a visit') => runWrite<void>('delete_visit', { p_id: id }, label);
 export const entryDetail = (type: string, id: string) => rpc<EntryDetail | null>('entry_detail', { p_type: type, p_id: id });
 export const placePage = (placeId: string) => rpc<PlacePageData>('place_page', { p_place_id: placeId });
-export const setWishlist = (placeId: string, on: boolean) => rpc<void>('set_wishlist', { p_place_id: placeId, p_on: on });
+export async function setWishlist(placeId: string, on: boolean, placeName?: string) {
+  const r = await runWrite<void>('set_wishlist', { p_place_id: placeId, p_on: on }, `${on ? 'Add' : 'Remove'} ${placeName ?? 'a place'} ${on ? 'to' : 'from'} your wishlist`);
+  // Offline: show the new state right away; the outbox syncs it.
+  if (r.queued) queryClient.setQueryData<PlacePageData>(['placePage', placeId], (d) => (d ? { ...d, on_wishlist: on } : d));
+  return r;
+}
+
+/** Offline: put a queued entry on Home straight away (spec §31 criterion 7), replacing an older copy of it. */
+export function showInFeed(item: FeedItem, filters: FeedFilter[]) {
+  for (const f of filters) {
+    queryClient.setQueryData<{ pages: FeedItem[][]; pageParams: unknown[] }>(['feed', f], (d) => d && {
+      ...d, pages: d.pages.map((p, i) => (i === 0 ? [item, ...p.filter((x) => x.id !== item.id)] : p.filter((x) => x.id !== item.id))),
+    });
+  }
+}
+/** Offline: take a queued deletion off Home straight away. */
+export function hideFromFeed(id: string) {
+  queryClient.setQueriesData<{ pages: FeedItem[][]; pageParams: unknown[] }>({ queryKey: ['feed'] }, (d) => d && {
+    ...d, pages: d.pages.map((p) => p.filter((x) => x.id !== id)),
+  });
+}
 export const setWishlistAudience = (ids: string[]) => rpc<void>('set_wishlist_audience', { p_list_ids: ids });
 export const myWishlistAudience = () => rpc<string[]>('my_wishlist_audience');
 export const myWishlist = () => rpc<{ place_id: string; name: string; area: string | null; category: Category | null; created_at: string }[]>('my_wishlist');
@@ -118,6 +141,12 @@ export async function myCompanionNames(): Promise<CompanionName[]> {
   if (error) throw error;
   return data ?? [];
 }
+
+/** F5: my private companion names with how many visits use each (spec §14). */
+export type CompanionNameUse = CompanionName & { visits: number };
+export const myCompanionNameUses = () => rpc<CompanionNameUse[]>('my_companion_names');
+export const renameCompanionName = (id: string, name: string) => rpc<void>('rename_companion_name', { p_id: id, p_name: name });
+export const deleteCompanionName = (id: string) => rpc<void>('delete_companion_name', { p_id: id });
 
 /** Query keys that change when a visit or the wishlist changes. */
 export const ENTRY_KEYS = [['feed'], ['place'], ['placePage'], ['entry'], ['myCounts'], ['myWishlist'], ['companionNames']];

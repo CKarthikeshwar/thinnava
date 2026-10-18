@@ -1,0 +1,39 @@
+{
+  "title": "Thinnava on a laptop: choose the layout",
+  "question": "Same Thinnava look (cobalt, Mist, Fredoka, the cat). These three differ in how the laptop screen is organised for deciding where to eat and logging fast. Lock one, steer, or re-roll.",
+  "options": [
+    {
+      "id": "columns",
+      "label": "People as columns",
+      "kicker": "THE ROLL",
+      "thesis": "Each person you trust gets a column: Test, Chitra, Rahul's tips, your wishlist, your reels. One 'Where tonight?' bar filters every column at once, so you scan whose taste you trust side by side.",
+      "palette": ["#2350D9", "#EEF2FF", "#FFFFFF", "#10183A", "#17703E"],
+      "materials": ["white place cards", "rating pills", "faces as column heads"],
+      "viewport": "Left rail (Home, Search, Map, Lists, Profile, + Log). Top: 'Where tonight?' bar with area, price and type filters plus 'Paste a message'. Below: four to five scrolling columns, one per person or list, each a stack of place cards with the rating pill and loved dish.",
+      "risk": "Gets crowded with many connections; needs a 'choose columns' control and good defaults.",
+      "html": ".impeccable/mocks/decision/columns.html"
+    },
+    {
+      "id": "mapdesk",
+      "label": "Map desk",
+      "thesis": "The city is the workspace: filters and a ranked list on the left, the map with friends' faces as pins in the middle, the place's 'who said what' card on the right.",
+      "palette": ["#2350D9", "#EEF1FB", "#FFFFFF", "#10183A", "#BCCBF5"],
+      "materials": ["map with face pins", "floating white panels"],
+      "viewport": "Left: 'Where tonight?' filters and a ranked results list. Centre: the Bengaluru map with face pins and clusters. Right: the selected place with each friend's take, Directions and Swiggy. A '+ Log' button stays top-right.",
+      "risk": "Depends on the Google map (billing). Until then the centre shows the list, which weakens the idea.",
+      "html": ".impeccable/mocks/decision/mapdesk.html"
+    },
+    {
+      "id": "matrix",
+      "label": "Who-said-what grid",
+      "thesis": "Places down the side, your people across the top, each cell their verdict and the dish they loved. Comparing becomes reading one row; agreement and disagreement jump out.",
+      "palette": ["#2350D9", "#EEF2FF", "#FFFFFF", "#10183A", "#845300"],
+      "materials": ["sortable table", "rating pills in cells", "avatar column heads"],
+      "viewport": "Left rail. Top: 'Where tonight?' filters and 'Paste a message'. Main: a sortable grid, rows are places (area, price), columns are you and your connections, cells hold the pill and loved dish. A detail drawer opens on the right for a row.",
+      "risk": "Sparse when few friends reviewed the same places; reads like a spreadsheet if not handled warmly.",
+      "html": ".impeccable/mocks/decision/matrix.html"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "steer": true
+}

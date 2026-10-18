@@ -1,6 +1,6 @@
 # Thinnava Privacy Policy
 
-_Last updated: DRAFT, not yet published. Contact: 921019chimirelakarthik@gmail.com_
+_Last updated: 18 October 2026. Contact: distilledwater.ck@gmail.com_
 
 Thinnava ("Thinnava", "we") is a student project built at the Indian Institute of Science (IISc). It helps you remember where you and the people you know have eaten. This policy explains what we collect and why, in plain words.
 
@@ -34,4 +34,4 @@ You can delete your account at any time from **Settings → Delete account**. Th
 If this policy changes, we'll update this page and the date above.
 
 ## Contact
-Questions: 921019chimirelakarthik@gmail.com
+Questions: distilledwater.ck@gmail.com

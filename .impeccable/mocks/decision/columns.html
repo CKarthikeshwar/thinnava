@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>People as columns</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2350D9;--ps:#16348F;--pc:#DBE4FF;--opc:#0E2266;--bg:#EEF2FF;--s:#fff;--tint:#E6ECFF;--ink:#10183A;--soft:#46507A;--mut:#5C668C;--hair:#D9E0F7;--good:#17703E;--gw:#DDF2E4;--ok:#845300;--ow:#FBEFD2;--bad:#A8301F;--bw:#FADFDB}
+*{box-sizing:border-box}body{margin:0;width:1440px;height:900px;overflow:hidden;background:var(--bg);font-family:Nunito,sans-serif;color:var(--ink);display:flex}
+.rail{width:96px;background:var(--s);border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:22px}
+.add{width:52px;height:52px;border-radius:18px;background:var(--p);color:#fff;font-size:30px;display:grid;place-items:center;box-shadow:0 8px 18px -8px rgba(35,80,217,.6)}
+.nav{display:flex;flex-direction:column;gap:14px;align-items:center}.nav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--soft)}
+.ic{width:56px;height:30px;border-radius:16px;display:grid;place-items:center;font-size:16px}.on .ic{background:var(--pc)}.on{color:var(--ink)!important;font-weight:800!important}
+main{flex:1;display:flex;flex-direction:column;min-width:0}
+.top{padding:18px 24px 14px;display:flex;align-items:center;gap:14px}
+h1{font-family:Fredoka;font-weight:600;font-size:26px;margin:0 8px 0 0;color:var(--ps)}
+.q{flex:1;display:flex;align-items:center;gap:8px;background:var(--s);border-radius:999px;padding:6px 6px 6px 18px;box-shadow:0 6px 18px -12px rgba(20,30,50,.3)}
+.q b{font-family:Fredoka;font-weight:600;font-size:17px;margin-right:6px}.chip{height:34px;padding:0 14px;border-radius:10px;border:1px solid var(--hair);display:flex;align-items:center;font-weight:700;font-size:13.5px;color:var(--soft);background:var(--s)}
+.chip.sel{background:var(--pc);border-color:var(--pc);color:var(--opc)}
+.paste{height:42px;padding:0 18px;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}
+.cols{flex:1;display:flex;gap:14px;padding:4px 24px 24px;min-height:0}
+.col{width:268px;flex:none;display:flex;flex-direction:column;min-height:0}
+.ch{display:flex;align-items:center;gap:10px;padding:8px 6px 12px}.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px}
+.ch .n{font-weight:800;font-size:15px}.ch .m{font-size:12px;color:var(--mut);font-weight:700}
+.card{background:var(--s);border-radius:18px;padding:13px 14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 8px 20px -14px rgba(20,30,50,.25)}
+.pl{font-family:Fredoka;font-weight:600;font-size:16.5px;line-height:1.2}.ar{font-size:12.5px;color:var(--mut);font-weight:600;margin-top:2px}
+.dish{font-size:13px;color:var(--soft);margin-top:8px}.ft{display:flex;align-items:center;gap:8px;margin-top:9px}
+.pill{font-size:12.5px;font-weight:800;border-radius:999px;padding:3px 10px}.g{background:var(--gw);color:var(--good)}.o{background:var(--ow);color:var(--ok)}.bd{background:var(--bw);color:var(--bad)}
+.pr{font-size:12.5px;font-weight:800}.match{outline:2px solid var(--p)}
+.addcol{width:200px;flex:none;border:1.5px dashed #C3CDEE;border-radius:18px;display:grid;place-items:center;color:var(--mut);font-weight:800;font-size:14px;margin-top:54px;height:120px}
+.note{position:absolute;right:24px;bottom:20px;background:var(--ink);color:#fff;border-radius:14px;padding:10px 14px;font-size:13px;font-weight:700}
+</style></head><body>
+<nav class="rail"><div class="add">+</div><div class="nav">
+<div class="on"><span class="ic">⌂</span>Home</div><div><span class="ic">⌕</span>Search</div><div><span class="ic">◫</span>Map</div><div><span class="ic">☰</span>Lists</div><div><span class="ic">◉</span>Profile</div></div></nav>
+<main>
+<div class="top"><h1>Thinnava</h1>
+<div class="q"><b>Where tonight?</b><span class="chip sel">Indiranagar ✕</span><span class="chip">Under ₹500</span><span class="chip">Any type ▾</span><span class="chip">Someone I trust went</span></div>
+<div class="paste">⎘ Paste a message</div></div>
+<div class="cols">
+ <section class="col"><div class="ch"><span class="av" style="background:#CB4A27">TF</span><div><div class="n">Test</div><div class="m">7 places match</div></div></div>
+  <div class="card match"><div class="pl">Third Wave Coffee</div><div class="ar">Indiranagar · Café</div><div class="dish">♡ Cold brew tonic</div><div class="ft"><span class="pill g">☺ Good</span><span class="pr">₹350 / person</span></div></div>
+  <div class="card"><div class="pl">Hatti Kaapi</div><div class="ar">Indiranagar · Café</div><div class="dish">♡ Filter coffee, bun maska</div><div class="ft"><span class="pill g">☺ Good</span><span class="pr">₹120</span></div></div>
+  <div class="card"><div class="pl">Burma Burma</div><div class="ar">Indiranagar · Restaurant</div><div class="dish">♡ Tea leaf salad</div><div class="ft"><span class="pill o">◔ Okayish</span><span class="pr">₹450</span></div></div></section>
+ <section class="col"><div class="ch"><span class="av" style="background:#567F43">CR</span><div><div class="n">Chitra</div><div class="m">4 places match</div></div></div>
+  <div class="card match"><div class="pl">Third Wave Coffee</div><div class="ar">Indiranagar · Café</div><div class="dish">👎 Too loud on weekends</div><div class="ft"><span class="pill o">◔ Okayish</span><span class="pr">₹300</span></div></div>
+  <div class="card"><div class="pl">Glen's Bakehouse</div><div class="ar">Indiranagar · Bakery</div><div class="dish">♡ Red velvet, carrot cake</div><div class="ft"><span class="pill g">☺ Good</span><span class="pr">₹280</span></div></div>
+  <div class="card"><div class="pl">Chai Point</div><div class="ar">Indiranagar · Tea shop</div><div class="dish">♡ Ginger chai</div><div class="ft"><span class="pill g">☺ Good</span><span class="pr">₹90</span></div></div></section>
+ <section class="col"><div class="ch"><span class="av" style="background:var(--tint);color:var(--ps)">☺</span><div><div class="n">Rahul told you</div><div class="m">Friend tips · only you</div></div></div>
+  <div class="card"><div class="pl">Toit</div><div class="ar">Indiranagar · Bar</div><div class="dish">♡ Tintin toit, pepperoni pizza</div><div class="ft"><span class="pill g">☺ Good</span><span class="pr">₹900</span></div></div>
+  <div class="card"><div class="pl">Leon Grill</div><div class="ar">Indiranagar · Fast food</div><div class="dish">♡ Peri peri fries</div><div class="ft"><span class="pill g">☺ Good</span><span class="pr">₹250</span></div></div></section>
+ <section class="col"><div class="ch"><span class="av" style="background:var(--p)">♡</span><div><div class="n">Your wishlist</div><div class="m">3 in Indiranagar</div></div></div>
+  <div class="card"><div class="pl">Brik Oven</div><div class="ar">Indiranagar · Restaurant</div><div class="dish">Test and Chitra haven't been</div></div>
+  <div class="card"><div class="pl">Koshy's</div><div class="ar">St Marks Road · Restaurant</div><div class="dish">Chitra went · ☺ Good</div></div></section>
+ <div class="addcol">+ Add a column</div>
+</div></main>
+</body></html>

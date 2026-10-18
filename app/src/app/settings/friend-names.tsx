@@ -9,7 +9,7 @@ import { Avatar, Button, Dialog, EmptyState, IconButton, ListSurface, Pressable,
 import { deleteFriendName, mergeFriendNames, myFriendNames, renameFriendName, SAVED_KEYS, type FriendName } from '@/features/saved/api';
 import { linkFriendName, myConnections } from '@/features/people/api';
 import { friendlyError } from '@/lib/errors';
-import { colors, fonts, radii, space } from '@/theme';
+import { colors, fonts, radii, space, MAX_FONT_SCALE } from '@/theme';
 
 /**
  * F4 My friend names (spec §14): entry counts; ⋮ per name: Rename · Merge into… · Link to a connection / Unlink · Delete
@@ -74,7 +74,7 @@ export default function FriendNames() {
         {target && mode === 'rename' ? (
           <View style={styles.renameBox}>
             <View style={styles.field}>
-              <BottomSheetTextInput value={newName} onChangeText={(t) => setNewName(t.slice(0, 40))} autoFocus style={styles.input} autoCapitalize="words" />
+              <BottomSheetTextInput maxFontSizeMultiplier={MAX_FONT_SCALE} value={newName} onChangeText={(t) => setNewName(t.slice(0, 40))} autoFocus style={styles.input} autoCapitalize="words" />
             </View>
             <Button label="Save" disabled={!newName.trim() || newName.trim() === target.name} onPress={() => run(() => renameFriendName(target.id, newName), 'Renamed')} />
           </View>

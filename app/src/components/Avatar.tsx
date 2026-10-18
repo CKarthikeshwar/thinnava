@@ -31,7 +31,7 @@ export function Avatar({ name, uri, size = 40, ring }: Props) {
   }
   return (
     <View style={[styles.av, box, { backgroundColor: tintFor(name) }, ringStyle]} accessible accessibilityLabel={name}>
-      <T style={{ fontFamily: fonts.bodyHeavy, fontSize: Math.round(size * 0.38) }} color="#FFFFFF">{initials(name)}</T>
+      <T style={{ fontFamily: fonts.bodyHeavy, fontSize: Math.round(size * 0.38) }} color={colors.onPrimary}>{initials(name)}</T>
     </View>
   );
 }

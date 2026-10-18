@@ -1,6 +1,7 @@
 import { callFunction } from '@/lib/functions';
 import { supabase } from '@/lib/supabase';
 import { storage } from '@/lib/storage';
+import { draftPlaceName, isDraftPlace } from '@/lib/drafts';
 
 export type Category = 'restaurant' | 'cafe' | 'bakery' | 'dhaba' | 'tea_shop' | 'fast_food' | 'dessert' | 'bar' | 'street_food' | 'delivery_only';
 
@@ -60,6 +61,8 @@ export async function googleInfoMode(): Promise<'tap' | 'off'> {
 
 /** A place from our own table (no Google call); falls back to the places function if we've never seen it. */
 export async function getPlace(placeId: string): Promise<Place> {
+  // A stand-in place typed offline (spec §13) only exists on this device.
+  if (isDraftPlace(placeId)) return { placeId, name: draftPlaceName(placeId), area: null, address: null, lat: 0, lng: 0, category: null, businessStatus: null };
   const { data, error } = await supabase.from('places').select('*').eq('place_id', placeId).maybeSingle();
   if (error) throw error;
   if (!data) return await placeDetails(placeId);

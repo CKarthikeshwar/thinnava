@@ -1,6 +1,6 @@
 // extract (spec §23, §24): reads a copied or shared message with Gemini and matches each place to Google places.
 // The message text is never stored or logged; only counts and latency are logged.
-import { fail, ok, requireUser } from '../_shared/http.ts';
+import { fail, ok, requireUser, preflight } from '../_shared/http.ts';
 import { extract as runGemini, GeminiError, todayIST, type ExtractItem } from '../_shared/gemini.ts';
 import { PRACTICE, textSearch, upsertMany, fromPractice, userQuota, type LatLng, type PlaceDTO } from '../_shared/placesCore.ts';
 import { practiceByName } from '../_shared/practicePlaces.ts';
@@ -9,6 +9,8 @@ const USER_DAILY_LIMIT = 40;
 const MAX_TEXT = 4000;
 
 Deno.serve(async (req) => {
+  const pre = preflight(req);
+  if (pre) return pre;
   if (req.method !== 'POST') return fail('method_not_allowed', 'Use POST', 405);
   const user = await requireUser(req);
   if (!user) return fail('not_signed_in', 'Sign in first', 401);

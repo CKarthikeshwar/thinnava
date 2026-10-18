@@ -2,7 +2,11 @@
 -- the tagger and the tagged user").
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(27);
+-- Run as postgres with pgTAP's schema on the path, so the tests also run on the hosted project, where the CLI's
+-- temporary login role is a member of postgres but doesn't use its rights by default.
+set local role postgres;
+set search_path to public, extensions;
+select plan(28);
 
 insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-0000000000a4', 'a4@t.local'),  -- A (Ananya)
@@ -32,16 +36,18 @@ select public.mark_notifications_read();
 select is(public.unread_notifications(), 0, 'mark read clears the dot');
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a4');
 select is((select type::text from public.notifications_page() limit 1), 'connect_accepted', 'the sender hears it was accepted');
-reset role;
+set local role postgres;
 insert into public.connections (user_a, user_b) values
   ('00000000-0000-0000-0000-0000000000b4', '00000000-0000-0000-0000-0000000000c4'),
   ('00000000-0000-0000-0000-0000000000a4', '00000000-0000-0000-0000-0000000000d4');
 set local role authenticated;
 
--- Only connections can be tagged.
+-- Only connections can be tagged; anyone else is dropped and the visit still saves (§13: offline replays).
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a4');
-select throws_ok($$ select public.save_visit(jsonb_build_object('id','00000000-0000-0000-0000-00000000ab01','place_id','test:t1','visited_on',current_date,'rating','good',
-  'tag_user_ids', jsonb_build_array('00000000-0000-0000-0000-0000000000c4'))) $$, 'P0001', 'not_connected', 'non-connections cannot be tagged');
+select lives_ok($$ select public.save_visit(jsonb_build_object('id','00000000-0000-0000-0000-00000000ab09','place_id','test:t1','visited_on',current_date,'rating','good',
+  'tag_user_ids', jsonb_build_array('00000000-0000-0000-0000-0000000000c4'))) $$, 'tagging a non-connection does not fail the visit');
+select is((select count(*)::int from public.tags where visit_id = '00000000-0000-0000-0000-00000000ab09'), 0, '…the non-connection is simply not tagged');
+select public.delete_visit('00000000-0000-0000-0000-00000000ab09');
 
 -- A visits Bao Story with B, shared with A's Only me — the tag still lets B see that one visit.
 select public.save_visit(jsonb_build_object('id','00000000-0000-0000-0000-00000000ab01','place_id','test:t1','visited_on',current_date,'rating','good',

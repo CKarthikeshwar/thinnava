@@ -43,9 +43,9 @@ export function WelcomePage() {
         <Button label={busy ? 'Signing in…' : 'Continue with Google'} variant="white" leading={<GoogleMark />} disabled={busy} onPress={signIn} style={{ marginTop: 4 }} />
         <T variant="meta" style={styles.legal} color="rgba(255,255,255,0.7)">
           By continuing you agree to the{' '}
-          <T variant="meta" color="#FFFFFF" style={styles.link} onPress={() => Linking.openURL(LEGAL.terms)}>Terms</T>
+          <T variant="meta" color={colors.onPrimary} style={styles.link} onPress={() => Linking.openURL(LEGAL.terms)}>Terms</T>
           {' '}and{' '}
-          <T variant="meta" color="#FFFFFF" style={styles.link} onPress={() => Linking.openURL(LEGAL.privacy)}>Privacy Policy</T>.
+          <T variant="meta" color={colors.onPrimary} style={styles.link} onPress={() => Linking.openURL(LEGAL.privacy)}>Privacy Policy</T>.
         </T>
       </View>
     </View>

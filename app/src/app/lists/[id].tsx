@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { deleteList, listDetail, myConnections, renameList, setListMembers } from '@/features/people/api';
 import { PersonRow, useRefreshPeople } from '@/features/people/components';
 import { friendlyError } from '@/lib/errors';
-import { colors, fonts, radii, space } from '@/theme';
+import { colors, fonts, radii, space, MAX_FONT_SCALE } from '@/theme';
 
 /** E7 List detail (spec §8, §14): rename (pencil), remove people (×), add people, delete (falls back to Only me). */
 export default function ListScreen() {
@@ -68,7 +68,7 @@ export default function ListScreen() {
       <Sheet ref={renameSheet} title="Rename list">
         <View style={styles.box}>
           <View style={styles.field}>
-            <BottomSheetTextInput value={name} onChangeText={(t) => setName(t.slice(0, 30))} style={styles.input} autoCapitalize="words" />
+            <BottomSheetTextInput maxFontSizeMultiplier={MAX_FONT_SCALE} value={name} onChangeText={(t) => setName(t.slice(0, 30))} style={styles.input} autoCapitalize="words" />
           </View>
           <Button label="Save" disabled={!name.trim() || name.trim() === l.name}
             onPress={() => { renameSheet.current?.dismiss(); run(() => renameList(l.id, name), 'Renamed'); }} />

@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState, type ComponentType, type ReactNode } from 'react';
-import { BackHandler, StyleSheet, View } from 'react-native';
+import { BackHandler, StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -11,6 +11,7 @@ import { Check, type LucideProps } from 'lucide-react-native';
 import { colors, curves, durations, radii, shadows, space, useMotion } from '@/theme';
 import { Pressable } from './Pressable';
 import { T } from './T';
+import { SHEET_MAX, useEscape, useWide } from '@/lib/layout';
 
 type Props = { title?: string; children: ReactNode; onDismiss?: () => void };
 
@@ -29,6 +30,10 @@ export const Sheet = forwardRef<BottomSheetModal, Props>(function Sheet({ title,
     return () => sub.remove();
   }, [open]);
   const { d } = useMotion();
+  // Laptop web: Esc closes, and the sheet keeps to a readable width in the middle (spec §18.3).
+  const wide = useWide();
+  const { width } = useWindowDimensions();
+  useEscape(open, () => inner.current?.dismiss());
   const animationConfigs = useBottomSheetTimingConfigs({ duration: d(durations.sheetIn), easing: curves.decelerate });
   const backdrop = useCallback(
     (p: BottomSheetBackdropProps) => <BottomSheetBackdrop {...p} appearsOnIndex={0} disappearsOnIndex={-1} opacity={1} style={[p.style, { backgroundColor: colors.scrim }]} />,
@@ -37,6 +42,7 @@ export const Sheet = forwardRef<BottomSheetModal, Props>(function Sheet({ title,
   return (
     <BottomSheetModal
       ref={inner}
+      style={wide ? { marginHorizontal: Math.max(0, (width - SHEET_MAX) / 2) } : undefined}
       onChange={(i) => setOpen(i >= 0)}
       onDismiss={() => { setOpen(false); onDismiss?.(); }}
       backdropComponent={backdrop}
@@ -65,10 +71,15 @@ type OptionProps = {
   onPress?: () => void;
 };
 
-/** Sheet option row with a 40 dp mark, label, one-line hint and a trailing radio. */
+/**
+ * Sheet option row with a 40 dp mark, label and one-line hint. A choice (`selected` given) ends in a radio, or a
+ * checkbox with `check`; an action (⋮ menus: Rename, Delete…) has no trailing mark.
+ */
 export function SheetOption({ icon: Icon, leading, label, hint, selected, check, onPress }: OptionProps) {
+  const choice = check || selected !== undefined;
   return (
-    <Pressable onPress={onPress} pressScale={0.99} style={styles.opt} accessibilityRole={check ? 'checkbox' : 'radio'} accessibilityState={{ checked: !!selected }} accessibilityLabel={hint ? `${label}, ${hint}` : label}>
+    <Pressable onPress={onPress} pressScale={0.99} style={styles.opt} accessibilityRole={check ? 'checkbox' : choice ? 'radio' : 'button'}
+      accessibilityState={choice ? { checked: !!selected } : undefined} accessibilityLabel={hint ? `${label}, ${hint}` : label}>
       {leading ?? (Icon ? (
         <View style={styles.mark}><Icon size={20} color={colors.primaryStrong} strokeWidth={2} /></View>
       ) : null)}
@@ -76,7 +87,7 @@ export function SheetOption({ icon: Icon, leading, label, hint, selected, check,
         <T variant="bodyStrong" style={styles.optLabel}>{label}</T>
         {hint ? <T variant="meta" style={styles.hint}>{hint}</T> : null}
       </View>
-      {check ? <CheckBox on={!!selected} /> : <Radio on={!!selected} />}
+      {check ? <CheckBox on={!!selected} /> : choice ? <Radio on={!!selected} /> : null}
     </Pressable>
   );
 }

@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thinnava Web Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2350D9;--ps:#16348F;--pc:#DBE4FF;--opc:#0E2266;--bg:#EEF2FF;--s:#fff;--tint:#E6ECFF;--ink:#10183A;--soft:#46507A;--mut:#5C668C;--hair:#D9E0F7;--good:#17703E;--gw:#DDF2E4;--ok:#845300;--ow:#FBEFD2;--bad:#A8301F;--bw:#FADFDB;--rings:#CAD5F8;--a1:#CB4A27;--a2:#567F43;--a3:#4D76B0}
+*{box-sizing:border-box}
+body{margin:0;background:#DCE3F7;font-family:Nunito,sans-serif;color:var(--ink);padding:40px 0 80px}
+.doc{width:1440px;margin:0 auto}
+.doc>h1{font-family:Fredoka;font-weight:600;font-size:40px;margin:0 0 8px;color:var(--ps)}
+.doc>p{font-size:17px;color:var(--soft);max-width:900px;line-height:1.55;margin:0 0 12px}
+.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0 46px}
+.rules div{background:var(--s);border-radius:18px;padding:16px 18px;font-size:14.5px;line-height:1.5;color:var(--soft)}.rules b{display:block;color:var(--ink);font-size:15.5px;margin-bottom:4px}
+.cap{display:flex;align-items:baseline;gap:14px;margin:0 0 12px}.cap h2{font-family:Fredoka;font-weight:600;font-size:28px;margin:0}.cap span{color:var(--soft);font-size:15.5px}
+.frame{width:1440px;height:900px;background:var(--bg);border-radius:14px;overflow:hidden;position:relative;margin-bottom:56px;box-shadow:0 30px 60px -30px rgba(16,24,58,.45)}
+.chrome{height:36px;background:#F7F8FC;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:8px;padding:0 14px}.chrome i{width:11px;height:11px;border-radius:50%;background:#D5DAE8}.chrome .url{margin-left:18px;height:24px;border-radius:8px;background:#fff;border:1px solid var(--hair);padding:0 12px;font-size:12.5px;color:var(--mut);display:flex;align-items:center;width:420px}
+
+/* top bar, shared by all pages */
+.top{height:68px;background:var(--s);border-bottom:1px solid var(--hair);display:flex;align-items:center;padding:0 32px;gap:20px}
+.brand{font-family:Fredoka;font-weight:600;font-size:25px;color:var(--ps);display:flex;align-items:center;gap:9px}.brand em{width:30px;height:30px;border-radius:10px;background:var(--p);display:inline-block}
+.links{display:flex;gap:6px;height:100%}.links a{display:flex;align-items:center;padding:0 14px;font-weight:800;font-size:15px;color:var(--soft);text-decoration:none;position:relative}
+.links a.on{color:var(--ink)}.links a.on:after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--p)}
+.sbox{flex:1;max-width:420px;min-width:250px;white-space:nowrap;height:42px;border-radius:12px;background:var(--tint);display:flex;align-items:center;padding:0 14px;gap:10px;color:var(--mut);font-weight:700;font-size:14.5px}.sbox kbd{margin-left:auto}
+kbd{font-family:Nunito;font-weight:800;font-size:11.5px;color:var(--mut);background:#fff;border:1px solid var(--hair);border-bottom-width:2px;border-radius:6px;padding:1px 6px}
+.sp{flex:1}
+.btn{height:40px;padding:0 16px;border-radius:12px;font-weight:800;font-size:14.5px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.ghost{border:1.5px solid var(--hair);color:var(--ink);background:#fff}.pri{background:var(--p);color:#fff}.soft{background:var(--pc);color:var(--opc)}
+.bell{width:40px;height:40px;border-radius:12px;background:var(--tint);display:grid;place-items:center;font-size:17px;position:relative}.bell i{position:absolute;top:7px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--bad);border:2px solid #fff}
+.me{width:38px;height:38px;border-radius:50%;background:var(--a3);color:#fff;display:grid;place-items:center;font-weight:800}
+.av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;flex:none}
+.pill{font-size:12.5px;font-weight:800;border-radius:999px;padding:3px 10px;display:inline-flex;gap:4px;align-items:center;white-space:nowrap}.g{background:var(--gw);color:var(--good)}.o{background:var(--ow);color:var(--ok)}.bd{background:var(--bw);color:var(--bad)}
+.card{background:var(--s);border-radius:18px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 10px 26px -18px rgba(20,30,50,.3)}
+.muted{color:var(--mut);font-weight:700;font-size:13px}
+.note{position:absolute;background:var(--ink);color:#fff;border-radius:12px;padding:8px 12px;font-size:13px;font-weight:700;max-width:260px;line-height:1.4;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.note:before{content:"";position:absolute;width:10px;height:10px;background:var(--ink);transform:rotate(45deg)}
+.note.l:before{left:-4px;top:14px}.note.t:before{top:-4px;left:20px}.note.r:before{right:-4px;top:14px}
+
+/* HOME */
+.home{display:grid;grid-template-columns:1fr 360px;gap:28px;width:1160px;margin:0 auto;padding:26px 0;height:796px}
+.feedh{display:flex;align-items:center;gap:12px;margin-bottom:14px}.feedh h3{font-family:Fredoka;font-weight:600;font-size:26px;margin:0}
+.seg{display:flex;background:var(--tint);border-radius:12px;padding:3px}.seg span{padding:6px 13px;border-radius:9px;font-weight:800;font-size:13px;color:var(--soft)}.seg .on{background:#fff;color:var(--ink)}
+.day{font-size:12.5px;font-weight:800;color:var(--mut);margin:16px 0 8px;letter-spacing:.3px}
+.post{display:grid;grid-template-columns:44px 1fr auto;gap:14px;padding:16px 18px;margin-bottom:10px}
+.post .who{font-size:14.5px;color:var(--soft)}.post .who b{color:var(--ink)}
+.post .pl{font-family:Fredoka;font-weight:600;font-size:21px;margin:2px 0 1px}
+.post .d{font-size:14px;color:var(--soft);margin-top:8px;display:flex;gap:18px}
+.post .acts{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between}
+.hov{display:flex;gap:6px}.hov span{height:34px;padding:0 12px;border-radius:10px;font-weight:800;font-size:13px;display:flex;align-items:center;background:var(--tint);color:var(--opc)}
+.post.hovered{outline:2px solid var(--pc)}
+.side{display:flex;flex-direction:column;gap:16px}
+.drop{border:2px dashed #B9C6EE;border-radius:18px;background:#F7F9FF;padding:18px}.drop h4{font-family:Fredoka;font-weight:600;font-size:19px;margin:0 0 4px}.drop p{margin:0 0 12px;font-size:13.5px;color:var(--soft);line-height:1.45}
+.box{padding:16px 18px}.box h4{font-family:Fredoka;font-weight:600;font-size:18px;margin:0 0 6px;display:flex;justify-content:space-between;align-items:baseline}.box h4 a{font-family:Nunito;font-size:13px;font-weight:800;color:var(--p)}
+.li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--hair);font-size:14px}.li:first-of-type{border-top:0}.li b{font-weight:800}
+
+/* SEARCH */
+.srch{width:1160px;margin:0 auto;padding:24px 0}
+.big{height:58px;background:#fff;border-radius:16px;border:2px solid var(--p);display:flex;align-items:center;padding:0 18px;gap:12px;font-size:19px;font-weight:700;box-shadow:0 0 0 5px rgba(35,80,217,.12)}
+.big .t{color:var(--ink)}.big .cur{width:2px;height:24px;background:var(--p);margin-left:-8px}
+.scope{display:flex;gap:6px;margin:14px 0 18px}.scope span{padding:8px 14px;border-radius:10px;font-weight:800;font-size:14px;color:var(--soft)}.scope .on{background:var(--ink);color:#fff}
+.sgrid{display:grid;grid-template-columns:240px 1fr;gap:28px}
+.filt h5{font-size:13px;font-weight:800;color:var(--mut);margin:0 0 8px;letter-spacing:.3px}.fg{margin-bottom:20px}
+.ck{display:flex;align-items:center;gap:9px;font-size:14.5px;font-weight:700;padding:5px 0;color:var(--soft)}.ck i{width:18px;height:18px;border-radius:6px;border:2px solid #B5C0E4;background:#fff}.ck.on{color:var(--ink)}.ck.on i{background:var(--p);border-color:var(--p)}.ck em{margin-left:auto;font-style:normal;font-size:12.5px;color:var(--mut)}
+.rh{display:flex;align-items:center;margin-bottom:12px}.rh b{font-size:15px}.rh .sp{flex:1}
+.tbl{overflow:hidden}.tr{display:grid;grid-template-columns:2.2fr 1.6fr 1.4fr 110px;gap:14px;align-items:center;padding:13px 18px;border-top:1px solid var(--hair);font-size:14px}
+.tr.h{border-top:0;background:#FAFBFF;font-size:12.5px;font-weight:800;color:var(--mut);padding:10px 18px}
+.tr .pn{font-weight:800;font-size:15.5px}.tr .ps{font-size:12.5px;color:var(--mut);font-weight:600}
+.faces{display:flex}.faces i{width:26px;height:26px;border-radius:50%;border:2px solid #fff;margin-left:-8px;color:#fff;font-style:normal;font-size:10px;font-weight:800;display:grid;place-items:center}.faces i:first-child{margin-left:0}
+.tr.hv{background:#F4F7FF}
+
+/* MAP */
+.mapw{display:flex;height:796px}
+.panel{width:420px;background:#fff;border-right:1px solid var(--hair);display:flex;flex-direction:column}
+.ph{padding:16px 18px 12px;border-bottom:1px solid var(--hair)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chip{height:32px;padding:0 12px;border-radius:10px;border:1px solid var(--hair);display:flex;align-items:center;font-weight:700;font-size:13px;color:var(--soft);background:#fff}.chip.s{background:var(--pc);border-color:var(--pc);color:var(--opc)}
+.row{display:flex;gap:12px;padding:13px 18px;border-bottom:1px solid var(--hair)}.row.on{background:#F4F7FF;box-shadow:inset 3px 0 0 var(--p)}
+.row .pn{font-weight:800;font-size:15.5px}.row .ps{font-size:12.5px;color:var(--mut);font-weight:600}.row .rd{font-size:13px;color:var(--soft);margin-top:3px}
+.mapc{flex:1;position:relative;background:#E4EAF6;overflow:hidden}
+.mapc svg{position:absolute;inset:0}
+.pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center}
+.pin b{min-width:34px;height:34px;border-radius:17px;background:var(--p);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800;border:3px solid #fff;box-shadow:0 6px 14px -6px rgba(16,24,58,.6);padding:0 6px}
+.pin.c b{min-width:44px;height:44px;border-radius:22px;background:var(--ps);font-size:15px}
+.pin.sel b{background:var(--ink);transform:scale(1.15)}
+.pop{position:absolute;width:330px;padding:16px}
+.mtools{position:absolute;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px}.mtools span{width:42px;height:42px;border-radius:12px;background:#fff;display:grid;place-items:center;font-weight:800;font-size:18px;box-shadow:0 4px 12px -6px rgba(16,24,58,.4)}
+.here{position:absolute;top:18px;left:50%;transform:translateX(-50%);height:40px;padding:0 18px;border-radius:999px;background:#fff;display:flex;align-items:center;font-weight:800;font-size:14px;box-shadow:0 6px 16px -8px rgba(16,24,58,.45)}
+
+/* PROFILE */
+.cover{height:170px;background:var(--pc);position:relative;overflow:hidden}
+.cover svg{position:absolute;right:-60px;top:-160px;width:560px;height:560px;fill:none;stroke:#BCCAF5;stroke-width:1.4}
+.pwrap{width:1160px;margin:0 auto;position:relative}
+.phead{display:flex;align-items:flex-end;gap:22px;margin-top:-56px}
+.bigav{width:124px;height:124px;border-radius:50%;background:var(--a3);border:5px solid var(--bg);color:#fff;font-family:Fredoka;font-size:48px;display:grid;place-items:center}
+.pname h3{font-family:Fredoka;font-weight:600;font-size:32px;margin:0}.pname div{font-size:14.5px;color:var(--mut);font-weight:700;margin:2px 0 8px}
+.stats{display:flex;gap:22px;font-size:14.5px;color:var(--soft)}.stats b{color:var(--ink);font-size:16px}
+.ptabs{display:flex;gap:4px;border-bottom:1px solid var(--hair);margin-top:22px}.ptabs span{padding:12px 16px;font-weight:800;font-size:15px;color:var(--soft);position:relative}.ptabs .on{color:var(--ink)}.ptabs .on:after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--p)}
+.ptabs em{font-style:normal;font-size:12.5px;color:var(--mut);margin-left:4px}
+.pgrid{display:grid;grid-template-columns:1fr;gap:24px;margin-top:18px}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.vc{padding:16px}.vc .pl{font-family:Fredoka;font-weight:600;font-size:18.5px}.vc .ps{font-size:12.5px;color:var(--mut);font-weight:700}.vc .d{font-size:13.5px;color:var(--soft);margin:10px 0}.vc .ft{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800}
+.bar{height:8px;border-radius:4px;background:var(--tint);overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--p);border-radius:4px}
+</style></head><body><div class="doc">
+
+<h1>Thinnava on the web: laptop</h1>
+<p>The same four pages as the Android app (Home, Search, Map, Profile) and the same colours, fonts and words, laid out the way people expect a website to work. Nothing new to learn: if you know the app, you know the website.</p>
+<div class="rules">
+<div><b>Top bar, not a bottom bar</b>The four pages sit as links in a top bar. Logging and pasting are always in the top right, on every page.</div>
+<div><b>Use the width</b>The phone's single column becomes a main column plus a side column, a filter sidebar, or a list beside the map.</div>
+<div><b>Mouse and keyboard</b>Actions show on hover. <kbd>/</kbd> searches, <kbd>N</kbd> logs a visit, and <kbd>Ctrl</kbd>+<kbd>V</kbd> anywhere reads a pasted message.</div>
+<div><b>Same app underneath</b>Same data, same privacy rules, same forms (they open as a centred dialog instead of a bottom sheet).</div>
+</div>
+
+<!-- ============ HOME ============ -->
+<div class="cap"><h2>1 · Home</h2><span>Your people's visits on the left; pasting, notifications and your wishlist on the right.</span></div>
+<div class="frame">
+<div class="chrome"><i></i><i></i><i></i><span class="url">thinnava.pages.dev</span></div>
+<header class="top"><span class="brand"><em></em>Thinnava</span><nav class="links"><a class="on">Home</a><a>Search</a><a>Map</a><a>Profile</a></nav><span class="sbox">⌕ Search places or people <kbd>/</kbd></span><span class="sp"></span><span class="btn ghost">⎘ Paste a message</span><span class="btn pri">+ Log a visit</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span><span class="me">C</span></header>
+<div class="home">
+<section>
+<div class="feedh"><h3>What your people ate</h3><div class="seg"><span class="on">Everything</span><span>Connections</span><span>From friends</span><span>Internet</span><span>Mine</span></div></div>
+<div class="day">TODAY</div>
+<article class="card post hovered"><span class="av" style="width:44px;height:44px;background:var(--a1)">TF</span><div><div class="who"><b>Test</b> went to</div><div class="pl">Meghana Foods</div><div class="muted">Indiranagar · Biryani · ₹450 / person</div><div class="d"><span>♡ Chicken boneless biryani</span><span>👎 Long wait</span></div></div><div class="acts"><span class="pill g">☺ Good</span><div class="hov"><span>♡ Wishlist</span><span>Directions</span><span>Swiggy</span></div></div></article>
+<article class="card post"><span class="av" style="width:44px;height:44px;background:var(--a3)">C</span><div><div class="who"><b>You</b> went to</div><div class="pl">Vidyarthi Bhavan</div><div class="muted">Basavanagudi · South Indian · ₹150 / person</div><div class="d"><span>♡ Masala dosa</span><span>With Test</span></div></div><div class="acts"><span class="pill g">☺ Good</span><span></span></div></article>
+<div class="day">THIS WEEK</div>
+<article class="card post"><span class="av" style="width:44px;height:44px;background:var(--a2)">CR</span><div><div class="who"><b>Chitra</b> went to</div><div class="pl">Burma Burma</div><div class="muted">Indiranagar · Burmese · ₹600 / person</div><div class="d"><span>♡ Khow suey</span><span>👎 Pricey drinks</span></div></div><div class="acts"><span class="pill o">◔ Okayish</span><span></span></div></article>
+<article class="card post"><span class="av" style="width:44px;height:44px;background:var(--a1)">TF</span><div><div class="who"><b>Test</b> went to</div><div class="pl">Third Wave Coffee</div><div class="muted">Indiranagar · Café · ₹350 / person</div><div class="d"><span>♡ Cold brew tonic</span></div></div><div class="acts"><span class="pill g">☺ Good</span><span></span></div></article>
+</section>
+<aside class="side">
+<div class="drop"><h4>Got a tip from a friend?</h4><p>Copy their WhatsApp message and press <kbd>Ctrl</kbd>+<kbd>V</kbd> anywhere on this page. We'll read it and fill in the place for you.</p><span class="btn soft">⎘ Paste a message</span></div>
+<div class="card box"><h4>Notifications <a>See all</a></h4>
+<div class="li"><span class="av" style="width:30px;height:30px;font-size:11px;background:#8A5BB8">AK</span><div style="flex:1"><b>Arjun</b> wants to connect<div class="muted">2 min ago</div></div><span class="btn pri" style="height:32px;padding:0 12px;font-size:13px">Accept</span></div>
+<div class="li"><span class="av" style="width:30px;height:30px;font-size:11px;background:var(--a1)">TF</span><div style="flex:1"><b>Test</b> tagged you at <b>Vidyarthi Bhavan</b><div class="muted">1 hr ago</div></div><span class="btn soft" style="height:32px;padding:0 12px;font-size:13px">Add your review</span></div>
+<div class="li"><span class="av" style="width:30px;height:30px;font-size:11px;background:var(--a2)">CR</span><div><b>Chitra</b> visited <b>Koshy's</b>, a place on your wishlist<div class="muted">Yesterday</div></div></div></div>
+<div class="card box"><h4>Your wishlist <a>See all 25</a></h4>
+<div class="li"><span>♡</span><div><b>Brik Oven</b><div class="muted">Rahul told you</div></div></div>
+<div class="li"><span>♡</span><div><b>Koshy's</b><div class="muted">Chitra went · ☺ Good</div></div></div>
+<div class="li"><span>♡</span><div><b>Glen's Bakehouse</b><div class="muted">Internet find</div></div></div></div>
+</aside></div>
+<div class="note t" style="left:690px;top:430px">Hover a visit: Wishlist, Directions and Swiggy appear. Click it to open the full visit.</div>
+</div>
+
+<!-- ============ SEARCH ============ -->
+<div class="cap"><h2>2 · Search</h2><span>One big search box with Places | People, filters down the left, results as a list you can scan.</span></div>
+<div class="frame">
+<div class="chrome"><i></i><i></i><i></i><span class="url">thinnava.pages.dev/search?q=biryani</span></div>
+<header class="top"><span class="brand"><em></em>Thinnava</span><nav class="links"><a>Home</a><a class="on">Search</a><a>Map</a><a>Profile</a></nav><span class="sp"></span><span class="btn ghost">⎘ Paste a message</span><span class="btn pri">+ Log a visit</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span><span class="me">C</span></header>
+<div class="srch">
+<div class="big">⌕ <span class="t">biryani</span><span class="cur"></span><span class="sp"></span><span class="muted">Searching near</span><span class="btn ghost" style="height:36px;font-size:13.5px">⌖ Indiranagar ▾</span></div>
+<div class="scope"><span class="on">Places</span><span>People</span></div>
+<div class="sgrid">
+<aside class="filt">
+<div class="fg"><h5>WHO WENT</h5><div class="ck on"><i></i>Someone I know went</div></div>
+<div class="fg"><h5>TYPE</h5><div class="ck on"><i></i>Restaurant</div><div class="ck"><i></i>Café</div><div class="ck"><i></i>Street food</div><div class="ck"><i></i>Bakery</div></div>
+<div class="fg"><h5>PRICE PER PERSON</h5><div class="ck"><i></i>Under ₹200</div><div class="ck on"><i></i>₹200 – ₹500</div><div class="ck"><i></i>₹500 – ₹1000</div><div class="ck"><i></i>Over ₹1000</div></div>
+<span style="font-weight:800;color:var(--p);font-size:14px">Clear filters</span>
+</aside>
+<section>
+<div class="rh"><b>Your people went</b><span class="muted" style="margin-left:8px">4 places</span></div>
+<div class="card tbl">
+<div class="tr h"><span>Place</span><span>Who went</span><span>Area</span><span>Price</span></div>
+<div class="tr hv"><div><div class="pn">Meghana Foods</div><div class="ps">Restaurant</div></div><span style="display:flex;gap:8px;align-items:center"><span class="faces"><i style="background:var(--a1)">TF</i><i style="background:var(--a2)">CR</i><i style="background:var(--a3)">C</i></span><span class="muted">3 went</span></span><span>Indiranagar</span><span><b>₹450</b></span></div>
+<div class="tr"><div><div class="pn">Nagarjuna</div><div class="ps">Restaurant</div></div><span style="display:flex;gap:8px;align-items:center"><span class="faces"><i style="background:var(--a3)">C</i></span><span class="muted">You went</span></span><span>Residency Road</span><span><b>₹400</b></span></div>
+<div class="tr"><div><div class="pn">Empire Restaurant</div><div class="ps">Restaurant</div></div><span style="display:flex;gap:8px;align-items:center"><span class="faces"><i style="background:var(--a1)">TF</i></span><span class="muted">Test went</span></span><span>Indiranagar</span><span><b>₹350</b></span></div>
+<div class="tr"><div><div class="pn">Biryani Zone</div><div class="ps">Restaurant</div></div><span style="display:flex;gap:8px;align-items:center"><span class="faces"><i style="background:var(--tint);color:var(--ps)">☺</i></span><span class="muted">Rahul told you</span></span><span>HAL 2nd Stage</span><span><b>₹300</b></span></div>
+</div>
+<div class="rh" style="margin-top:20px"><b>Nobody you know has been</b><span class="muted" style="margin-left:8px">hidden while "Someone I know went" is on · <span style="color:var(--p)">Show</span></span></div>
+</section></div></div>
+<div class="note t" style="left:150px;top:690px">Ticking a filter updates the results and the web address, so a search can be bookmarked or sent to a friend.</div>
+</div>
+
+
+<!-- ============ MAP ============ -->
+<div class="cap"><h2>3 · Map</h2><span>Like Google Maps on a laptop: the list on the left, the map filling the rest. Hover a row and its pin lights up.</span></div>
+<div class="frame">
+<div class="chrome"><i></i><i></i><i></i><span class="url">thinnava.pages.dev/map</span></div>
+<header class="top"><span class="brand"><em></em>Thinnava</span><nav class="links"><a>Home</a><a>Search</a><a class="on">Map</a><a>Profile</a></nav><span class="sbox">⌕ Search places or people <kbd>/</kbd></span><span class="sp"></span><span class="btn ghost">⎘ Paste a message</span><span class="btn pri">+ Log a visit</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span><span class="me">C</span></header>
+<div class="mapw">
+<aside class="panel"><div class="ph"><div style="display:flex;align-items:baseline;justify-content:space-between"><b style="font-family:Fredoka;font-weight:600;font-size:21px">18 places in view</b><span class="muted">Moves with the map</span></div>
+<div class="chips"><span class="chip s">All</span><span class="chip">Visited</span><span class="chip">Wishlist</span><span class="chip">Connections</span><span class="chip">Friends</span><span class="chip">Internet</span><span class="chip">⚙ Filters</span></div></div>
+<div class="row on"><span class="av" style="width:40px;height:40px;font-size:13px;background:var(--a1)">TF</span><div><div class="pn">Meghana Foods</div><div class="ps">Biryani · ₹450 · Test, Chitra</div><div class="rd">♡ Chicken boneless biryani</div></div><span class="pill g" style="margin-left:auto;align-self:flex-start">☺ Good</span></div>
+<div class="row"><span class="av" style="width:40px;height:40px;font-size:13px;background:var(--a2)">CR</span><div><div class="pn">Burma Burma</div><div class="ps">Burmese · ₹600 · Chitra</div><div class="rd">♡ Khow suey</div></div><span class="pill o" style="margin-left:auto;align-self:flex-start">◔ Okayish</span></div>
+<div class="row"><span class="av" style="width:40px;height:40px;font-size:13px;background:var(--a1)">TF</span><div><div class="pn">Third Wave Coffee</div><div class="ps">Café · ₹350 · Test, Chitra</div><div class="rd">♡ Cold brew tonic</div></div><span class="pill g" style="margin-left:auto;align-self:flex-start">☺ Good</span></div>
+<div class="row"><span class="av" style="width:40px;height:40px;font-size:13px;background:var(--a3)">C</span><div><div class="pn">Hatti Kaapi</div><div class="ps">Café · ₹120 · You, Test</div><div class="rd">♡ Filter coffee</div></div><span class="pill g" style="margin-left:auto;align-self:flex-start">☺ Good</span></div>
+<div class="row"><span class="av" style="width:40px;height:40px;font-size:13px;background:var(--tint);color:var(--ps)">♡</span><div><div class="pn">Brik Oven</div><div class="ps">Pizza · On your wishlist</div><div class="rd">Rahul told you about it</div></div></div>
+</aside>
+<div class="mapc">
+<svg viewBox="0 0 1020 796" preserveAspectRatio="none"><rect width="1020" height="796" fill="#E4EAF6"/>
+<path d="M160 0 C220 220 380 300 420 796" stroke="#fff" stroke-width="22" fill="none"/><path d="M0 330 C300 360 640 300 1020 380" stroke="#fff" stroke-width="26" fill="none"/>
+<path d="M0 600 L1020 520" stroke="#fff" stroke-width="12" fill="none"/><path d="M700 0 L620 796" stroke="#fff" stroke-width="14" fill="none"/><path d="M860 0 C820 300 960 500 900 796" stroke="#fff" stroke-width="9" fill="none"/>
+<path d="M0 150 L1020 120" stroke="#fff" stroke-width="8" fill="none"/><rect x="460" y="420" width="130" height="80" rx="18" fill="#D3E8D4"/><rect x="760" y="610" width="180" height="110" rx="24" fill="#D3E8D4"/>
+<text x="440" y="304" font-family="Nunito" font-weight="800" font-size="14" fill="#8A94B8">100 FEET ROAD</text><text x="80" y="230" font-family="Nunito" font-weight="800" font-size="16" fill="#8A94B8" letter-spacing="2">INDIRANAGAR</text><text x="760" y="460" font-family="Nunito" font-weight="800" font-size="14" fill="#8A94B8" letter-spacing="2">DOMLUR</text></svg>
+<div class="here">Search this area</div>
+<div class="pin sel" style="left:340px;top:330px"><b>☺</b></div>
+<div class="pin" style="left:520px;top:280px"><b>☺</b></div><div class="pin" style="left:610px;top:380px"><b>◔</b></div><div class="pin c" style="left:250px;top:560px"><b>6</b></div><div class="pin c" style="left:800px;top:240px"><b>4</b></div><div class="pin" style="left:720px;top:560px"><b>☺</b></div><div class="pin" style="left:420px;top:170px"><b>♡</b></div>
+<div class="card pop" style="left:370px;top:350px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-family:Fredoka;font-weight:600;font-size:20px">Meghana Foods</div><div class="muted">Indiranagar · Biryani · ₹450</div></div><span class="pill g">☺ Good</span></div>
+<div style="display:flex;gap:8px;align-items:center;margin:12px 0;font-size:13.5px;color:var(--soft)"><span class="faces"><i style="background:var(--a1)">TF</i><i style="background:var(--a2)">CR</i></span>Test and Chitra liked it</div>
+<div style="display:flex;gap:6px"><span class="btn pri" style="height:36px;font-size:13.5px">Open place</span><span class="btn soft" style="height:36px;font-size:13.5px">Directions</span><span class="btn soft" style="height:36px;font-size:13.5px">♡</span></div></div>
+<div class="mtools"><span>⌖</span><span>+</span><span>−</span></div>
+</div></div>
+<div class="note l" style="left:560px;top:760px">The list only shows places visible on the map. Drag the map and the list follows.</div>
+</div>
+
+<!-- ============ PROFILE ============ -->
+<div class="cap"><h2>4 · Profile</h2><span>A proper profile page: header, counts, and the app's three tabs (Visited, Wishlist, Saved) shown as a grid.</span></div>
+<div class="frame">
+<div class="chrome"><i></i><i></i><i></i><span class="url">thinnava.pages.dev/profile</span></div>
+<header class="top"><span class="brand"><em></em>Thinnava</span><nav class="links"><a>Home</a><a>Search</a><a>Map</a><a class="on">Profile</a></nav><span class="sbox">⌕ Search places or people <kbd>/</kbd></span><span class="sp"></span><span class="btn ghost">⎘ Paste a message</span><span class="btn pri">+ Log a visit</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span><span class="me">C</span></header>
+<div class="cover"><svg viewBox="0 0 400 400"><circle cx="300" cy="100" r="60"/><circle cx="300" cy="100" r="110"/><circle cx="300" cy="100" r="160"/><circle cx="300" cy="100" r="210"/><circle cx="300" cy="100" r="260"/></svg></div>
+<div class="pwrap">
+<div class="phead"><span class="bigav">C</span><div class="pname" style="flex:1"><h3>C.Karthikeshwar</h3><div>@karthik · Food explorer, filter coffee person</div><div class="stats"><span><b>42</b> visited</span><span><b>25</b> wishlist</span><span><b>6</b> connections</span></div></div><span class="btn ghost">Connections</span><span class="btn ghost">⚙ Settings</span></div>
+<div class="ptabs"><span class="on">Visited<em>42</em></span><span>Wishlist<em>25</em></span><span>Saved<em>15</em></span><span class="sp"></span><span style="color:var(--p)">◫ Open on map</span></div>
+<div class="pgrid"><div class="vgrid">
+<div class="card vc"><div class="pl">Nagarjuna</div><div class="ps">Residency Road · Andhra · Today</div><div class="d">♡ Andhra meals, chicken fry</div><div class="ft"><span class="pill g">☺ Good</span><span class="sp"></span>₹400</div></div>
+<div class="card vc"><div class="pl">Vidyarthi Bhavan</div><div class="ps">Basavanagudi · South Indian · Today</div><div class="d">♡ Masala dosa · with Test</div><div class="ft"><span class="pill g">☺ Good</span><span class="sp"></span>₹150</div></div>
+<div class="card vc"><div class="pl">CTR</div><div class="ps">Malleshwaram · South Indian · Oct 15</div><div class="d">♡ Benne masala dosa</div><div class="ft"><span class="pill g">☺ Good</span><span class="sp"></span>₹120</div></div>
+<div class="card vc"><div class="pl">Hatti Kaapi</div><div class="ps">Indiranagar · Café · Oct 11</div><div class="d">♡ Filter coffee</div><div class="ft"><span class="pill g">☺ Good</span><span class="sp"></span>₹120</div></div>
+<div class="card vc"><div class="pl">Leon Grill</div><div class="ps">Indiranagar · Fast food · Oct 8</div><div class="d">👎 Soggy fries</div><div class="ft"><span class="pill bd">☹ Bad</span><span class="sp"></span>₹250</div></div>
+<div class="card vc"><div class="pl">Meghana Foods</div><div class="ps">Koramangala · Biryani · Oct 4</div><div class="d">♡ Chicken biryani</div><div class="ft"><span class="pill g">☺ Good</span><span class="sp"></span>₹450</div></div>
+</div>
+
+</div></div>
+</div>
+
+<style>
+/* ---------- phone browser ---------- */
+.part{font-family:Fredoka;font-weight:600;font-size:34px;color:var(--ps);margin:70px 0 6px}
+.partp{font-size:17px;color:var(--soft);max-width:960px;line-height:1.55;margin:0 0 24px}
+.phones{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:56px}
+.pcol{display:flex;flex-direction:column;gap:10px;width:390px}
+.pcol>h3{font-family:Fredoka;font-weight:600;font-size:21px;margin:0}.pcol>p{margin:0;font-size:14.5px;color:var(--soft);line-height:1.5;min-height:66px}
+.ph{width:390px;height:844px;border-radius:46px;background:var(--bg);border:10px solid #10183A;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 60px -30px rgba(16,24,58,.5)}
+.sb{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-weight:800;font-size:14px;background:var(--s)}
+.mt{flex:none;background:var(--s);display:flex;align-items:center;gap:10px;padding:6px 14px 4px}
+.mt .brand{font-size:22px}.mt .brand em{width:24px;height:24px;border-radius:8px}
+.mt .lg{height:34px;padding:0 13px;border-radius:11px;background:var(--pc);color:var(--opc);font-weight:800;font-size:13.5px;display:flex;align-items:center}
+.mt .bell{width:36px;height:36px}
+.mtabs{flex:none;background:var(--s);border-bottom:1px solid var(--hair);display:flex;padding:0 6px}
+.mtabs span{flex:1;text-align:center;padding:11px 0 10px;font-weight:800;font-size:14px;color:var(--soft);position:relative}
+.mtabs .on{color:var(--ink)}.mtabs .on:after{content:"";position:absolute;left:22%;right:22%;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--p)}
+.mb>*{flex-shrink:0}
+.mb{flex:1;overflow:hidden;padding:14px;display:flex;flex-direction:column;gap:12px;position:relative}
+.safari{flex:none;height:84px;background:rgba(246,247,251,.96);border-top:1px solid #D5DAE8;padding:8px 14px 0;display:flex;flex-direction:column;gap:8px}
+.safari .u{height:40px;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--ink)}
+.safari .ic{display:flex;justify-content:space-around;color:#2B6DE8;font-size:17px;font-weight:800}
+.paste1{background:var(--p);color:#fff;border-radius:22px;padding:16px}
+.paste1 h4{font-family:Fredoka;font-weight:600;font-size:20px;margin:0 0 3px}.paste1 p{margin:0 0 12px;font-size:13.5px;opacity:.88;line-height:1.4}
+.paste1 .b{height:48px;border-radius:14px;background:#fff;color:var(--ps);font-weight:800;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:8px}
+.a2hs{background:var(--s);border-radius:20px;padding:12px 14px;display:flex;gap:12px;align-items:center;position:relative;box-shadow:0 8px 20px -16px rgba(20,30,50,.4)}
+.a2hs img{width:52px;height:52px;object-fit:contain}.a2hs b{font-size:14.5px;display:block}.a2hs span{font-size:12.5px;color:var(--soft);line-height:1.35;display:block;margin-top:2px}
+.a2hs .x{position:absolute;top:8px;right:12px;color:var(--mut);font-weight:800}
+.a2hs .go{font-size:13px;font-weight:800;color:var(--p);margin-top:5px;display:block}
+.mseg{display:flex;gap:6px;overflow:hidden}.mseg span{flex:none;height:32px;padding:0 12px;border-radius:10px;border:1px solid var(--hair);display:flex;align-items:center;font-weight:700;font-size:13px;color:var(--soft);background:#fff}.mseg .on{background:var(--pc);border-color:var(--pc);color:var(--opc)}
+.mc{background:var(--s);border-radius:18px;padding:13px 14px;display:flex;gap:11px;box-shadow:0 1px 2px rgba(20,30,50,.05),0 8px 20px -16px rgba(20,30,50,.3)}
+.mc .w{font-size:13px;color:var(--soft)}.mc .w b{color:var(--ink)}.mc .pl{font-family:Fredoka;font-weight:600;font-size:18px}.mc .ps{font-size:12px;color:var(--mut);font-weight:700}.mc .d{font-size:13px;color:var(--soft);margin-top:6px}
+.msearch{height:48px;border-radius:14px;background:#fff;border:2px solid var(--p);display:flex;align-items:center;gap:10px;padding:0 14px;font-weight:700;font-size:16px}
+.mrow{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px solid var(--hair)}.mrow:first-child{border-top:0}
+.mrow .pn{font-weight:800;font-size:15px}.mrow .ps{font-size:12.5px;color:var(--mut);font-weight:600}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:26px 26px 0 0;padding:10px 20px 20px;box-shadow:0 -10px 30px -10px rgba(16,24,58,.35)}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:#C9D1EA;margin:0 auto 14px}
+.step{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--hair);font-size:14.5px}.step:first-of-type{border-top:0}
+.step i{width:30px;height:30px;border-radius:50%;background:var(--pc);color:var(--opc);font-style:normal;font-weight:800;display:grid;place-items:center;flex:none}
+.dim{position:absolute;inset:0;background:rgba(16,24,58,.38)}
+.arrowdown{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:26px;color:#fff;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+
+/* ---------- front page ---------- */
+.fp-top{height:72px;display:flex;align-items:center;padding:0 56px;gap:20px}
+.fp{display:grid;grid-template-columns:1fr 560px;gap:40px;padding:6px 56px 0 96px;align-items:center}
+.fp h2{font-family:Fredoka;font-weight:600;font-size:52px;line-height:1.08;margin:0 0 18px;color:var(--ink);letter-spacing:-.3px}
+.fp h2 span{color:var(--p)}
+.fp .lead{font-size:19px;color:var(--soft);line-height:1.55;margin:0 0 28px;max-width:540px}
+.gbtn{height:56px;padding:0 26px;border-radius:16px;background:var(--ink);color:#fff;font-weight:800;font-size:17px;display:inline-flex;align-items:center;gap:12px}
+.gbtn b{width:26px;height:26px;border-radius:50%;background:#fff;color:#4285F4;display:grid;place-items:center;font-size:15px}
+.fine{font-size:13px;color:var(--mut);font-weight:600;margin-top:12px}.fine u{color:var(--soft)}
+.back{margin-top:22px;display:flex;gap:10px;align-items:center;font-size:14.5px;color:var(--soft);background:#fff;border-radius:14px;padding:10px 14px;width:max-content}
+.stage{position:relative;height:470px}
+.bubble{position:absolute;left:10px;top:30px;width:330px;background:#fff;border-radius:18px 18px 18px 4px;padding:12px 14px;font-size:15px;line-height:1.45;box-shadow:0 12px 26px -16px rgba(16,24,58,.45)}
+.bubble small{display:block;font-weight:800;color:#1F8A5B;font-size:12.5px;margin-bottom:2px}
+.bubble em{font-style:normal;color:var(--mut);font-size:11.5px;float:right;margin-top:4px}
+.flow{position:absolute;left:150px;top:150px;font-family:Fredoka;font-weight:600;color:var(--p);font-size:16px;display:flex;align-items:center;gap:8px}
+.made{position:absolute;left:150px;top:190px;width:360px;background:#fff;border-radius:22px;padding:16px;box-shadow:0 20px 40px -22px rgba(16,24,58,.5)}
+.made .pl{font-family:Fredoka;font-weight:600;font-size:22px}.made .t{font-size:13.5px;color:var(--soft);margin-top:8px}
+.stage img{position:absolute;right:0;bottom:0;width:200px}
+.rings2{position:absolute;right:-80px;top:-60px;width:560px;height:560px;fill:none;stroke:var(--rings);stroke-width:1.3}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 56px 0 96px;margin-top:14px}
+.three div{background:#fff;border-radius:18px;padding:14px 16px;font-size:14px;color:var(--soft);line-height:1.45}.three b{display:block;color:var(--ink);font-size:16px;font-family:Fredoka;font-weight:600;margin-bottom:2px}
+.fp-foot{position:absolute;left:96px;right:56px;bottom:20px;display:flex;gap:22px;font-size:13.5px;font-weight:700;color:var(--mut)}
+</style>
+
+<!-- =================== PART 2: PHONE BROWSER =================== -->
+<div class="part">Thinnava on the web: phone browser</div>
+<p class="partp">For friends on iPhone (and anyone who opens a link). Same four pages, but three things make it clearly the website, not the Android app: a <b>top bar</b> instead of a bottom bar (Safari already puts its own address bar at the bottom), a <b>paste-first Home</b>, and an <b>Add to Home Screen</b> card so it can sit on the phone like an app.</p>
+<div class="phones">
+
+<div class="pcol"><h3>Home</h3><p>Pasting comes first: copy a friend's WhatsApp message, open Thinnava, tap the big button. The Add to Home Screen card shows until it's used or closed.</p>
+<div class="ph"><div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+<div class="mt"><span class="brand"><em></em>Thinnava</span><span class="sp"></span><span class="lg">+ Log</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span></div>
+<div class="mtabs"><span class="on">Home</span><span>Search</span><span>Map</span><span>Profile</span></div>
+<div class="mb">
+<div class="paste1"><h4>Got a tip from a friend?</h4><p>Copy their WhatsApp message, then tap below. We'll read it and fill in the place.</p><div class="b">⎘ Paste a message</div></div>
+<div class="a2hs"><img src="assets/cat-waving.png" alt=""><div><b>Keep Thinnava on your home screen</b><span>Opens full screen, like an app.</span><span class="go">Show me how</span></div><span class="x">✕</span></div>
+<div class="mseg"><span class="on">Everything</span><span>Connections</span><span>From friends</span><span>Internet</span></div>
+<div class="mc"><span class="av" style="width:38px;height:38px;font-size:12px;background:var(--a1)">TF</span><div style="flex:1"><div class="w"><b>Test</b> went to</div><div class="pl">Meghana Foods</div><div class="ps">Indiranagar · ₹450 / person</div><div class="d">♡ Chicken boneless biryani</div></div><span class="pill g" style="align-self:flex-start">☺ Good</span></div>
+<div class="mc"><span class="av" style="width:38px;height:38px;font-size:12px;background:var(--a2)">CR</span><div style="flex:1"><div class="w"><b>Chitra</b> went to</div><div class="pl">Burma Burma</div><div class="ps">Indiranagar · ₹600 / person</div></div><span class="pill o" style="align-self:flex-start">◔ Okayish</span></div>
+</div>
+<div class="safari"><div class="u">🔒 thinnava.pages.dev</div><div class="ic"><span>‹</span><span>›</span><span>⬆</span><span>▢</span><span>⧉</span></div></div></div></div>
+
+<div class="pcol"><h3>Add to Home Screen</h3><p>"Show me how" opens a short sheet pointing at Safari's own Share button. On Android Chrome it's one tap: the browser's own Install prompt.</p>
+<div class="ph"><div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+<div class="mt"><span class="brand"><em></em>Thinnava</span><span class="sp"></span><span class="lg">+ Log</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span></div>
+<div class="mtabs"><span class="on">Home</span><span>Search</span><span>Map</span><span>Profile</span></div>
+<div class="mb"><div class="paste1"><h4>Got a tip from a friend?</h4><p>Copy their WhatsApp message, then tap below.</p><div class="b">⎘ Paste a message</div></div>
+<div class="dim"></div>
+<div class="sheet"><div class="grab"></div>
+<div style="display:flex;gap:12px;align-items:center;margin-bottom:8px"><img src="assets/cat-offering.png" alt="" style="width:64px"><div><div style="font-family:Fredoka;font-weight:600;font-size:21px">Put Thinnava on your home screen</div><div class="muted">Takes 10 seconds.</div></div></div>
+<div class="step"><i>1</i><div>Tap <b>⬆ Share</b> in Safari's bar below</div></div>
+<div class="step"><i>2</i><div>Scroll down, tap <b>Add to Home Screen</b></div></div>
+<div class="step"><i>3</i><div>Tap <b>Add</b>. Thinnava now opens like an app.</div></div>
+<div style="height:46px;border-radius:14px;background:var(--pc);color:var(--opc);font-weight:800;display:grid;place-items:center;margin-top:8px">Got it</div>
+</div></div>
+<div class="safari"><div class="u">🔒 thinnava.pages.dev</div><div class="ic"><span>‹</span><span>›</span><span style="background:#2B6DE8;color:#fff;border-radius:8px;padding:0 7px">⬆</span><span>▢</span><span>⧉</span></div></div></div></div>
+
+<div class="pcol"><h3>Search</h3><p>Same as the laptop, folded into one column: Places | People, filter chips, the area it's searching near, then results.</p>
+<div class="ph"><div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+<div class="mt"><span class="brand"><em></em>Thinnava</span><span class="sp"></span><span class="lg">+ Log</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span></div>
+<div class="mtabs"><span>Home</span><span class="on">Search</span><span>Map</span><span>Profile</span></div>
+<div class="mb">
+<div class="msearch">⌕ biryani<span style="width:2px;height:20px;background:var(--p);margin-left:-6px"></span></div>
+<div style="display:flex;gap:8px;align-items:center"><div class="seg"><span class="on">Places</span><span>People</span></div><span class="sp"></span><span class="chip" style="height:30px;white-space:nowrap">⌖ Indiranagar ▾</span></div>
+<div class="mseg"><span class="on">✓ Someone I know went</span><span>Type ▾</span><span>₹ Price ▾</span></div>
+<div class="muted" style="margin-top:2px">YOUR PEOPLE WENT</div>
+<div class="card" style="padding:4px 14px">
+<div class="mrow"><div style="flex:1"><div class="pn">Meghana Foods</div><div class="ps">Restaurant · Indiranagar · ₹450</div></div><span class="faces"><i style="background:var(--a1)">TF</i><i style="background:var(--a2)">CR</i><i style="background:var(--a3)">C</i></span></div>
+<div class="mrow"><div style="flex:1"><div class="pn">Nagarjuna</div><div class="ps">Restaurant · Residency Rd · ₹400</div></div><span class="faces"><i style="background:var(--a3)">C</i></span></div>
+<div class="mrow"><div style="flex:1"><div class="pn">Empire Restaurant</div><div class="ps">Restaurant · Indiranagar · ₹350</div></div><span class="faces"><i style="background:var(--a1)">TF</i></span></div>
+<div class="mrow"><div style="flex:1"><div class="pn">Biryani Zone</div><div class="ps">Rahul told you · ₹300</div></div><span class="faces"><i style="background:var(--tint);color:var(--ps)">☺</i></span></div>
+</div></div>
+<div class="safari"><div class="u">🔒 thinnava.pages.dev</div><div class="ic"><span>‹</span><span>›</span><span>⬆</span><span>▢</span><span>⧉</span></div></div></div></div>
+
+<div class="pcol"><h3>Map</h3><p>The map fills the screen; tapping a pin shows its card. The layer chips are the app's (All, Visited, Wishlist…).</p>
+<div class="ph"><div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+<div class="mt"><span class="brand"><em></em>Thinnava</span><span class="sp"></span><span class="lg">+ Log</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span></div>
+<div class="mtabs"><span>Home</span><span>Search</span><span class="on">Map</span><span>Profile</span></div>
+<div class="mb" style="padding:0">
+<svg viewBox="0 0 370 560" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><rect width="370" height="560" fill="#E4EAF6"/><path d="M60 0 C90 200 150 260 170 560" stroke="#fff" stroke-width="16" fill="none"/><path d="M0 230 C120 250 240 210 370 260" stroke="#fff" stroke-width="18" fill="none"/><path d="M260 0 L230 560" stroke="#fff" stroke-width="10" fill="none"/><rect x="190" y="300" width="80" height="60" rx="14" fill="#D3E8D4"/></svg>
+<div class="mseg" style="position:absolute;top:12px;left:12px;right:0"><span class="on">All</span><span>Visited</span><span>Wishlist</span><span>Connections</span><span>⚙</span></div>
+<div class="pin sel" style="left:120px;top:230px"><b>☺</b></div><div class="pin" style="left:240px;top:180px"><b>☺</b></div><div class="pin c" style="left:300px;top:330px"><b>4</b></div><div class="pin" style="left:80px;top:360px"><b>♡</b></div>
+<div class="card" style="position:absolute;left:12px;right:12px;bottom:12px;padding:14px"><div style="display:flex;justify-content:space-between"><div><div style="font-family:Fredoka;font-weight:600;font-size:19px">Meghana Foods</div><div class="muted">Biryani · ₹450 · Test and Chitra</div></div><span class="pill g" style="align-self:flex-start">☺ Good</span></div><div style="display:flex;gap:6px;margin-top:10px"><span class="btn pri" style="height:38px;flex:1;justify-content:center">Open place</span><span class="btn soft" style="height:38px">Directions</span></div></div>
+</div>
+<div class="safari"><div class="u">🔒 thinnava.pages.dev</div><div class="ic"><span>‹</span><span>›</span><span>⬆</span><span>▢</span><span>⧉</span></div></div></div></div>
+
+<div class="pcol"><h3>Profile</h3><p>Like the app's profile, with Connections and Settings as plain links up top.</p>
+<div class="ph"><div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+<div class="mt"><span class="brand"><em></em>Thinnava</span><span class="sp"></span><span class="lg">+ Log</span><span class="bell"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10183A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></span></div>
+<div class="mtabs"><span>Home</span><span>Search</span><span>Map</span><span class="on">Profile</span></div>
+<div class="mb" style="align-items:center;gap:8px">
+<div style="align-self:stretch;display:flex;justify-content:space-between;font-weight:800;font-size:14px;color:var(--p)"><span>Connections</span><span>⚙ Settings</span></div>
+<span class="av" style="width:84px;height:84px;font-size:32px;background:var(--a3);font-family:Fredoka">C</span>
+<div style="font-family:Fredoka;font-weight:600;font-size:24px">C.Karthikeshwar</div><div class="muted" style="margin-top:-6px">@karthik</div>
+<div class="stats" style="font-size:13.5px"><span><b>42</b> visited</span><span><b>25</b> wishlist</span><span><b>6</b> connections</span></div>
+<div class="ptabs" style="align-self:stretch;margin-top:6px;justify-content:space-around"><span class="on">Visited</span><span>Wishlist</span><span>Saved</span></div>
+<div class="card" style="align-self:stretch;padding:4px 14px">
+<div class="mrow"><div style="flex:1"><div class="pn">Nagarjuna</div><div class="ps">Residency Road · Today</div></div><span class="pill g">☺ Good</span></div>
+<div class="mrow"><div style="flex:1"><div class="pn">Vidyarthi Bhavan</div><div class="ps">Basavanagudi · Today</div></div><span class="pill g">☺ Good</span></div>
+<div class="mrow"><div style="flex:1"><div class="pn">Leon Grill</div><div class="ps">Indiranagar · Oct 8</div></div><span class="pill bd">☹ Bad</span></div>
+</div></div>
+<div class="safari"><div class="u">🔒 thinnava.pages.dev</div><div class="ic"><span>‹</span><span>›</span><span>⬆</span><span>▢</span><span>⧉</span></div></div></div></div>
+</div>
+
+<!-- =================== PART 3: FRONT PAGE =================== -->
+<div class="part">The front page (signed out)</div>
+<p class="partp">What anyone sees at thinnava.pages.dev before signing in. It answers "what is this?" for newcomers in one look (a friend's message turning into a saved place), and gives existing Android users the same one button: their Google account already has all their data.</p>
+<div class="frame">
+<div class="chrome"><i></i><i></i><i></i><span class="url">thinnava.pages.dev</span></div>
+<svg class="rings2" viewBox="0 0 400 400"><circle cx="300" cy="100" r="60"/><circle cx="300" cy="100" r="110"/><circle cx="300" cy="100" r="160"/><circle cx="300" cy="100" r="210"/><circle cx="300" cy="100" r="260"/></svg>
+<div class="fp-top"><span class="brand"><em></em>Thinnava</span><span class="sp"></span><span class="btn ghost">Sign in</span></div>
+<div class="fp"><div>
+<h2>Every place your friends rave about, <span>in one spot.</span></h2>
+<p class="lead">No more scrolling chats to find "that biryani place Rahul said". Save what friends tell you, log where you ate, and see where your people have been. No strangers, no ads.</p>
+<span class="gbtn"><b>G</b>Continue with Google</span>
+<div class="fine">By continuing you agree to the <u>Terms</u> and <u>Privacy Policy</u>.</div>
+<div class="back">📱 Already use Thinnava on Android? Same Google account, same places. Everything's already here.</div>
+</div>
+<div class="stage">
+<div class="bubble"><small>Rahul</small>da try Brik Oven in Indiranagar, the truffle mushroom pizza is insane 🍕 bit pricey tho<em>8:42 pm</em></div>
+<div class="flow">⎘ Paste it into Thinnava ↓</div>
+<div class="made"><div class="muted">Rahul told you</div><div class="pl">Brik Oven</div><div class="muted">Indiranagar · Pizza</div><div class="t">♡ Truffle mushroom pizza</div><div class="t">👎 Bit pricey</div><div style="margin-top:10px"><span class="pill g">☺ Good</span></div></div>
+<img src="assets/cat-offering.png" alt="">
+</div></div>
+<div class="three"><div><b>Save what friends tell you</b>Copy their message and paste it. We fill in the place.</div><div><b>Log where you ate</b>A rating, what was good, what wasn't. Seconds.</div><div><b>See where your people went</b>Only people you've connected with. On a list or a map.</div></div>
+<div class="fp-foot"><span>Privacy</span><span>Terms</span><span class="sp"></span><span>Made in Bengaluru</span></div>
+</div>
+
+<div class="phones">
+<div class="pcol"><h3>Front page on a phone</h3><p>Same page, stacked: the promise, the button, then the example.</p>
+<div class="ph" style="background:var(--bg)"><div class="sb" style="background:var(--bg)"><span>9:41</span><span>●●● ▮</span></div>
+<div class="mb" style="gap:14px;padding:16px 20px">
+<div style="display:flex;align-items:center"><span class="brand" style="font-size:22px"><em style="width:24px;height:24px;border-radius:8px"></em>Thinnava</span><span class="sp"></span><span style="font-weight:800;color:var(--p);font-size:14px">Sign in</span></div>
+<img src="assets/cat-offering.png" alt="" style="width:130px;align-self:center;margin-top:4px">
+<div style="font-family:Fredoka;font-weight:600;font-size:31px;line-height:1.1;text-align:center">Every place your friends rave about, <span style="color:var(--p)">in one spot.</span></div>
+<div style="font-size:15px;color:var(--soft);text-align:center;line-height:1.5">Save what friends tell you, log where you ate, see where your people have been.</div>
+<span class="gbtn" style="justify-content:center;height:52px">  <b>G</b>Continue with Google</span>
+<div class="fine" style="text-align:center;margin-top:-6px">By continuing you agree to the <u>Terms</u> and <u>Privacy Policy</u>.</div>
+<div class="back" style="width:auto;font-size:13px">📱 On the Android app already? Same Google account, same places.</div>
+<div class="bubble" style="position:relative;left:0;top:0;width:auto;font-size:14px"><small>Rahul</small>da try Brik Oven in Indiranagar, the truffle pizza is insane 🍕</div>
+</div>
+<div class="safari"><div class="u">🔒 thinnava.pages.dev</div><div class="ic"><span>‹</span><span>›</span><span>⬆</span><span>▢</span><span>⧉</span></div></div></div></div>
+<div class="pcol" style="width:600px;padding-top:40px"><h3>Why one button for everyone</h3><p style="min-height:0">Newcomers and existing Android users do the same thing: Continue with Google. A new account goes on to "Set up your profile" (same as the app); an existing one lands straight on Home with all their places. "Sign in" at the top is the same button, for people who look there out of habit.</p>
+<h3 style="margin-top:18px">What's not here, on purpose</h3><p style="min-height:0">No feature tour, no screenshots carousel, no sign-up form. One promise, one example, one button.</p></div>
+</div>
+
+</div></body></html>

@@ -152,7 +152,7 @@ function Connected({ p, onLists }: { p: ProfilePage; onLists: () => void }) {
       </View>
       <Panel style={styles.tools}>
         <ListRow leading={<Thumb><MapIcon size={22} color={colors.primary} strokeWidth={2} /></Thumb>} title="Open map"
-          subtitle={tab === 'visited' ? `Places ${name} went` : `Places ${name} wants to try`} chevron onPress={() => showSnack({ text: 'The map arrives in M8.' })} />
+          subtitle={tab === 'visited' ? `Places ${name} went` : `Places ${name} wants to try`} chevron onPress={() => router.navigate({ pathname: '/(tabs)/map', params: { person: p.id, name, layers: tab } })} />
       </Panel>
       {tab === 'visited' ? (
         visits.isLoading ? <ActivityIndicator color={colors.primary} style={{ margin: 24 }} /> : rows.length ? (
@@ -177,7 +177,7 @@ function Connected({ p, onLists }: { p: ProfilePage; onLists: () => void }) {
                 trailing={w.i_went && !w.on_mine ? undefined : <IconButton icon={Heart} ghost={!w.on_mine} active={w.on_mine} label={w.on_mine ? 'On your wishlist' : 'Add to my wishlist'}
                   onPress={async () => {
                     if (w.on_mine) return showSnack({ text: 'Already on your wishlist' });
-                    try { await setWishlist(w.place_id, true); await refresh(); showSnack({ text: 'Added to your wishlist' }); } catch (e) { showSnack({ text: friendlyError(e) }); }
+                    try { await setWishlist(w.place_id, true, w.name); await refresh(); showSnack({ text: 'Added to your wishlist' }); } catch (e) { showSnack({ text: friendlyError(e) }); }
                   }} />}
                 onPress={() => router.push({ pathname: '/place/[placeId]', params: { placeId: w.place_id } })} />
             </View>

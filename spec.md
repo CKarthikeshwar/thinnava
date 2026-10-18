@@ -84,10 +84,10 @@ Context: IISc course project, team of 2, demo with real users, distributed as an
 | Q | Offline support for manual entries |
 
 ### 4.2 v2 (later, not now)
-Screenshot import (OCR) · YouTube metadata import · Zomato and District buttons (§11.3) · custom (non-Google) places · place collections · revisit nudges · web version (same codebase, see §18.3).
+Screenshot import (OCR) · YouTube metadata import · Zomato and District buttons (§11.3) · custom (non-Google) places · place collections · revisit nudges. (The web version moved into v1 as M10 on 2026-10-17, see §18.3.)
 
 ### 4.3 Never (unless the spec is changed)
-Photos on entries · veg info/filters · dishes as entities (no dish pages, counts, search) · rating summaries · stars as our own rating · in-app "send a recommendation" · groups · people nearby · contact-based friend finding · invite links · taste matching / recommendation algorithms / AI chatbot · in-app ordering or payments · creator features · iOS · dark mode · languages other than English.
+Photos on entries · veg info/filters · dishes as entities (no dish pages, counts, search) · rating summaries · stars as our own rating · in-app "send a recommendation" · groups · people nearby · contact-based friend finding · invite links · taste matching / recommendation algorithms / AI chatbot · in-app ordering or payments · creator features · a native iOS app (iPhone users use the web version, §18.3) · dark mode · languages other than English.
 
 ## 5. Social and privacy rules
 
@@ -333,6 +333,9 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
     - up to 3 summaries from visible entries, each with its pill, like "**Rahul** loved the chicken burger" or "**Meera** said the fries were soggy". Each uses the first loved dish, else the first didn't-like dish, else just the rating;
     - ♡ wishlist, plus **Open place** and **Directions** buttons.
   - *No location permission*: centre on Bengaluru (12.9716, 77.5946). "Locate me" asks via A7.
+  - Search bar → D1 in "Find on the map" mode; picking a place centres the map on it.
+  - *A connection's map* (E1 → Open map) and *my map* (B5 → Open map) are B2 with a scope: a removable chip "Anand's map ×" leads the chips (only All · Visited · Wishlist then), or the tab's layer is preselected. × returns to the normal map.
+  - *No Maps key yet* (dev, before `thinnava-maps` has billing; the Maps SDK crashes without a key): the same top bar, chips, filters and pin card over a plain list of the places around Bengaluru, with the note "The map turns on once Google Maps is set up."
 - **B3 + speed dial** — three circles: **I went somewhere** (→ D1 → D2), **A friend told me** (→ D5 friend), **Found it online** (→ D5 internet).
 - **B4 Search** `/(tabs)/search` — one search box with segments **Places | People**.
   - **Places, while typing** (250 ms debounce): first, places already in Thinnava that match the name and where I can see entries; then Google name suggestions (Autocomplete). Before typing: "Recent" places I opened.
@@ -412,10 +415,10 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - Profile card: photo, name, @username, Edit (→ F3).
   - Group 1: Connections · My lists · Blocked people.
   - Group 2: Friend names · Private companion names · Offline drafts (with a badge count).
-  - Group 3: Notifications (opens Android settings) · About & privacy (§27.4) · Sign out · Delete account.
+  - Group 3: Notifications (opens Android's notification settings for the app) · About & privacy (§27.4: the Gemini line up front, then the privacy policy and terms in the app, synced from `docs/legal` by `tools/legal/sync.mjs`, plus "Open on the web") · Sign out · Delete account.
 - **F3 Edit profile** `/settings/profile` — same fields as A3.
 - **F4 My friend names** `/settings/friend-names` — list with entry counts; ⋮ per name: Rename · Merge into… (pick another name; entries move, this name is deleted) · Link to a connection / Unlink · Delete (only if it has no entries). No automatic merge suggestions.
-- **F5 My companion names** `/settings/companion-names` — rename · delete (removed from visits).
+- **F5 My companion names** `/settings/companion-names` — each name with "N visits"; ⋮ rename (changes it on every visit) · delete (removed from those visits, which stay).
 - **F6 Offline drafts** `/settings/drafts` — Waiting to sync (auto) · Needs a place (tap → D1 with text prefilled) · Waiting for internet (copied or shared messages) · Couldn't sync (error + Retry / Delete).
 - **F7 Delete account** `/settings/delete-account` — "Sad to see you go, Karthik", then counts of what will be deleted (visits, friend and internet entries, connections and lists) and "All of this is deleted permanently. Tags on other people's visits are removed." Typing your username enables **Delete my account**.
 - **F8 Offline banner** — state, per §13.
@@ -549,8 +552,45 @@ Principles:
 | Scheduled jobs | pg_cron + pg_net |
 | Migrations | Supabase CLI (`supabase migration new`, `supabase db push`) |
 
-### 18.3 Web later
-Not built in v1. When it is: the same Expo app runs on `react-native-web`, with web versions of `src/platform/` for the map (`@vis.gl/react-google-maps`), sign-in (Supabase OAuth redirect) and share (a paste box). Nothing else should need to change.
+### 18.3 Web version (M10)
+**Why:** friends on iPhone (no iOS app, §4.3) and on laptops can use Thinnava from a link, on the same account and data.
+
+**How:** the same Expo app runs on `react-native-web` and is exported as a static site (`expo export -p web`), hosted free on Cloudflare Pages (no card; GitHub Pages needs a paid plan for a private repo). Same Supabase backend. Web versions of `src/platform/` (`*.web.ts(x)` files):
+- **Sign-in:** Supabase `signInWithOAuth({ provider: 'google' })` redirect (the same `thinnava-free` Web OAuth client, with the site's origins and redirect URLs added).
+- **Map:** the B2 list mode until `thinnava-maps` has a key; then `@vis.gl/react-google-maps` (Maps JavaScript API, its own free monthly amount, capped like Places, §27.5).
+- **Share:** none. A **"Paste a message"** button on Home and D5 replaces the automatic "You copied a message" card (browsers can't check the clipboard without asking).
+- **Notification settings, push, offline outbox:** not on web at first (rows hidden; the in-app 🔔 list works).
+- Edge Functions answer browser preflight (CORS). `Access-Control-Allow-Origin: *` is safe here: requests are authorised by the user's bearer token, never cookies.
+- Copy flow labels come from `PASTE_TEXT` in `features/import/clipboard(.web).ts`.
+- Tappables nested inside tappables (a photo in a card, Accept in a notification row) drop the `button` role on web only, because HTML forbids a button inside a button.
+
+**Compared with Android:**
+- *Browser limits:* no automatic copied-message card (one extra tap); no "Share to Thinnava" on iPhone (paste the link); push on iPhone only after "Add to Home Screen"; no vibration; Back is the browser's.
+- *Postponed (can be added later, free):* web push, offline saving, the real map (waits for Google billing, same as Android), some animations simpler.
+- *Same:* everything else, on the same account.
+
+**Web layout (owner-approved design, `design/web.html`, 2026-10-18).** The same four pages (Home · Search · Map · Profile), the same tokens, fonts and words, laid out the way a website works. The Android app does not change.
+
+*Shared, all browser widths:*
+- A **top bar** replaces the bottom bar and the + speed dial: wordmark, the four pages as text links (laptop) or tabs under the bar (phone), **Paste a message** (laptop; on phones it lives on Home), **+ Add** (opens a small menu with the speed dial's three choices: I went somewhere · A friend told me · Found it online), 🔔 (outline bell, red dot when unread) and my avatar (laptop, → Profile). Each page's own Android top bar (Home's wordmark, filter and bell; Profile's title) is not shown on web.
+- **Keyboard (laptop):** `/` goes to Search, `N` starts "I went somewhere", **Ctrl+V** (⌘V) anywhere outside a text field reads the pasted text into the import flow (§10), the same as "Paste a message". Esc closes sheets, dialogs and menus.
+- Screens other than the four pages (place, entry, forms, settings, people, notifications…) sit in a centred column (max ≈ 720 px) under the top bar; sheets open as centred panels.
+- Hover states on everything tappable (a light dim).
+
+*Laptop (≥ 1024 px wide):* content is centred, max ≈ 1160 px.
+- **Home:** the feed in a main column with the B1b filters as a segmented control in its heading ("What your people ate": Everything · Connections · From friends · Internet · Mine) and day headings (Today · This week · Earlier). A side column (≈ 360 px): **Got a tip from a friend?** paste box (with the Ctrl+V hint) → **Notifications** (newest 3, inline Accept / Add your review, "See all" → F1; reading them here does not mark them read) → **Your wishlist** (newest 3, "See all" → Profile · Wishlist).
+- **Search:** one large search box, Places | People under it, then a left filter sidebar (Someone I know went · Type · Price per person, same rules as B4) and the results as a table (Place · Who went · Area · Price), "Your people went" first, then "Nobody you know has been". The search area shows as "Near you" / "Near Bengaluru"; tapping it asks for location (A7).
+- **Map:** a left panel (≈ 420 px) with the layer chips, filters and the list of places; the map fills the rest. Until `thinnava-maps` has a key the right side shows the "The map turns on once Google Maps is set up" note and the list stays in the panel.
+- **Profile:** a tinted cover band with Rings, then photo, name, @username, bio and counts (Visited · Wishlist · Connections) on one row with **Connections** and **Settings** buttons; the three tabs (Visited · Wishlist · Saved) as underlined tabs with "Open on map"; entries as a 3-column grid of cards.
+
+*Phone browsers (< 1024 px):* the app's screens, with three differences that mark it as the website:
+- the **top bar** above (wordmark, + Add, 🔔; tabs Home · Search · Map · Profile underneath); there is no bottom bar, because Safari keeps its own address bar at the bottom;
+- **paste-first Home:** a large blue "Got a tip from a friend? · Paste a message" card at the top of the feed (✕ hides it for 6 hours, as today);
+- an **Add to Home Screen** card on Home ("Keep Thinnava on your home screen · Opens full screen, like an app · Show me how", ✕ hides it for good). It is shown only in a browser tab, never once Thinnava runs from the home screen. On iPhone "Show me how" opens a sheet with three steps (Share → Add to Home Screen → Add); where the browser offers its own install prompt (Android Chrome), the button uses it. The site ships a web app manifest (name, icon, Mist theme colour) so it installs with the right name and icon.
+
+*Signed out (front page, replaces A1b/A2 on web):* one headline ("Every place your friends rave about, in one spot."), one line of what it does, **Continue with Google** with the Terms / Privacy line, "Already use Thinnava on Android? Same Google account, same places.", an example of a friend's WhatsApp message turning into a saved place, three short lines (Save what friends tell you · Log where you ate · See where your people went) and a footer with Privacy and Terms. "Sign in" in the corner is the same Google button. New accounts continue to A3; existing ones land on Home.
+
+**Hosting:** Cloudflare Pages (free, no card), address `thinnava.pages.dev` until a custom domain is chosen. The site's origin is added to the Google OAuth client and Supabase redirect URLs at release.
 
 ## 19. Repository layout
 
@@ -903,7 +943,7 @@ Called with `supabase.rpc(name, args)`. All use `auth.uid()`. On a rule violatio
 ### 22.4 Entries
 | RPC | Does |
 |---|---|
-| `save_visit(p jsonb) → uuid` | Upsert by `p.id` (idempotent). Fields: id, place_id, visited_on, rating, loved, disliked, price_per_person, notes, audience (list ids), tag_user_ids, companion_name_ids, new_companion_names, accept_tag_id?. Validates all fields; replaces audience and companions; creates new tags (connections only; notifies `tag_request`); removes tags dropped from the list; if `accept_tag_id` is set, marks that tag accepted with this visit. **On insert only:** removes the place from my wishlist, and notifies opted-in subscribers who can see the visit (§12). |
+| `save_visit(p jsonb) → uuid` | Upsert by `p.id` (idempotent). Fields: id, place_id, visited_on, rating, loved, disliked, price_per_person, notes, audience (list ids), tag_user_ids, companion_name_ids, new_companion_names, accept_tag_id?. Validates all fields; replaces audience and companions; creates new tags (current connections only; anyone else is dropped silently and the visit still saves, §13; notifies `tag_request`); removes tags dropped from the list; if `accept_tag_id` is set, marks that tag accepted with this visit. **On insert only:** removes the place from my wishlist, and notifies opted-in subscribers who can see the visit (§12). |
 | `delete_visit(p_id)` | |
 | `respond_tag(p_tag_id, p_action) → uuid?` | `'same'` creates my visit copying the tagger's rating, dishes, price and notes (audience = my All connections), accepts the tag, returns the visit id. `'reject'` deletes the tag. ("Write my review" goes through `save_visit` with `accept_tag_id`.) |
 | `untag_me(p_tag_id)` | Deletes the tag; my own visit stays. |
@@ -912,7 +952,7 @@ Called with `supabase.rpc(name, args)`. All use `auth.uid()`. On a rule violatio
 | `save_saved_entry(p jsonb) → uuid` | Upsert by id. Fields: id, kind, place_id, friend_name_id **or** new_friend_name {id, name}, source_url, rating, loved, disliked, price_per_person, visited_on. |
 | `delete_saved_entry(p_id)` | |
 | `rename_friend_name` · `merge_friend_names(p_from, p_into)` · `link_friend_name(p_id, p_user?)` · `delete_friend_name` | Merge moves entries then deletes `p_from`. Link only to a current connection. Delete only when unused. |
-| `rename_companion_name` · `delete_companion_name` | |
+| `my_companion_names()` · `rename_companion_name(p_id, p_name)` · `delete_companion_name(p_id)` | F5. The list carries how many of my visits use each name. Rename has the same rules as friend names (trimmed, ≤ 40, no duplicates ignoring case). Delete removes the name from those visits; the visits stay. |
 
 ### 22.5 Reading
 | RPC | Returns |
@@ -923,7 +963,7 @@ Called with `supabase.rpc(name, args)`. All use `auth.uid()`. On a rule violatio
 | `my_saved(p_kind?, cursor…)` · `my_wishlist()` | Profile tabs. |
 | `entry_detail(p_type, p_id) → json` | C2, incl. companions, `tags[]` (accepted partners with ids; pending too for the author), `my_tag` (if I'm tagged) and (mine only) the audience summary. |
 | `who_went(p_place_ids text[])` | Search results (B4): per place, ≤ 3 people I know who went, how many, whether I went, and every price I can see there (for the ₹ buckets). |
-| `map_places(p_min_lat, p_min_lng, p_max_lat, p_max_lng, p_layers text[], p_price text, p_categories place_category[], p_person uuid?)` | `(place_id, name, lat, lng, layers text[], people json[≤3], is_mine)`, max 300 rows, most recent first. |
+| `map_places(p_min_lat, p_min_lng, p_max_lat, p_max_lng, p_layers text[], p_price text, p_categories place_category[], p_person uuid?)` | `(place_id, name, area, category, lat, lng, layers text[], people json[≤3], is_mine)`, max 300 rows, most recent activity first. Layers: visited · wishlist · connections · friends · internet (null = all), built only from what I may see (`can_see_visit_social`, `can_see_wishlist`, my own saved entries). `p_price` uses the Search buckets `u200` · `200` · `500` · `1000`, matching if any in-scope entry there has a price in the bucket. `p_person` = a connection: their visible visits (as `visited`) and shared wishlist only, nothing of mine. |
 | `notifications_page(cursor…)` · `mark_notifications_read()` | Rows `{id, type, created_at, read, actor{id,name,avatar,relation}, visit_id, place{id,name}, tag_id, tag_status}`, newest first, keyset paged. An actor who blocked me shows as "Someone" with no photo; blocking someone deletes the notifications between us. |
 | `unread_notifications() → int` | The 🔔 dot. |
 | `register_push_token(p_token)` · `unregister_push_token(p_token)` | Upsert / delete this device's Expo token (a token moves to whoever signs in on it). |
@@ -1133,19 +1173,20 @@ src/app/
 ### 26.5 Offline outbox
 - **The queue:** `lib/outbox.ts` keeps a FIFO queue in MMKV. Each op is `{opId, kind, payload, createdAt, attempts, state: 'queued'|'failed', error?}`.
   - Kinds: `save_visit`, `delete_visit`, `save_saved_entry`, `delete_saved_entry`, `set_wishlist`, `add_friend_name`, `rename_friend_name`.
-- **Each offline-capable mutation:**
+- **Each offline-capable mutation** (`runWrite(kind, args, label)`):
   1. generates its ids on the device (`expo-crypto.randomUUID`);
-  2. updates the query cache optimistically;
-  3. enqueues the op;
-  4. tries to flush right away.
+  2. if online with nothing queued, sends it straight away (rule errors show as usual); otherwise enqueues it (order matters) and tries to flush;
+  3. when queued, updates the query cache optimistically (a new entry is put on Home, a deleted one taken off, the wishlist ♡ flips) and says "Saved · it'll sync when you're online".
+  - The `label` ("Visit to CTR") is what F6 shows.
 - **Flushing:**
-  - Triggers: NetInfo coming online, the app coming to the foreground, and after every enqueue.
+  - Triggers: NetInfo coming online, the app coming to the foreground, app start, and after every enqueue. A trigger during a flush makes it take one more pass.
   - Ops are sent one at a time, in order.
   - A network error or 5xx stops the flush and retries later with backoff (2 s up to 5 min).
   - A 4xx or rule violation marks the op `failed` and shows it in F6 with its message. Later ops continue.
-- **Place-less drafts** live in a separate MMKV store (`drafts`), never in the outbox. Once the user picks a place in F6, the draft becomes a normal outbox op.
-- **Pending shares** (made while offline or signed out) are kept in `pendingShares`. They're processed on the next online open, with a Home banner: "1 message waiting · Review". (Copied text taken while offline is stored the same way.)
-- **UI:** NetInfo drives the F8 banner. The F6 count is outbox failures + drafts + pending shares.
+- **Place-less drafts** live in a separate MMKV store (`drafts`), never in the outbox. Offline, D1 lists places already on the phone (recently used and cached) and offers "Use '<typed>' for now", a stand-in place with a `draft:` id. A save with a stand-in place becomes a draft ("Saved as a draft · pick the place in Offline drafts"), never synced or shown. Once the user picks a place in F6, the draft becomes a normal outbox op.
+- **Pending shares** (made while offline or signed out) are kept in `pendingShares`. They're processed on the next online open, with a Home banner: "1 message waiting · Review". (Copied text taken while offline is stored the same way: `/import` opened offline keeps the text and says "Saved. We'll read it when you're online.")
+- **UI:** NetInfo drives the F8 banner (every TopBar, plus Search and Map). The F6 count is outbox failures + drafts + pending shares, shown as a badge on the F2 row. Social actions, search and settings offline say "You're offline. Try again when you're connected."
+- **Sign-out** clears the query cache, outbox, drafts and pending shares; if anything is unsynced, the sign-out dialog says "N changes haven't synced yet and will be lost" first.
 
 ### 26.6 Share intent and copied text
 - WhatsApp doesn't offer messages to the share sheet, so those arrive through the clipboard: the Home card "You copied a message · Read it" (below) or the chip "Use copied text?" (§10.4, D5). Both call the same `/import` screen with `{text}`. `expo-clipboard` reads the clipboard only when the chip is tapped (`hasStringAsync` decides whether to show the chip).
@@ -1162,7 +1203,7 @@ src/app/
 - `/import`: if a URL is present, call `links` first and branch on `kind` (§10.1); otherwise call `extract`. The motion follows the share-import sequence in §16.7.
 
 ### 26.7 Map
-- `platform/map/MapView.tsx` wraps `react-native-maps` with `provider={PROVIDER_GOOGLE}` and `customMapStyle` from `theme/mapStyle.json`.
+- `platform/map/MapView.tsx` wraps `react-native-maps` with `provider={PROVIDER_GOOGLE}` and `customMapStyle` from `theme/mapStyle.ts` (built from the colour tokens; JSON styling only, never a Map ID). It exports `mapsReady`, true only when the build had `GOOGLE_MAPS_ANDROID_KEY` (`extra.mapsReady`).
 - When the region changes (debounced 500 ms):
   1. call the `map_places` RPC for the visible area;
   2. cluster the results with `supercluster` in JS;
@@ -1208,7 +1249,7 @@ src/app/
 |---|---|---|
 | Google Cloud project **`thinnava-free`** | **No billing account, ever** | OAuth consent screen (External, basic scopes, published, with the §27.4 links). OAuth clients: **Web** (for Supabase) and one **Android** client per SHA-1 (P1's laptop, P2's laptop, EAS). Firebase (Spark plan) for push: Android app `com.thinnava.app` → `google-services.json`; upload the FCM v1 service account to EAS. **Gemini API key** created in Google AI Studio *on this project*. |
 | Google Cloud project **`thinnava-maps`** | **Pay-as-you-go billing account** (owner's decision, 2026-10-14): created through the free trial and **upgraded immediately**, keeping the $300 trial credit for its 90 days. No subscription or fee; only usage beyond Google's free monthly amounts is billed, and our caps stop at 80% of them | Enable Places API (New) and Maps SDK for Android, nothing else. Keys: a **Maps Android key** restricted to `com.thinnava.app` + all SHA-1s and to Maps SDK for Android only; a **Places server key** restricted to Places API (New) only. Zero-cost locks 2–4 from §27.5. |
-| GitHub | Free | Private repo `thinnava` (both owners); public repo `thinnava-legal` for GitHub Pages (§27.4). Branch protection on `main` (§33). |
+| GitHub | Free | Private repo `thinnava` (both owners). The legal pages live on the owner's own GitHub Pages site (§27.4). Branch protection on `main` (§33). |
 | Supabase | **Free plan, no payment method** | **Development: a local sandbox on each laptop** (Supabase CLI in Docker, `npm run backend`, see `docs/dev-setup.md`), so migrations never collide and no free hosted slot is used. **Hosted (ap-south-1 Mumbai): only `thinnava-prod`**, in the owner's organisation (both owners as members), created before the first APK for other people (§33.4). **Google provider:** Web client ID + secret; "Skip nonce check" on; every Android client ID in the authorized client IDs. |
 | Expo / EAS | **Free plan, no payment method** | One Expo organisation with both owners; project linked to the repo. Android keystore managed by EAS; add its SHA-1 to `thinnava-free` (OAuth) and `thinnava-maps` (Maps key). |
 
@@ -1228,7 +1269,7 @@ src/app/
 `.env*` files, `google-services.json` and keystores are git-ignored. `.env.example` lists every variable. Each person's `.env` points at their own dev project; real values are shared privately (never in git or chat logs that are public).
 
 ### 27.4 Privacy policy and terms
-- Two short, plain-English pages, `privacy.md` and `terms.md`, in the public repo `thinnava-legal`, published with GitHub Pages (free). The URLs go into the OAuth consent screen, the A2 welcome line and Settings → About & privacy. The same text is also shown in the app.
+- Two short, plain-English pages, written in `docs/legal/privacy.md` and `terms.md` (this repo stays private) and published on the owner's own website (GitHub Pages, free) at **https://ckarthikeshwar.github.io/projects/thinnava/privacy** and **/projects/thinnava/terms** (Astro pages rendering a copy of the same Markdown). The URLs go into the OAuth consent screen, the A2 welcome line and Settings → About & privacy (`lib/links.ts`). The same text is also shown in the app (`tools/legal/sync.mjs`). After editing the text, copy both files to the website's `src/legal/thinnava/` too.
 - The privacy policy covers:
   - what we collect: Google name, email and photo, plus the entries, connections and lists you create;
   - who sees what (§5);
@@ -1248,6 +1289,7 @@ src/app/
 | Supabase | No | Free plan with no payment method. Going over a limit restricts the project; it doesn't bill. |
 | Expo EAS | No | Free plan. Builds just queue longer. |
 | GitHub, GitHub Pages | No | Free. |
+| Cloudflare Pages (web version, §18.3) | No | Free plan with no payment method; static files only, no Workers or paid add-ons. Over a limit, builds or requests stop; nothing bills. |
 | Firebase Cloud Messaging (push) | No | Lives on `thinnava-free`, which has no billing account. FCM is free. |
 | Gemini | No | The key belongs to `thinnava-free`, which has no billing account, so only the free tier exists. Over the limit, Google answers "rate limited" and the app opens the manual form. **Never attach billing to `thinnava-free`.** |
 | Directions and Swiggy links | No | Plain links, no API. |
@@ -1418,6 +1460,18 @@ Each account is created only when a milestone needs it, so the account-dependent
 4. Release prep: demo seed data on prod (team accounts, Bengaluru places, listing links), the prod backend deploy, and the preview APK.
 
 **Done when:** everything in §31 passes on the release APK on two different phones, and `changelog.md` has the 0.1.0 release entry.
+
+### M10 · Web version (owner decision 2026-10-17; see §18.3)
+1. Spec and changelog.
+2. Make it build for web: `react-native-web`, web stand-ins for the Android-only modules (sign-in, map, share intent, push, notification settings, offline outbox).
+3. Web sign-in (OAuth redirect), local sandbox first.
+4. Copy flow on web: "Paste a message" on Home and D5.
+5. Edge Functions: CORS for the site's origins.
+6. Web layout per §18.3 and `design/web.html`: top bar, laptop Home / Search / Map / Profile, phone-browser paste-first Home and Add to Home Screen card, signed-out front page, keyboard shortcuts, centred column for other screens.
+7. Test in Chrome on the laptop at phone width (≈ 400 px) and laptop width (≈ 1366 px): the demo script (§31) as far as web allows.
+8. Release: production backend (shared with the APK, M9), then deploy the static site and add its address to Google OAuth and Supabase.
+
+**Done when:** on a laptop browser and an iPhone browser, a new user signs in with Google, logs a visit, pastes a WhatsApp message into a friend entry, connects with an Android user and sees each other's visits, and the laptop and phone-browser layouts match `design/web.html`.
 
 ## 31. Demo script and success criteria
 

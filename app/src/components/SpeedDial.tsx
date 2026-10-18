@@ -7,6 +7,7 @@ import { colors, curves, durations, fonts, radii, reduceMotion, shadows, size, u
 import { NAV_HEIGHT, useDial } from './NavBar';
 import { Pressable } from './Pressable';
 import { T } from './T';
+import { useEscape } from '@/lib/layout';
 
 export type DialAction = 'visit' | 'friend' | 'internet';
 
@@ -34,11 +35,12 @@ export function SpeedDial({ onPick }: { onPick: (a: DialAction) => void }) {
   }, [open]);
 
   const scrim = useAnimatedStyle(() => ({ opacity: t.value }));
+  useEscape(open, () => set(false));
 
   return (
     <View pointerEvents={open ? 'auto' : 'none'} style={[StyleSheet.absoluteFill, { bottom: NAV_HEIGHT + insets.bottom }]}>
       <Animated.View style={[StyleSheet.absoluteFill, styles.scrim, scrim]}>
-        <Pressable style={StyleSheet.absoluteFill} pressScale={1} onPress={() => set(false)} accessibilityLabel="Close add menu" />
+        <Pressable style={StyleSheet.absoluteFill} pressScale={1} onPress={() => set(false)} accessibilityLabel="Close add menu" accessibilityRole="button" />
       </Animated.View>
       <View style={styles.row}>
         {ITEMS.map((it, i) => (
@@ -56,10 +58,10 @@ function DialItem({ item, index, t, open, reduced, onPress }: { item: (typeof IT
     p.value = open ? withDelay(reduced ? 0 : index * durations.dialStagger, withTiming(1, cfg)) : withTiming(0, { ...cfg, duration: durations.short });
   }, [open]);
   const anim = useAnimatedStyle(() => {
+    const move = reduced ? 1 : p.value;
     // Items start at the + (centre, bottom) and fan out to their spots.
     const fromX = (1 - index) * 114;
     const fromY = 96 - item.lift;
-    const move = reduced ? 1 : p.value;
     return {
       opacity: p.value,
       transform: [

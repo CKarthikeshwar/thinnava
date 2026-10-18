@@ -44,7 +44,7 @@ export default function PlacePage() {
   const nobodyYet = !mine.length && !people.length;
   const toggleWishlist = async () => {
     try {
-      await setWishlist(p.placeId, !onWishlist);
+      await setWishlist(p.placeId, !onWishlist, p.name);
       await Promise.all(ENTRY_KEYS.map((k) => qc.invalidateQueries({ queryKey: k })));
       showSnack(onWishlist ? { text: 'Removed from your wishlist' } : { text: 'Added to your wishlist', action: { label: 'Who sees it', onPress: () => router.push('/(tabs)/profile') } });
     } catch (e) { showSnack({ text: friendlyError(e) }); }
@@ -106,7 +106,8 @@ export default function PlacePage() {
                 style={[styles.person, i > 0 && styles.personDivider]} accessibilityRole="button"
                 accessibilityLabel={`${v.entry_type === 'visit' ? v.author_name : v.entry_type === 'friend' ? `${v.friend_name} told you` : internetLabel(v.source_url)}${v.rating ? `, ${v.rating}` : ''}`}>
                 {/* Avatar and name open the person (§14 C1): the author, or the account a friend name is linked to. */}
-                <Pressable onPress={personId(v) ? () => openPerson(personId(v)!) : undefined} disabled={!personId(v)} hitSlop={6}>
+                <Pressable onPress={personId(v) ? () => openPerson(personId(v)!) : undefined} disabled={!personId(v)} hitSlop={6}
+                  accessible={!!personId(v)} accessibilityRole="button" accessibilityLabel={`Open ${v.entry_type === 'visit' ? (v.author_name ?? '').split(' ')[0] : v.friend_name}'s profile`}>
                   {v.entry_type === 'visit' ? <Avatar name={v.author_name ?? '?'} uri={v.author_avatar} />
                     : <View style={styles.src}>{v.entry_type === 'friend' ? <UserRound size={20} color={colors.primaryStrong} strokeWidth={2} /> : <Globe size={20} color={colors.primaryStrong} strokeWidth={2} />}</View>}
                 </Pressable>
@@ -174,7 +175,7 @@ function useGoogleInfo(placeId: string) {
 function GoogleInfoRow({ placeId, name, mode }: { placeId: string; name: string; mode: 'tap' | 'off' }) {
   const { asked, ask, q } = useGoogleInfo(placeId);
   if (mode === 'off') {
-    return <Pressable onPress={() => open(directionsUrl(name, placeId))} style={styles.gRow}><T variant="label">See rating and hours on Google Maps</T></Pressable>;
+    return <Pressable onPress={() => open(directionsUrl(name, placeId))} style={styles.gRow} accessibilityRole="link"><T variant="label">See rating and hours on Google Maps</T></Pressable>;
   }
   if (asked && q.data?.info) return <View style={{ marginTop: 10 }}><InfoRows info={q.data.info} practice={!!q.data.practice} compact /></View>;
   return (

@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { runWrite } from '@/lib/outbox';
 import { callFunction, FnError } from '@/lib/functions';
 import type { Category, Place } from '@/features/places/api';
 import type { Rating } from '@/components';
@@ -53,15 +54,16 @@ const rpc = async <T>(fn: string, args?: Record<string, unknown>): Promise<T> =>
 
 export const SAVED_PAGE = 20;
 
-export const saveSaved = (p: SavedInput) => rpc<{ id: string; friend_name_id: string | null }>('save_saved_entry', { p });
-export const deleteSaved = (id: string) => rpc<void>('delete_saved_entry', { p_id: id });
+// Offline-capable (spec §13): `queued` means it waits in the outbox.
+export const saveSaved = (p: SavedInput, label: string) => runWrite<{ id: string; friend_name_id: string | null }>('save_saved_entry', { p }, label);
+export const deleteSaved = (id: string, label = 'Delete an entry') => runWrite<void>('delete_saved_entry', { p_id: id }, label);
 export const savedDetail = (id: string) => rpc<SavedDetail | null>('entry_detail', { p_type: 'saved', p_id: id });
 export const mySaved = (kind: SavedKind | null, before?: { created_at: string; id: string }) =>
   rpc<SavedRow[]>('my_saved', { p_kind: kind, p_before: before?.created_at ?? null, p_before_id: before?.id ?? null, p_limit: SAVED_PAGE });
 
 export const myFriendNames = () => rpc<FriendName[]>('my_friend_names');
-export const addFriendName = (id: string, name: string) => rpc<string>('add_friend_name', { p_id: id, p_name: name });
-export const renameFriendName = (id: string, name: string) => rpc<void>('rename_friend_name', { p_id: id, p_name: name });
+export const addFriendName = (id: string, name: string) => runWrite<string>('add_friend_name', { p_id: id, p_name: name }, `Add the name ${name}`);
+export const renameFriendName = (id: string, name: string) => runWrite<void>('rename_friend_name', { p_id: id, p_name: name }, `Rename to ${name}`);
 export const mergeFriendNames = (from: string, into: string) => rpc<void>('merge_friend_names', { p_from: from, p_into: into });
 export const deleteFriendName = (id: string) => rpc<void>('delete_friend_name', { p_id: id });
 

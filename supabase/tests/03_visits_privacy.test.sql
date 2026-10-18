@@ -1,6 +1,10 @@
 -- Visits & wishlist (spec §5.2, §6, §8, §9, §21.3).
 begin;
 create extension if not exists pgtap with schema extensions;
+-- Run as postgres with pgTAP's schema on the path, so the tests also run on the hosted project, where the CLI's
+-- temporary login role is a member of postgres but doesn't use its rights by default.
+set local role postgres;
+set search_path to public, extensions;
 select plan(18);
 
 insert into auth.users (id, email) values
@@ -19,7 +23,7 @@ select pg_temp.as_user('00000000-0000-0000-0000-0000000000a1'); select public.cr
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000b1'); select public.create_profile('bharat', 'Bharat');
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000c1'); select public.create_profile('chitra', 'Chitra');
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000d1'); select public.create_profile('dev', 'Dev');
-reset role;
+set local role postgres;
 insert into public.connections (user_a, user_b) values
   ('00000000-0000-0000-0000-0000000000a1', '00000000-0000-0000-0000-0000000000b1'),
   ('00000000-0000-0000-0000-0000000000a1', '00000000-0000-0000-0000-0000000000d1');

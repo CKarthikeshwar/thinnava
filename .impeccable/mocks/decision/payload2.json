@@ -1,0 +1,39 @@
+{
+  "title": "Thinnava on a laptop: choose the layout (new hand)",
+  "question": "Same Thinnava look. Three fresh ways to organise the laptop screen for deciding where to eat and logging fast. Lock one, steer, or re-roll.",
+  "options": [
+    {
+      "id": "diary",
+      "label": "Food diary calendar",
+      "kicker": "THE ROLL",
+      "thesis": "Your eating life as a month: your visits and your people's, day by day. Beside it, a 'Where tonight?' planner and a big 'Paste a friend's message' box, so remembering, deciding and logging share one screen.",
+      "palette": ["#2350D9", "#EEF2FF", "#FFFFFF", "#10183A", "#17703E"],
+      "materials": ["month grid", "coloured entry chips", "planner card"],
+      "viewport": "Left rail (Diary, Search, Map, Lists, Profile, +). Centre: the month, each day showing who ate where (you in cobalt, friends in green, tips dashed), today outlined. Right: 'Paste a friend's message' and 'Where tonight?' with filters and three suggestions.",
+      "risk": "The calendar is great for memory, weaker for comparing places; most days look empty for light users.",
+      "html": ".impeccable/mocks/decision/diary.html"
+    },
+    {
+      "id": "tonight",
+      "label": "Ask 'Where tonight?'",
+      "thesis": "The page opens with the question people actually have. Pick area, budget and type, and get a short ranked list of places your people agree on, each with their quotes.",
+      "palette": ["#2350D9", "#EEF2FF", "#FFFFFF", "#10183A", "#CAD5F8"],
+      "materials": ["question bar", "ranked result cards", "rings ground"],
+      "viewport": "Top bar (Tonight, Feed, Map, Lists, People, Paste a message, + Log a visit). A big 'Where should we eat tonight?' with a four-part question bar. Below, three ranked cards with friends' quotes, pills and Directions.",
+      "risk": "Shows few places at once; power users wanting to browse may find it slow.",
+      "html": ".impeccable/mocks/decision/tonight.html"
+    },
+    {
+      "id": "threepane",
+      "label": "Three-pane desk",
+      "thesis": "Like a good email app: your lists and people on the left, matching places in the middle, and the selected place's 'what your people said' on the right. Logging and pasting are always one click away.",
+      "palette": ["#2350D9", "#EEF2FF", "#FFFFFF", "#10183A", "#845300"],
+      "materials": ["sidebar", "place list", "detail with friends' takes"],
+      "viewport": "Left: Thinnava, + Log a visit, Paste a message, then Where tonight?, Feed, Map, Wishlist, Friend tips, Lists, People. Middle: filters and places with faces and an agree/split pill. Right: the place, Directions/Swiggy/Wishlist/I went here, and each person's take.",
+      "risk": "Familiar and dense; less personality than the other two.",
+      "html": ".impeccable/mocks/decision/threepane.html"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "steer": true
+}

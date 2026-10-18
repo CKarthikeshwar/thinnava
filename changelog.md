@@ -12,6 +12,421 @@ Entry format:
 
 ---
 
+## 2026-10-18 · Web version built to the approved design (M10 step 6)
+- **What:** the web layout from §18.3 / `design/web.html`, replacing the earlier left-rail build. Android is unchanged (every change checks `useLayoutMode()`, which is always `'app'` on Android).
+  - `lib/layout.ts`: `useLayoutMode()` → `app` · `phone` (browser < 1024 px) · `laptop`; `PAGE_MAX` 1160, `COLUMN_MAX` 720. The rail and centred-frame constants are gone.
+  - `features/web/TopBar.tsx`: the web top bar (wordmark, page links or tabs, search box with `/`, Paste a message, **+ Add** menu with the three speed-dial choices, outline bell with unread dot, avatar), shown by the root layout once signed in; keyboard `/`, `N`, and Ctrl+V outside text fields → import flow. On web the bottom bar and speed dial are not rendered; other screens sit in a centred 720 px column on laptops.
+  - Home: laptop feed with "What your people ate", the filters as a segmented control, Today / This week / Earlier headings, and a side column (`features/web/HomeParts.tsx`: paste box, newest 3 notifications with inline Accept / Add your review, newest 3 wishlist places). Phone browser: paste-first blue card, the Add to Home Screen card (`features/web/InstallCard.tsx`: browser install prompt where offered, else a three-step sheet; hidden when running from the home screen) and filter chips.
+  - Search: laptop page with a large search box, Places | People, "Near you / Near Bengaluru" (asks for location), a filter sidebar and a results table (Place · Who went · Area · Price per person). Typing `/` anywhere focuses it.
+  - Map: laptop list panel with layer chips and Filters, and the "map turns on once Google Maps is set up" panel until the Maps key exists.
+  - Profile: laptop cover band, identity and counts, Connections / Settings, underlined tabs with Open on map, a 3-column card grid and "Show more". Phone browser: Connections and Settings as links instead of the Android top bar. `?tab=wishlist` opens a tab (used by the Home wishlist box).
+  - Signed out: `features/web/FrontPage.tsx` (laptop and phone) replaces the swipe onboarding on web.
+  - The F1 notification row moved to `features/notifications/NotifRow.tsx` so Home can reuse it; `Segmented` gained a `compact` style; three colour tokens added (`surfaceSoft`, `dashed`, `chatName`).
+  - `public/index.html`, `public/manifest.json` and 180/192/512 px icons, plus `web` settings in `app.config.ts`, so "Add to Home Screen" gets the Thinnava name and icon. `npx expo export -p web` builds cleanly.
+- **Checked:** laptop (1440 × 900) and phone (390 × 844) screenshots of the front page, Home, the Add menu, Search with results, Map, Profile and an entry page against the local sandbox; type-check and the 23 unit tests pass.
+- **Not yet:** hover actions on feed cards (left for later, see the entry above); deploying to Cloudflare Pages (needs the owner's free account).
+- **Spec:** §18.3 (already updated).
+
+## 2026-10-18 · Web layout approved and written into the spec; Cloudflare Pages chosen for hosting
+- **What:** spec §18.3 now describes the approved web design (`design/web.html`) in place of the old "left rail + centred column" plan:
+  - a top bar on every browser width (four page links or tabs, Paste a message, **+ Add** with the three speed-dial choices, outline 🔔, avatar);
+  - laptop Home (feed + side column: paste box, notifications, wishlist), Search (filter sidebar + results table), Map (list panel + map), Profile (cover band, tabs, card grid);
+  - phone browsers: top bar instead of the bottom bar, paste-first Home, Add to Home Screen card (iPhone steps sheet, or the browser's install prompt) and a web app manifest;
+  - the signed-out front page (one promise, one example, Continue with Google for newcomers and existing users);
+  - keyboard: `/` search, `N` log a visit, Ctrl+V anywhere pastes a message.
+
+  Hosting is **Cloudflare Pages** (free, no card), added to the §27.5 cost table. M10 step 6 and its "Done when" point at the new design. An outdated line about a `thinnava-legal` repo (never created; the legal pages are on the owner's site) was corrected.
+- **Why:** owner approved the design ("looks good for now") and prefers Cloudflare for deploying.
+- **Detail decided while specifying:** the mockup's "+ Log a visit" button becomes **+ Add** with a small menu, so "A friend told me" and "Found it online" by hand stay reachable on web (they were on the speed dial). The mockup's hover actions on feed cards (Wishlist / Directions / Swiggy) are left for later; hover shows the usual light dim.
+- **Spec:** §18.3, §27.5 cost table, §27 GitHub row, §30 M10.
+
+## 2026-10-18 · Web version: phone-browser pages and the signed-out front page (design draft)
+- **What:** added to `design/web.html`:
+  - **Phone browser** (iPhone Safari shown): the four pages with a top bar (wordmark, "+ Log", 🔔) and Home · Search · Map · Profile as tabs under it, instead of the Android bottom bar; a **paste-first Home** (big "Paste a message" card at the top); an **Add to Home Screen** card on Home (closable) whose "Show me how" sheet points at Safari's Share button.
+  - **Front page** (laptop and phone): one promise ("Every place your friends rave about, in one spot."), one example (a friend's WhatsApp message turning into a saved place), and one button, Continue with Google, for newcomers and existing Android users alike. Terms and Privacy linked under the button and in the footer.
+  - Mockup addresses now use `thinnava.pages.dev` (Cloudflare Pages, which the owner prefers for hosting; §18.3 already allows it).
+- **Why:** owner's picks for the mobile web (Add to Home Screen card, paste-first home, web-style top bar) and a front page that serves both newcomers and existing users. Design only; nothing implemented until approved.
+- **Spec:** none yet; §18.3 and §17 get updated after approval.
+
+## 2026-10-18 · Web version (laptop): design draft of the four main pages
+- **What:** new mockup `design/web.html` showing Home, Search, Map and Profile as laptop web pages: a top bar with the four page links plus "Paste a message" and "+ Log a visit"; Home as a feed with a side column (paste box, then notifications, then wishlist; the owner dropped a separate People box because connection requests already arrive as notifications), a 🔔 in the top bar on every page; Search with a filter sidebar and a results table; Map as a list beside the map; Profile with header, counts and Visited / Wishlist / Saved as a grid. Earlier layout ideas (people as columns, map desk, who-said-what grid, diary calendar, "Where tonight?", three-pane desk) were dropped by the owner in favour of keeping the app's four pages. Design only: no app code changed, nothing implemented until the owner approves.
+- **Why:** the owner felt the first laptop build looked like a stretched phone app and asked for a plan first, built in the direction of "the same four pages, made for the web".
+- **Spec:** none yet (the spec gets updated once a design is approved). A "Where you eat most" box on Profile was tried and removed by the owner. Search shows the area it searches near ("Searching near Indiranagar"), per §B4 (near me or the map centre).
+
+## 2026-10-18 · Privacy policy and terms: published on the owner's website
+**Decision (owner):** host the two pages on the owner's own website (`CKarthikeshwar.github.io`, GitHub Pages, Astro) instead of a new public `thinnava-legal` repo. Making the private `thinnava` repo public was considered and advised against.
+
+**Addresses:** https://ckarthikeshwar.github.io/projects/thinnava/privacy and `/terms`. `app/src/lib/links.ts` and spec §27.4 point there.
+
+**Design:** three options were previewed locally:
+- A, Thinnava's app look;
+- B, a calm reading document;
+- C, a mix of the two.
+
+An earlier version on the site's old violet layout, then on its "Glass Terminal" layout, was dropped. **The owner chose B:**
+- a light page with a slim "Thinnava / Legal" bar and tabs;
+- a book-style serif body;
+- an "On this page" list (sticky on wide screens, a box on phones);
+- cobalt as the only accent.
+
+Checked at 1440 and 390 px wide, with no sideways scrolling.
+
+**Text:** `docs/legal/*.md` changed "Last updated: DRAFT, not yet published" to "Last updated: 18 October 2026" (synced into the app with `tools/legal/sync.mjs`). The website renders a copy of the same Markdown (`src/legal/thinnava/`). After editing the text, copy both files there too.
+
+**Website files** (a fresh clone in the session scratchpad, nothing else touched):
+- `src/components/thinnava/LegalPage.astro`;
+- `src/pages/projects/thinnava/{privacy,terms}.astro`;
+- `src/legal/thinnava/{privacy,terms}.md`;
+- `public/thinnava/cat-mark.webp`.
+
+The site builds. **Pushing to the website waits for the owner's yes.**
+
+**Owner's edits:** the contact email is now **distilledwater.ck@gmail.com** in both legal texts (synced to the app and the website copy), and the website footer credits **C.Karthikeshwar**.
+
+**Published** with the owner's yes:
+- commit `45badc5` "Add Thinnava privacy policy and terms pages" on `CKarthikeshwar.github.io` `main`, no AI attribution;
+- the site's deploy workflow succeeded;
+- both addresses serve the pages (the address without a trailing slash redirects to the one with it).
+
+## 2026-10-18 · Production backend `thinnava-prod` set up (free)
+**Account:** the owner's own Supabase account, organisation **CK** on the **Free** plan (no card).
+- The Supabase connector attached to this Claude session belongs to a different account (an org with other projects); it was **not used**. Everything went through the Supabase CLI on the owner's laptop, logged in as the owner in their own PowerShell window (`npx supabase login` needs an interactive terminal).
+
+**Project:** `thinnava-prod`, ref `vfkxwxhocelfvlpsqtwc`, region **Mumbai (`ap-south-1`)**.
+- The first attempt was created in Tokyo by mistake; the owner deleted it and recreated it in Mumbai, which the privacy policy and spec require.
+- Automatic RLS and the Data API are on.
+- Linked with `supabase link`, which uses the CLI's temporary login role, so no database password is stored anywhere.
+
+**Database:**
+- `supabase db push`: **all 13 migrations applied**; no seed data, no sandbox accounts.
+- **148/148 privacy tests pass on production** (`supabase test db --linked`).
+- The tests run in transactions that roll back; a check afterwards found 0 users, profiles, places and visits.
+
+**Test files changed to run on hosted:** each test now does `set local role postgres` and `set search_path to public, extensions` (and uses `set local role postgres` where it used `reset role`).
+- **Why:** the CLI's login role (`cli_login_postgres`) is a member of `postgres` but doesn't use its rights by default, so it couldn't see pgTAP in `extensions`.
+- Local runs are unchanged: 148/148.
+
+**Function secrets** (`supabase secrets set`, from git-ignored files through a temporary file deleted straight after; values never shown):
+- `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_FALLBACK_MODEL`;
+- a **new** `PUSH_WEBHOOK_SECRET` just for production;
+- `APP_ENV=prod`.
+- No `GOOGLE_PLACES_KEY` yet; it waits for the billing account.
+
+**Vault:** `push_url` (the production push function's address) and `push_webhook_secret`, so the notifications trigger calls `push`.
+
+**Functions deployed:** `delete-account`, `extract`, `links`, `places`, `push`.
+- Checks: `places` without sign-in → 401; `push` with a wrong secret → 403; `delete-account` answers the browser preflight.
+- **`places`, `extract` and `links` don't start in production yet.** This is the designed guard ("Practice mode is not allowed in production"; spec §25.6): with no Places key they refuse rather than serve practice places to real users. They start working once the key is added, with no redeploy.
+
+**Deviation from spec §33.4:** the 13 migrations were pushed while still uncommitted (the owner asked for no commit yet), although the rule is "only code merged into `main` is pushed to `thinnava-prod`". From now on they count as released: never edit them; change things only with new migrations. A commit is recommended so `main` matches production (the owner decides).
+
+**Still to do for going live:**
+- in the Supabase dashboard, the Google sign-in provider (the Web client ID and its secret, typed by the owner) and the auth site and redirect addresses;
+- the Places key (after billing);
+- a release APK pointing at production;
+- publish the privacy and terms pages;
+- publish the Google sign-in setup;
+- the web hosting.
+
+## 2026-10-18 · Phone test of M8 list mode, M9 offline and settings, plus fixes
+Samsung S711B, sandbox backend, driven over adb with the owner. Web design is on hold (the owner is thinking about the desktop direction; nothing more is built for web until a design is approved).
+
+**Passed on the phone**
+- **Map tab (list mode):**
+  - 193 places, with faces (Test, Chitra) and glyphs for wishlist and friend tips;
+  - the pin card ("You went · Good", "Test loved the benne masala dosa · Good", no ♡ for a visited place, Open place, Directions);
+  - B2a filters: picking the connection Chitra gave 40 places, and the filter button shows a dot.
+- **Settings:**
+  - companion name rename "Mom" → "Amma" (confirmed in the database);
+  - About & privacy (the Gemini line, then the privacy policy and terms with the switch);
+  - the Notifications row.
+- **Offline, demo criterion 7** (airplane mode, then Wi-Fi off too, since Samsung keeps Wi-Fi on in airplane mode):
+  - the F8 strip appears;
+  - D1 shows "Places on this phone";
+  - a visit saved offline: "Saved · it'll sync when you're online", and the op is in the outbox;
+  - "Use 'Vidyarthi Bhavan' for now" became a draft ("Saved as a draft…", not on Home);
+  - F6 listed "Waiting to sync" and "Needs a place".
+  - Back online: the visit synced by itself (in the database; Nagarjuna also left the wishlist). "Pick the place" turned the draft into a real visit, and F6 then said "All synced".
+- **Push, activity:** I turned on 🔔 for Test; Test logged Meghana Foods from the laptop; the `connection_visited` notification and push were sent; tapping it opened Test's visit. **All four push types (request, accept, tag, activity) are now verified on the phone.**
+- **Large text** (Samsung's largest, font_scale 2.0; the app caps at 1.3): Home, Profile, Settings, place page and Add visit lay out without clipping; long names end in "…". The owner set it back afterwards.
+
+**Bugs found and fixed**
+1. After saving (especially offline), the new card was added above the list's visible top (FlashList keeps the old anchor), so it looked missing and its tint faded unseen. Home now scrolls to the top when a fresh entry lands (`useFresh` → `scrollToOffset(0)`).
+2. The Map said "0 places" while loading. It now says "Loading places…".
+3. Action menus (⋮ Rename / Delete, etc.) showed radio circles. `SheetOption` now shows a radio or checkbox only for real choices (`selected` given or `check`); actions get the `button` role. Checked on the phone.
+4. Not a bug: the owner appears as "C" because their Google account has no photo (Google's default letter image is stored and shown).
+5. The pin card's "You went" used a generic icon; it now shows your avatar. Checked on the phone.
+6. D1 opened from F6 said "Where did you eat?"; it now says "Which place?".
+7. Add visit at the largest text size looked scrolled, hiding the place name. **Not reproduced** at normal size, and no cause found in the code; recheck at large text later.
+8. The tab pill once stayed on Home while on Map (seen once, not reproducible). The pill is now derived from `focused` with `useDerivedValue`, so it can't drift from the current tab.
+9. Left as is: the italic "Last updated" line in About uses Android's default italic (Nunito italic isn't loaded).
+
+Typecheck is clean; 23 app tests pass.
+
+## 2026-10-17 · M10 web version: it builds, runs and has the laptop layout
+Tested in headless Chrome on this laptop: Chrome is driven by a script in the session scratchpad (the Claude Chrome extension wasn't connected), signed in as the sandbox account `@tester` by putting a session in the page's storage. **Real Google sign-in on web is not tested yet**: it needs the owner's Google Cloud step below.
+
+**Builds for web:** `react-native-web` and `@expo/metro-runtime` added (`npx expo install`). Web versions (`*.web.ts(x)`, picked automatically by the bundler):
+- `platform/map/MapView.web.tsx`: `mapsReady = false`, so the Map tab is the list mode;
+- `platform/signin/google.web.ts`: Supabase `signInWithOAuth` redirect (`lib/supabase.ts` has `detectSessionInUrl` on web);
+- `platform/settings/notifications.web.ts`: no-op; F2 hides the Notifications row;
+- `features/notifications/push.web.tsx`: no push yet;
+- `features/import/clipboard.web.ts`: "Paste a message" instead of noticing a copy (Home card: "Saving what a friend told you? · Copy their message, then paste it here · Paste a message"; D5 bar: "Paste a message?"). Reads the clipboard with the browser's permission. Labels come from `PASTE_TEXT`.
+
+**Phone-width check (412 px):**
+- every main screen renders with **no console errors**: onboarding, Home, Search, Map (list, 124 places), Profile, a connection's profile, place page, notifications, settings, "A friend told me";
+- MMKV works on web (browser storage).
+
+**Fixes found on web:**
+- Nested tappables (a photo inside a card, Accept inside a notification row) rendered as a `<button>` inside a `<button>`. The shared `Pressable` drops the inner `button` role on web only.
+- On web the selected tab's pill was painted over its icon; the icon now sits above it.
+- Metro had to be restarted with `--clear` to notice new `.web` files.
+- On laptop, the welcome slides were sized to the whole window instead of the frame, so text was cut off. `welcome.tsx` now uses the frame width when wide.
+- Screenshots of the web version at 1440 × 900 and 390 × 844 were shared with the owner as a private page.
+
+**Laptop layout** (`lib/layout.ts`, from 900 px wide):
+- the bottom bar becomes a left **rail** (+ on top, then Home, Search, Map, Profile; `tabBarPosition: 'left'`);
+- the app sits in a centred **frame** (96 px rail + up to 680 px column, card shadow) on the Mist ground, pushed screens included;
+- the **+ menu** opens beside the rail as a column;
+- **sheets** keep to 560 px in the middle;
+- the snackbar sits 24 px from the bottom;
+- **hover** dims anything tappable slightly;
+- **Esc** closes sheets, dialogs (react-native-web Modal) and the + menu.
+- Checked at 1366 × 800: Home, place page, the + menu, the filter sheet.
+
+**Backend:** Edge Functions (`places`, `extract`, `links`, `delete-account`) answer the browser preflight and send CORS headers (`_shared/http.ts`: `CORS`, `preflight`). Verified with a real call from inside the web page to `places`.
+
+**Local auth for web:** `supabase/config.toml` `site_url` and `additional_redirect_urls` → `http://localhost:8081` (and `127.0.0.1:8081`). Supabase restarted; sandbox data kept. The Google secret was already in `supabase/.env`.
+
+**Android unaffected:** typecheck clean, 23 app tests pass, the Android bundle builds.
+
+**Spec:** §18.3 (CORS reasoning, `PASTE_TEXT`, nested tappables, map side panel once the map exists, Esc/hover; Enter-to-submit moved to later).
+
+**Next, owner:** in Google Cloud (`thinnava-free` → APIs & Services → Credentials → the **Web** OAuth client), add:
+- Authorised JavaScript origins: `http://localhost:8081`
+- Authorised redirect URIs: `http://127.0.0.1:54321/auth/v1/callback`
+
+Then open `http://localhost:8081` in Chrome and press "Continue with Google".
+
+## 2026-10-17 · Decision: a web version (M10)
+**What:** Thinnava gets a web version, built from the same Expo app with `react-native-web` and hosted free as a static site.
+- It works on phone browsers (it looks like the app) and on **laptop screens**: a left navigation rail, a centred column, a full-width map with a side list, sheets as centred panels, hover, and Enter / Esc.
+- Same backend, account and data as Android.
+
+**Why:** the owner asked for it. iPhone friends can't install the APK (no iOS app, §4.3), and a link is easier for everyone. The codebase was kept web-compatible for this (§18.1).
+
+**Name:** "the web version", not "lite" (owner's wording).
+
+**Compromises, agreed:**
+- *Browser limits:*
+  - no automatic "You copied a message" card: a "Paste a message" button replaces it (one extra tap);
+  - no "Share to Thinnava" on iPhone (paste the link instead);
+  - push on iPhone only after "Add to Home Screen";
+  - no vibration; the browser's Back.
+- *Postponed:* web push, offline saving, the real map (needs the same Google billing as Android), some animations simpler.
+
+**Spec:** §4.2 (web moved out of v2), §4.3 ("a native iOS app" stays out), §18.3 rewritten, new M10 in §30. CLAUDE.md's project line updated.
+
+**Plan, Claude's side:**
+1. Make the app build for web: `react-native-web`, plus web stand-ins for the Android-only parts (Google sign-in, map, share intent, push, notification settings, offline outbox).
+2. Web Google sign-in (redirect), tested against the local sandbox.
+3. "Paste a message" on Home and D5.
+4. CORS in the Edge Functions, so browsers can call them.
+5. The laptop layout.
+6. Testing in Chrome on this laptop at phone and laptop widths.
+7. The deploy script and steps.
+
+**Plan, the owner's side (all free, no card), when we get there:**
+- **Google OAuth** (Google Cloud `thinnava-free` → APIs & Services → Credentials → the **Web** OAuth client): add the authorised JavaScript origins (`http://localhost:8081` for testing, later the site's address) and the redirect URI Supabase shows. Claude gives exact values at that step.
+- **The OAuth Web client's secret** goes into the git-ignored `supabase/.env` (never shared in chat), so the local sandbox can do web sign-in.
+- **Production backend** (the same M9 step the APK needs): a free Supabase project `thinnava-prod`.
+- **Hosting account:** Cloudflare Pages or Netlify, free with no card (GitHub Pages needs a paid plan for a private repo).
+- **Testing:** open the site on an iPhone (a friend's is fine) for the iPhone checks.
+
+## 2026-10-17 · Motion pass against DESIGN.md / design/motion.html, code side (M9)
+Docker reopened from the session at the owner's request; all 148 database tests pass. No phone, so nothing here has been seen moving yet.
+
+**Already matched:**
+- tab crossfade 280 ms;
+- bottom sheets 400 ms in;
+- dialogs (fade and scale from 90%, 200 ms);
+- snackbars (rise 300 ms, stay 3 s, leave 200 ms);
+- the + speed dial;
+- the chef-cat climb (`CatPeek`, 600 ms decelerate);
+- "Remove animations" (`useMotion`).
+
+**Added:**
+- **Tabs:** the arriving tab now settles in from 98% scale on top of the crossfade (a custom `sceneStyleInterpolator`; plain fade when animations are off).
+- **Heart pop:** `IconButton` pops its icon once (1.35×, 220 ms) when it turns on, e.g. the wishlist ♡. Not on first render, not with animations off.
+- **Username check:** a small spinner in the field while checking, then the ✓ pops in (ZoomIn, 150 ms). `FieldStatus` gains a `checking` kind.
+- **Share import, confirm screen:** the fields fill in one after another, 40 ms apart (fade up 8 px, `SavedFields fillIn`). Each amber "Please check this" pulses once (1.08×) after they land.
+- **New card on Home:** the entry just saved (visit, friend tip, internet find, import) lands tinted Pale Cobalt and fades to white (`lib/fresh.ts`, `EntryCard fresh`).
+
+**Not built yet** (needs tuning on the phone, so left for when it's available):
+- the **Home card → place page title glide** (the place still uses a plain fade);
+- the rest of the **share-import choreography**: the copied card lifting, the message copy flying into the reading card, the sheet growing into the confirm screen, Save shrinking the screen into the new card while others slide down;
+- **pushed screens** use Android's full slide rather than the 60 px shared-axis X.
+
+**Caught during the work:** a field wrapper defined inside the form's render would have remounted every field on each keystroke, losing focus while typing. It was replaced with a stable component before anything shipped.
+
+## 2026-10-17 · Accessibility and copy passes, code side (M9)
+No phone or Google billing available, so this is the review work that can be done in code. On-phone checks (TalkBack, text at 130% without clipping) are still to do.
+
+**Accessibility (§16.9)**
+- Already true: all text goes through `T` with the 130% font-scale cap, and rating pills announce "Rating: Good".
+- Fixed icon-only taps that had no role or label:
+  - the person photo on the place page's "People who've been" (now "Open Anu's profile", and not focusable when there's no profile);
+  - Google's "See rating and hours" row (a link);
+  - the dish chip ×;
+  - "Clear the date";
+  - the speed-dial backdrop.
+- The bottom-sheet text boxes (list names, friend and companion renames) now also cap scaling at 130%.
+- **Contrast check** for every text/background pair in the theme: all pass 4.5:1 except two.
+  - **Avatar initials** (white on the five tints) were 2.1–3.4:1, a real failure. The tints were darkened to pass 4.5:1 with the same hues:
+    - `#E07A5F`→`#CB4A27`
+    - `#6C8EBF`→`#4D76B0`
+    - `#7FB069`→`#567F43`
+    - `#B07AA1`→`#A05F8E`
+    - `#E3A73B`→`#9A6B16`
+    - Green and amber change most.
+    - Updated in `theme/tokens.ts`, DESIGN.md and the three mockup files. The rendered mockup PNGs are now slightly out of date.
+  - `inkMuted` on `primaryContainer` (4.43:1) never actually carries text, so nothing changed.
+  - The welcome screen's 70% white legal line on Deep Cobalt passes (6.15:1).
+- Raw hex cleanup: the welcome screen's white links and the avatar initials now use `colors.onPrimary`. The Google "G" colours and its button text stay, as Google's branding requires.
+
+**Copy (§15)**
+- No he/she anywhere in the UI.
+- "review" appears only for visits and tags, never for friend entries.
+- No Title Case labels.
+- Fixed:
+  - "Wishlist audience updated." → "Updated who can see your wishlist." (no "audience");
+  - "Couldn't open that link." → "…Check it in your browser." (errors say what to do).
+
+Typecheck is clean.
+
+**App unit tests (§21 "Pure TS")**
+- New `src/lib/__tests__/helpers.test.ts` (18 cases):
+  - link detection inside a message (trailing punctuation dropped);
+  - Directions and Swiggy hand-off URLs (practice places don't pin a Google id);
+  - internet labels (reel / video / link / found online);
+  - distance and ₹-mark formatting, and `dotJoin`;
+  - IST dates ("today" flips at India midnight, not UTC), `friendlyDate`, `addDays` across months and years, `timeAgo`.
+- `package.json` jest config gains `moduleNameMapper` for the `@/` path alias.
+- **`npm test`: 23 tests, all pass.**
+
+## 2026-10-17 · Offline: outbox, drafts, waiting messages, F6, F8 (M9)
+Built without the phone; the airplane-mode test on the phone is still to do.
+
+**Infrastructure**
+- `lib/net.ts`: NetInfo → `useNet` and React Query's `onlineManager`. "Unknown" counts as online.
+- `lib/outbox.ts`: the MMKV queue, `runWrite`, `flush`, `retryOp` / `dropOp`, `useDraftCount`, `startOutbox`, `clearOutbox`.
+  - Online with nothing queued, a write goes straight through, so errors show as before.
+  - Otherwise it's queued and sent in order.
+  - Network trouble or a 5xx retries with backoff (2 s → 5 min). A rule error marks the op failed for F6, and later ops continue.
+  - Triggers: back online, app foreground, start, and every enqueue.
+- `lib/drafts.ts`: place-less drafts (stand-in places with `draft:` ids) and pending shares, both in MMKV, device-only.
+- Query cache persisted to MMKV, max age 7 days (`PersistQueryClientProvider`), so screens open with last-known data offline.
+
+**Writes that now work offline:**
+- `save_visit` / `delete_visit`, `save_saved_entry` / `delete_saved_entry`, `set_wishlist`, `add_friend_name` / `rename_friend_name`.
+- When queued:
+  - a new entry appears on Home immediately (criterion 7);
+  - a deleted one disappears;
+  - the ♡ flips;
+  - the snackbar says "Saved · it'll sync when you're online".
+
+**Screens**
+- **F8:** "You're offline · changes will sync" under every TopBar, and on Search and Map.
+- **D1 offline:** "Places on this phone" (recent and cached), filtered by what you type, plus "Use '<typed>' for now". An entry saved with that becomes a draft ("Saved as a draft · pick the place in Offline drafts").
+- **F6 Offline drafts** (`settings/drafts`):
+  - Waiting to sync;
+  - Needs a place ("Pick the place" → D1 prefilled → it becomes a normal save);
+  - Waiting for internet (Review / delete);
+  - Couldn't sync (the error, Retry / Delete).
+  - F2 shows a count badge.
+- **Shares and copied text offline:** `/import` keeps the text and says "Saved. We'll read it when you're online." Home shows "1 message waiting · Review" once online.
+- **Errors offline:** social actions, search and settings say "You're offline. Try again when you're connected."
+- **Sign-out** clears the cache, queue, drafts and waiting messages (§26.3). If anything is unsynced, the dialog warns how many changes will be lost.
+
+**Backend:** migration `20261017000342_save_visit_drop_stale_tags.sql`. A tag for someone who isn't, or is no longer, a connection is now **dropped silently** and the visit still saves (§13), instead of failing with `not_connected`, which would have made an offline visit fail to sync. `06_tags_notifications` was updated: that check now expects the visit saved without the tag (plan 28). Applied after the owner reopened Docker (started from the session): **all 148 database tests pass.**
+
+**Tests:** Jest `src/lib/__tests__/outbox.test.ts`, 5 cases, all pass:
+- straight-through when online;
+- order is kept offline;
+- a network failure stops and keeps the order;
+- a rule error fails one op and the rest continue, then retry works;
+- new writes queue behind waiting ones.
+
+They found a real gap, now fixed: a `flush()` during a running flush returned at once. It now waits and runs one more pass.
+
+**Spec:** §22.4 (`save_visit` tags), §26.5 (`runWrite`, triggers, drafts, D1 offline, pending shares, UI, sign-out). Typecheck is clean.
+
+## 2026-10-16 · Settings: companion names, notifications, About & privacy (M9)
+Phone testing is postponed at the owner's request; this is work that needs no phone.
+
+**F5 Private companion names** (`settings/companion-names`): each name with "N visits"; ⋮ Rename (changes it on every visit) or Delete (removed from those visits; the visits stay).
+- Migration `20261016181632_companion_names.sql`: `my_companion_names`, `rename_companion_name`, `delete_companion_name`.
+- The same migration also blocks signed-out callers from the functions recreated or added today (`home_feed`, `user_wishlist`, `map_places`), as earlier migrations do for every RPC. They already returned nothing without a user; this keeps the rule uniform.
+- New test `09_companion_names.test.sql` (7 checks). **All 147 database tests pass.**
+
+**Notifications row:** opens Android's notification settings for Thinnava, falling back to the app's settings page. Lives in `platform/settings/notifications.ts`.
+
+**About & privacy** (`settings/about`):
+- the version and "A student project from IISc";
+- the Gemini line from §30 M9, verbatim: "Copied or shared messages are sent to Google's Gemini to read them and are not stored by Thinnava";
+- the privacy policy and terms, rendered in the app by a small Markdown renderer (`features/legal/Markdown.tsx`);
+- "Open on the web".
+
+The text comes from `docs/legal/*.md`, copied into `features/legal/text.ts` by **`node tools/legal/sync.mjs`**. Re-run it after editing either file.
+
+Settings now only says "arrives in M9" for Offline drafts (next). **Spec:** §14 F2, F5; §22.4. Typecheck is clean.
+
+## 2026-10-16 · M8 work log (map), in progress
+**Decision (owner): option A, Google Maps.** The owner will set up the `thinnava-maps` billing account later. Until then, everything except the map tiles is built and testable.
+- **Why the map can't show yet:** the Maps SDK needs an API key, and Google requires a billing account, even though showing the map is free. `GOOGLE_MAPS_ANDROID_KEY` is empty.
+- **Rejected:** option B (MapLibre with OpenFreeMap tiles, no card).
+
+**Backend**
+- Migration `20261016143444_map_places.sql`: `map_places`, plus indexes on `places(lat, lng)` and `visits(place_id)`.
+  - Pins come from my visits, my wishlist, connections' visible visits (`can_see_visit_social`, so a pending tag never adds a pin) and my friend and internet entries.
+  - Layer, price, category and person filters.
+  - Price uses the same buckets as Search (`u200` / `200` / `500` / `1000`).
+  - A connection's map shows only their shared visits and wishlist.
+- New test `08_map_places.test.sql` (16 checks: layers, privacy against only-me / non-connection / pending-tag visits, the visible box, price including friend entries, category, a connection's map, a stranger's view). **All 140 database tests pass.**
+- Sandbox seed `tools/sandbox-seed/map_seed.sql` (local only, re-runnable, ids `practice:seed-…`):
+  - 200 practice places across Bengaluru;
+  - 100 visits by `@tester`, 40 by `@cfriend` and 20 by me;
+  - 25 places on my wishlist;
+  - 15 friend tips and 10 internet finds.
+  - As me: 193 pins in about 60 ms.
+
+**App**
+- `features/map/`:
+  - `api.ts` (layers, filters, `mapPlaces`, the Bengaluru default);
+  - `cluster.ts` (supercluster; zoom from the region);
+  - `PinCard.tsx` (B2b: up to 3 one-line summaries like "Rahul loved the chicken burger", with pills; ♡ only for unvisited places; Open place and Directions);
+  - `FilterSheet.tsx` (B2a: price, place type, one connection, Clear filters).
+- `platform/map/MapView.tsx` (Google provider, style from tokens in `theme/mapStyle.ts`, `mapsReady` from `app.config.ts` → `extra.mapsReady`).
+- `(tabs)/map.tsx` (B2):
+  - search bar, filter button with a dot when filters are on, layer chips, and Locate me (asks via A7);
+  - pins with faces or glyphs, clusters (tap to zoom in), and the "N places here" list sheet;
+  - region loads debounced 500 ms;
+  - **without a key**, it shows the same chips, filters and pin card over a plain list, with "The map turns on once Google Maps is set up."
+- `MapPin` takes a photo (`personUri`).
+- D1 gains a `map` purpose ("Find on the map"). The picked-place handoff now carries its purpose, so the always-mounted Map tab never takes a place picked for a form.
+- "Open map" on my profile (Visited / Wishlist → that layer) and on E1 (→ "Anand's map ×", their places only), replacing the "arrives in M8" snackbars.
+- Typecheck is clean.
+
+**Spec:** §14 B2 (search centring, scoped maps, no-key state), §22.5 `map_places`, §26.7.
+
+**Still to do in M8:** a phone test of the list mode now. After the owner's billing setup: the Maps key, a rebuild, and journey C with about 200 pins on the real map.
+
+## 2026-10-16 · Commit `406b253`: M2–M7 (not pushed)
+- One commit on `main` for everything since `4aa7669`: 140 files (M2–M7, the design pass, push setup, the wishlist rule, and person taps on cards). The owner asked for it.
+- Checked before committing: no `.env`, `google-services.json`, keystore, Firebase key or log file was staged.
+- Fixed while checking: comments and docs said Firebase is on `thinnava-free`; it is actually the separate project `thinnava-f44c7` (Spark plan, no billing).
+- Not pushed. M7's opted-in activity push ("X visited …") still hasn't been tried on the phone.
+
 ## 2026-10-16 · Tap a person on a card → their profile
 **What:**
 - On Home cards and the place page's "People who've been" rows, tapping the **avatar or the name** opens that person's profile (E1, or E2 if not connected).

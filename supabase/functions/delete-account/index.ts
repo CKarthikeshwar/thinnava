@@ -1,8 +1,10 @@
 // delete-account (spec §23, F7): permanently deletes the caller's account.
 // Deleting the auth user cascades through profiles to everything they own.
-import { admin, fail, ok, requireUser } from '../_shared/http.ts';
+import { admin, fail, ok, requireUser, preflight } from '../_shared/http.ts';
 
 Deno.serve(async (req) => {
+  const pre = preflight(req);
+  if (pre) return pre;
   if (req.method !== 'POST') return fail('method_not_allowed', 'Use POST', 405);
   const user = await requireUser(req);
   if (!user) return fail('not_signed_in', 'Sign in first', 401);

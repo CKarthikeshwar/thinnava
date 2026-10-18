@@ -37,7 +37,7 @@ export function ChipInput({ label, optional, value, onChange, placeholder = 'Typ
         {value.map((d) => (
           <View key={d} style={styles.chip}>
             <T style={styles.chipText} color={colors.onPrimaryContainer}>{d}</T>
-            <Pressable onPress={() => onChange(value.filter((x) => x !== d))} hitSlop={10} accessibilityLabel={`Remove ${d}`}>
+            <Pressable onPress={() => onChange(value.filter((x) => x !== d))} hitSlop={10} accessibilityLabel={`Remove ${d}`} accessibilityRole="button">
               <X size={14} color={colors.onPrimaryContainer} strokeWidth={2.4} />
             </Pressable>
           </View>

@@ -1,6 +1,6 @@
 # Thinnava Terms of Use
 
-_Last updated: DRAFT, not yet published. Contact: 921019chimirelakarthik@gmail.com_
+_Last updated: 18 October 2026. Contact: distilledwater.ck@gmail.com_
 
 1. **What this is.** Thinnava is a student project from IISc, offered free and "as is", with no guarantees that it will always be available or error-free.
 2. **Your account.** You sign in with Google. Keep your account to yourself, and give a real name and a username that isn't offensive or impersonating someone.
@@ -9,4 +9,4 @@ _Last updated: DRAFT, not yet published. Contact: 921019chimirelakarthik@gmail.c
 5. **Third-party services.** Directions open Google Maps, and order buttons open Swiggy. Those services have their own terms.
 6. **Removal.** We may remove content or accounts that break these terms.
 7. **Changes.** We may update these terms. Continuing to use the app means you accept the updated terms.
-8. **Contact:** 921019chimirelakarthik@gmail.com
+8. **Contact:** distilledwater.ck@gmail.com

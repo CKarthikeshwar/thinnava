@@ -9,17 +9,24 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useFonts } from 'expo-font';
 import { Fredoka_600SemiBold } from '@expo-google-fonts/fredoka';
 import { Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { NAV_HEIGHT, SnackbarHost } from '@/components';
 import { LocationExplainer } from '@/features/places/LocationExplainer';
-import { queryClient } from '@/lib/queryClient';
+import { PERSIST_MAX_AGE, queryClient, queryPersister } from '@/lib/queryClient';
+import { flush, startOutbox } from '@/lib/outbox';
 import { Splash } from '@/features/auth/Splash';
 import { useAuth, useAuthBootstrap } from '@/features/auth/session';
 import { useShareImport } from '@/features/import/useShareImport';
 import { PushExplainer, usePush } from '@/features/notifications/push';
-import { colors } from '@/theme';
+import { colors, shadows } from '@/theme';
+import { COLUMN_MAX, useLayoutMode } from '@/lib/layout';
+import { WebTopBar, isTabPath } from '@/features/web/TopBar';
+import { usePathname } from 'expo-router';
+import { View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
+// Offline (spec §13, §26.5): watch the network and send queued writes when possible.
+startOutbox();
 
 // Root layout (spec §26.2–26.3): fonts, providers and the auth gate.
 export default function RootLayout() {
@@ -41,15 +48,18 @@ export default function RootLayout() {
     <ShareIntentProvider options={{ resetOnBackground: true }}>
       <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
         <SafeAreaProvider>
-          <QueryClientProvider client={queryClient}>
+          <PersistQueryClientProvider client={queryClient} onSuccess={() => void flush()}
+            persistOptions={{ persister: queryPersister, maxAge: PERSIST_MAX_AGE, buster: 'v1' }}>
             <BottomSheetModalProvider>
               <StatusBar style="dark" />
-              <Gate />
-              <Snacks />
+              <Frame>
+                <Gate />
+                <Snacks />
+              </Frame>
               <LocationExplainer />
               <PushExplainer />
             </BottomSheetModalProvider>
-          </QueryClientProvider>
+          </PersistQueryClientProvider>
         </SafeAreaProvider>
       </GestureHandlerRootView>
     </ShareIntentProvider>
@@ -84,6 +94,9 @@ function Gate() {
         <Stack.Screen name="import" options={{ presentation: 'transparentModal', animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
         <Stack.Screen name="settings/friend-names" />
         <Stack.Screen name="settings/blocked" />
+        <Stack.Screen name="settings/companion-names" />
+        <Stack.Screen name="settings/about" />
+        <Stack.Screen name="settings/drafts" />
         <Stack.Screen name="people/[userId]" />
         <Stack.Screen name="connections" />
         <Stack.Screen name="lists/index" />
@@ -101,8 +114,31 @@ function Gate() {
   );
 }
 
-/** One snackbar host for the whole app, sitting just above the nav bar. */
+/**
+ * Web (spec §18.3): the top bar above everything once signed in (on a phone browser only on the four main pages,
+ * which have no other bar). On a laptop, screens other than the four pages sit in a centred column.
+ */
+function Frame({ children }: { children: React.ReactNode }) {
+  const mode = useLayoutMode();
+  const status = useAuth((s) => s.status);
+  const path = usePathname();
+  if (mode === 'app') return <>{children}</>;
+  const tab = isTabPath(path);
+  const bar = status === 'ready' && (mode === 'laptop' || tab);
+  const column = mode === 'laptop' && !tab && path !== '/welcome' && status !== 'loading';
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {bar ? <WebTopBar mode={mode} /> : null}
+      <View style={[{ flex: 1 }, column && { width: '100%', maxWidth: COLUMN_MAX, alignSelf: 'center', backgroundColor: colors.background, boxShadow: shadows.card }]}>
+        {children}
+      </View>
+    </View>
+  );
+}
+
+/** One snackbar host for the whole app, sitting just above the nav bar (web: no nav bar). */
 function Snacks() {
   const insets = useSafeAreaInsets();
-  return <SnackbarHost bottom={NAV_HEIGHT + insets.bottom + 10} />;
+  const web = useLayoutMode() !== 'app';
+  return <SnackbarHost bottom={web ? 24 : NAV_HEIGHT + insets.bottom + 10} />;
 }

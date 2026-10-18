@@ -4,19 +4,20 @@ import { colors, fonts, shadows } from '@/theme';
 import { Avatar } from './Avatar';
 import { T } from './T';
 
-type Glyph = 'wishlist' | 'went' | 'internet' | 'friend';
+export type Glyph = 'wishlist' | 'went' | 'internet' | 'friend';
 const glyphIcon = { wishlist: Heart, went: Check, internet: Globe, friend: UserRound };
 
 type Props = {
   label: string; // place name
   person?: string; // avatar of who went
+  personUri?: string | null; // their photo, if any
   glyph?: Glyph; // otherwise a glyph circle
   mine?: boolean; // my own pins invert to cobalt
   selected?: boolean;
 };
 
 /** Map pin bubble with a tail (DESIGN.md "Map Pins"). Rendered inside a map Marker in M8. */
-export function MapPin({ label, person, glyph = 'went', mine, selected }: Props) {
+export function MapPin({ label, person, personUri, glyph = 'went', mine, selected }: Props) {
   const Icon = glyphIcon[glyph];
   const bg = mine ? colors.primary : colors.surface;
   const fg = mine ? colors.onPrimary : colors.ink;
@@ -24,7 +25,7 @@ export function MapPin({ label, person, glyph = 'went', mine, selected }: Props)
     <View style={styles.pin}>
       <View style={[styles.bub, { backgroundColor: bg }, selected && styles.sel]}>
         {person ? (
-          <Avatar name={person} size={24} />
+          <Avatar name={person} uri={personUri} size={24} />
         ) : (
           <View style={[styles.g, mine && styles.gMine]}>
             <Icon size={14} color={mine ? colors.onPrimary : colors.primaryStrong} strokeWidth={2.2} />

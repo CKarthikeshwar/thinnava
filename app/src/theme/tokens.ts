@@ -16,6 +16,10 @@ export const colors = {
   scrim: 'rgba(10,20,60,0.42)',
   dialScrim: 'rgba(14,24,44,0.78)', // navy, behind the + speed dial (phase1 B3 mockup)
   rings: '#CAD5F8', // primary mixed 18% into the ground
+  // Web (spec §18.3, design/web.html): table heads and the dashed paste box, the WhatsApp sender name on the front page
+  surfaceSoft: '#F7F9FF',
+  dashed: '#B9C6EE',
+  chatName: '#1F8A5B',
   // Fixed verdict colours (never decorative)
   good: '#17703E',
   goodWash: '#DDF2E4',
@@ -36,7 +40,7 @@ export const colors = {
 } as const;
 
 // Initials-avatar tints (DESIGN.md "Avatars and Source Marks")
-export const avatarTints = ['#E07A5F', '#6C8EBF', '#7FB069', '#B07AA1', '#E3A73B'] as const;
+export const avatarTints = ['#CB4A27', '#4D76B0', '#567F43', '#A05F8E', '#9A6B16'] as const;
 
 export const radii = {
   chip: 10,

@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
+import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated';
 import { StyleSheet, View } from 'react-native';
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Calendar, CircleAlert, Globe, MapPin, Search, UserRound, X } from 'lucide-react-native';
@@ -6,7 +7,7 @@ import { Avatar, Chip, ChipInput, Pressable, RatingPicker, Segmented, T, TextFie
 import type { Place } from '@/features/places/api';
 import { DateSheet } from '@/features/visits/DateSheet';
 import { friendlyDate, todayIST } from '@/lib/dates';
-import { colors, fonts, radii, strokes } from '@/theme';
+import { colors, fonts, radii, strokes, useMotion } from '@/theme';
 import type { FriendName, SavedKind } from './api';
 import { FriendNameSheet, type PickedFriend } from './FriendNameSheet';
 
@@ -37,6 +38,8 @@ type Props = {
   names: FriendName[];
   onChangePlace: () => void;
   flags?: Flags;
+  /** Share import (D8): the fields fill in one after another, 40 ms apart (DESIGN.md "Share import"). */
+  fillIn?: boolean;
 };
 
 /**
@@ -44,19 +47,22 @@ type Props = {
  * source toggle · Who told you? (friend, required, quick picks) or Link (internet) · Place · How was it for them? ·
  * Loved · Didn't like · Price per person · When they went (friend).
  */
-export function SavedFields({ value: d, onChange, names, onChangePlace, flags = {} }: Props) {
+export function SavedFields({ value: d, onChange, names, onChangePlace, flags = {}, fillIn }: Props) {
   const nameSheet = useRef<BottomSheetModal>(null);
   const dateSheet = useRef<BottomSheetModal>(null);
   const recent = names.slice(0, 3);
 
   return (
     <>
+<Fill i={0} on={!!fillIn}>
       <Segmented
         options={[{ key: 'friend', label: 'A friend', icon: UserRound }, { key: 'internet', label: 'Internet', icon: Globe }]}
         value={d.kind}
         onChange={(kind) => onChange({ kind })}
       />
+      </Fill>
 
+      <Fill i={1} on={!!fillIn}>
       {d.kind === 'friend' ? (
         <View style={styles.field}>
           <View style={styles.labelRow}>
@@ -85,7 +91,9 @@ export function SavedFields({ value: d, onChange, names, onChangePlace, flags = 
         <TextField label="Link" optional value={d.link} onChangeText={(link) => onChange({ link: link.trim().slice(0, 2000) })}
           placeholder="Paste a reel, video or page link" keyboardType="url" autoCapitalize="none" autoCorrect={false} />
       )}
+      </Fill>
 
+      <Fill i={2} on={!!fillIn}>
       <View style={styles.field}>
         <T variant="fieldLabel">Place</T>
         <Pressable onPress={onChangePlace} pressScale={0.99} style={[styles.inp, flags.place && styles.warn]} accessibilityRole="button"
@@ -105,15 +113,19 @@ export function SavedFields({ value: d, onChange, names, onChangePlace, flags = 
         </Pressable>
         {flags.place ? <Flag /> : null}
       </View>
+      </Fill>
 
+      <Fill i={3} on={!!fillIn}>
       <View style={styles.field}>
         <T variant="fieldLabel">How was it for them?</T>
         <RatingPicker value={d.rating} onChange={(rating) => onChange({ rating })} allowNone />
         {flags.rating ? <Flag /> : null}
       </View>
-      <ChipInput label="Loved" value={d.loved} onChange={(loved) => onChange({ loved })} />
-      <ChipInput label="Didn't like" optional value={d.disliked} onChange={(disliked) => onChange({ disliked })} />
+      </Fill>
+      <Fill i={4} on={!!fillIn}><ChipInput label="Loved" value={d.loved} onChange={(loved) => onChange({ loved })} /></Fill>
+      <Fill i={5} on={!!fillIn}><ChipInput label="Didn't like" optional value={d.disliked} onChange={(disliked) => onChange({ disliked })} /></Fill>
 
+      <Fill i={6} on={!!fillIn}>
       <View style={styles.two}>
         <View style={{ flex: 1 }}>
           <TextField label="Price / person" prefix="₹" keyboardType="number-pad" value={d.price} placeholder="300"
@@ -130,7 +142,7 @@ export function SavedFields({ value: d, onChange, names, onChangePlace, flags = 
               <Calendar size={18} color={d.visitedOn ? colors.inkSoft : colors.inkMuted} strokeWidth={2} />
               <T style={[styles.inpText, !d.visitedOn && styles.muted]} numberOfLines={1}>{d.visitedOn ? friendlyDate(d.visitedOn) : 'Add'}</T>
               {d.visitedOn ? (
-                <Pressable onPress={() => onChange({ visitedOn: null })} hitSlop={10} accessibilityLabel="Clear the date">
+                <Pressable onPress={() => onChange({ visitedOn: null })} hitSlop={10} accessibilityLabel="Clear the date" accessibilityRole="button">
                   <X size={16} color={colors.inkMuted} strokeWidth={2.2} />
                 </Pressable>
               ) : null}
@@ -139,6 +151,7 @@ export function SavedFields({ value: d, onChange, names, onChangePlace, flags = 
           </View>
         ) : <View style={{ flex: 1 }} />}
       </View>
+      </Fill>
 
       <FriendNameSheet ref={nameSheet} names={names} onPick={(friend) => onChange({ friend })} />
       <DateSheet ref={dateSheet} value={d.visitedOn ?? todayIST()} onPick={(visitedOn) => onChange({ visitedOn })} />
@@ -146,13 +159,25 @@ export function SavedFields({ value: d, onChange, names, onChangePlace, flags = 
   );
 }
 
-/** Amber "Please check this" under a low-confidence field (spec §10.3). */
+/** One field arriving: fades up 8 px, 40 ms after the previous one. Just the children when not animating. */
+function Fill({ i, on, children }: { i: number; on: boolean; children: ReactNode }) {
+  if (!on) return <>{children}</>;
+  return <Animated.View entering={FadeInDown.duration(250).delay(i * 40).withInitialValues({ transform: [{ translateY: 8 }] })}>{children}</Animated.View>;
+}
+
+/** Amber "Please check this" under a low-confidence field (spec §10.3). Pulses once, after the fields fill in. */
 function Flag() {
+  const { reduced } = useMotion();
+  const pulse = useSharedValue(1);
+  useEffect(() => {
+    if (!reduced) pulse.value = withDelay(450, withSequence(withTiming(1.08, { duration: 160 }), withTiming(1, { duration: 200 })));
+  }, []);
+  const style = useAnimatedStyle(() => ({ transform: [{ scale: pulse.value }] }));
   return (
-    <View style={styles.flag}>
+    <Animated.View style={[styles.flag, style]}>
       <CircleAlert size={15} color={colors.okayish} strokeWidth={2.2} />
       <T style={styles.flagText}>Please check this</T>
-    </View>
+    </Animated.View>
   );
 }
 

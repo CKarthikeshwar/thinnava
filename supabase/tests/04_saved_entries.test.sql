@@ -1,6 +1,10 @@
 -- Friend & internet entries (spec §6.3–6.4, §21.3 "saved entries are never visible to others, even linked friends").
 begin;
 create extension if not exists pgtap with schema extensions;
+-- Run as postgres with pgTAP's schema on the path, so the tests also run on the hosted project, where the CLI's
+-- temporary login role is a member of postgres but doesn't use its rights by default.
+set local role postgres;
+set search_path to public, extensions;
 select plan(21);
 
 insert into auth.users (id, email) values
@@ -15,7 +19,7 @@ $$;
 set local role authenticated;
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a2'); select public.create_profile('anu2', 'Anu');
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000b2'); select public.create_profile('rahulk', 'Rahul K');
-reset role;
+set local role postgres;
 insert into public.connections (user_a, user_b) values ('00000000-0000-0000-0000-0000000000a2', '00000000-0000-0000-0000-0000000000b2');
 set local role authenticated;
 
@@ -57,7 +61,7 @@ select is((select count(*)::int from public.saved_entries where friend_name_id =
 select throws_ok($$ select public.delete_friend_name('00000000-0000-0000-0000-00000000f002') $$, 'P0001', 'name_in_use', 'a name with entries cannot be deleted');
 
 -- Even a linked, connected friend sees nothing.
-reset role;
+set local role postgres;
 update public.friend_names set linked_user = '00000000-0000-0000-0000-0000000000b2' where id = '00000000-0000-0000-0000-00000000f002';
 set local role authenticated;
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000b2');

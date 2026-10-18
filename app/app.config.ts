@@ -27,6 +27,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     predictiveBackGestureEnabled: false,
     ...(existsSync(GOOGLE_SERVICES) ? { googleServicesFile: GOOGLE_SERVICES } : {}),
   },
+  // Web version (spec §18.3): a single-page site; public/ holds index.html, the manifest and home-screen icons.
+  web: { bundler: 'metro', output: 'single', name: 'Thinnava', shortName: 'Thinnava', lang: 'en', themeColor: '#FFFFFF', backgroundColor: '#EEF2FF', favicon: './assets/icon.png' },
   plugins: [
     'expo-router',
     // Splash: the peeking chef cat on Mist (spec §16.8). The full splash (A1) with wordmark is drawn in JS.
@@ -42,5 +44,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   ],
   experiments: { typedRoutes: true },
-  extra: { APP_ENV, ...(process.env.EAS_PROJECT_ID ? { eas: { projectId: process.env.EAS_PROJECT_ID } } : {}) },
+  // The map screen shows the place list instead of the map until a Maps key exists (the SDK crashes without one).
+  extra: { APP_ENV, mapsReady: !!process.env.GOOGLE_MAPS_ANDROID_KEY, ...(process.env.EAS_PROJECT_ID ? { eas: { projectId: process.env.EAS_PROJECT_ID } } : {}) },
 });

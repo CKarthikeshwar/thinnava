@@ -1,6 +1,10 @@
 -- Privacy tests for profiles (spec §21.3). Run: npx supabase test db --linked  (or paste into the SQL editor).
 begin;
 create extension if not exists pgtap with schema extensions;
+-- Run as postgres with pgTAP's schema on the path, so the tests also run on the hosted project, where the CLI's
+-- temporary login role is a member of postgres but doesn't use its rights by default.
+set local role postgres;
+set search_path to public, extensions;
 select plan(12);
 
 -- Three users: A, B, C. A and B are connected; C blocks A.
@@ -32,7 +36,7 @@ select lives_ok($$ select public.create_profile('chitra', 'Chitra') $$, 'C creat
 -- A sets a bio; set up the A–B connection and C's block on A (as the table owner, bypassing RLS).
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.update_profile('anu.eats', 'Anu', 'Momo hunter');
-reset role;
+set local role postgres;
 insert into public.connections (user_a, user_b) values ('00000000-0000-0000-0000-00000000000a', '00000000-0000-0000-0000-00000000000b');
 insert into public.blocks (blocker, blocked) values ('00000000-0000-0000-0000-00000000000c', '00000000-0000-0000-0000-00000000000a');
 set local role authenticated;

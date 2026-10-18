@@ -1,10 +1,12 @@
 import { forwardRef, useState, type ReactNode } from 'react';
-import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
+import { ActivityIndicator, StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
+import Animated, { ZoomIn } from 'react-native-reanimated';
 import { CircleCheck, CircleX, Check, X } from 'lucide-react-native';
 import { colors, fonts, MAX_FONT_SCALE, radii, size, strokes } from '@/theme';
 import { T } from './T';
 
-export type FieldStatus = { kind: 'neutral' | 'success' | 'error'; text: string } | null;
+/** 'checking' spins in the field while a live check runs (A3 username), then 'success' pops its tick in. */
+export type FieldStatus = { kind: 'neutral' | 'checking' | 'success' | 'error'; text: string } | null;
 
 type Props = TextInputProps & {
   label: string;
@@ -45,7 +47,10 @@ export const TextField = forwardRef<TextInput, Props>(function TextField(
           onBlur={(e) => { setFocused(false); onBlur?.(e); }}
           {...rest}
         />
-        {error ? <CircleX size={20} color={colors.bad} strokeWidth={2} /> : status?.kind === 'success' ? <CircleCheck size={20} color={colors.good} strokeWidth={2} /> : trailing}
+        {error ? <CircleX size={20} color={colors.bad} strokeWidth={2} />
+          : status?.kind === 'success' ? <Animated.View entering={ZoomIn.duration(150)}><CircleCheck size={20} color={colors.good} strokeWidth={2} /></Animated.View>
+          : status?.kind === 'checking' ? <ActivityIndicator size="small" color={colors.inkMuted} />
+          : trailing}
       </View>
       {status?.text ? (
         <View style={styles.help} accessibilityLiveRegion="polite">

@@ -8,12 +8,14 @@ import { Button, T, TopBar, showSnack } from '@/components';
 import { getPlace } from '@/features/places/api';
 import { useTakePicked } from '@/features/places/picked';
 import { UseCopiedBanner } from '@/features/import/CopiedBanners';
-import { readClipboard, useCopiedText } from '@/features/import/clipboard';
+import { PASTE_TEXT, readClipboard, useCopiedText } from '@/features/import/clipboard';
 import { friendlyError } from '@/lib/errors';
 import { colors, space } from '@/theme';
 import { myFriendNames, SAVED_KEYS, saveSaved, savedDetail, type SavedKind } from './api';
 import { canSave, emptyDraft, SavedFields, type SavedDraft } from './SavedFields';
-import { toInput } from './draft';
+import { toFeedItem, toInput } from './draft';
+import { showInFeed } from '@/features/visits/api';
+import { markFresh } from '@/lib/fresh';
 
 type Props = { source?: SavedKind; placeId?: string; editId?: string };
 
@@ -43,7 +45,7 @@ export function SavedScreen({ source = 'friend', placeId, editId }: Props) {
 
   const useCopied = async () => {
     const text = await readClipboard().catch(() => '');
-    if (!text) { copied.hide(); showSnack({ text: 'Nothing copied right now.' }); return; }
+    if (!text) { copied.hide(); showSnack({ text: PASTE_TEXT.empty }); return; }
     router.replace({ pathname: '/import', params: { text, source: d.kind } });
   };
 
@@ -51,9 +53,17 @@ export function SavedScreen({ source = 'friend', placeId, editId }: Props) {
     if (!canSave(d)) return;
     setBusy(true);
     try {
-      await saveSaved(toInput(id, d));
-      await Promise.all(SAVED_KEYS.map((k) => qc.invalidateQueries({ queryKey: k })));
-      showSnack({ text: editId ? 'Saved' : d.kind === 'friend' ? `Saved ${d.friend!.name}'s experience` : 'Saved' });
+      const r = await saveSaved(toInput(id, d), d.kind === 'friend' ? `${d.friend!.name}'s tip about ${d.place!.name}` : `${d.place!.name}, found online`);
+      if (!editId && !r.draft) markFresh(id);
+      if (r.draft) {
+        showSnack({ text: 'Saved as a draft · pick the place in Offline drafts' });
+      } else if (r.queued) {
+        showInFeed(toFeedItem(id, d), ['all', d.kind === 'friend' ? 'friends' : 'internet']);
+        showSnack({ text: "Saved · it'll sync when you're online" });
+      } else {
+        await Promise.all(SAVED_KEYS.map((k) => qc.invalidateQueries({ queryKey: k })));
+        showSnack({ text: editId ? 'Saved' : d.kind === 'friend' ? `Saved ${d.friend!.name}'s experience` : 'Saved' });
+      }
       router.back();
     } catch (e) {
       showSnack({ text: friendlyError(e, "Couldn't save. Try again.") });

@@ -44,3 +44,10 @@ export function useCopiedText(respectQuiet: boolean) {
   }, [respectQuiet]);
   return { has, hide: () => setHas(false) };
 }
+
+/** What the copy-and-read UI says on Android (the web says "Paste a message", clipboard.web.ts). */
+export const PASTE_TEXT = {
+  cardTitle: 'You copied a message', cardSub: 'Want us to read it?', cardAction: 'Read it',
+  chipTitle: 'Use copied text?', chipSub: "We'll read it and fill this in for you", chipAction: 'Use',
+  empty: 'Nothing copied right now.',
+};

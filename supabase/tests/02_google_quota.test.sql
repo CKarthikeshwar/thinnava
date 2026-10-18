@@ -1,6 +1,10 @@
 -- Zero-cost lock 1 (spec §27.5): the counter refuses at the cap and app users can't touch it.
 begin;
 create extension if not exists pgtap with schema extensions;
+-- Run as postgres with pgTAP's schema on the path, so the tests also run on the hosted project, where the CLI's
+-- temporary login role is a member of postgres but doesn't use its rights by default.
+set local role postgres;
+set search_path to public, extensions;
 select plan(8);
 
 -- Shrink one cap to 2 for the test (rolled back at the end).

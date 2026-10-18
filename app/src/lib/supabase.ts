@@ -1,4 +1,4 @@
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { authStorage } from './storage';
 
@@ -12,7 +12,7 @@ if (!url || !key) {
 
 /** The one backend client. Screens never use it directly; each feature's api.ts does (spec §26.1). */
 export const supabase = createClient(url ?? 'http://localhost', key ?? 'missing', {
-  auth: { storage: authStorage, autoRefreshToken: true, persistSession: true, detectSessionInUrl: false },
+  auth: { storage: authStorage, autoRefreshToken: true, persistSession: true, detectSessionInUrl: Platform.OS === 'web' }, // web: Google's redirect lands back with the session in the URL
 });
 
 // Refresh tokens only while the app is in the foreground (Supabase's React Native guidance).

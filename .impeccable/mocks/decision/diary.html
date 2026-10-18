@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Food diary calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2350D9;--ps:#16348F;--pc:#DBE4FF;--opc:#0E2266;--bg:#EEF2FF;--s:#fff;--tint:#E6ECFF;--ink:#10183A;--soft:#46507A;--mut:#5C668C;--hair:#D9E0F7;--good:#17703E;--gw:#DDF2E4;--ok:#845300;--ow:#FBEFD2;--bad:#A8301F;--bw:#FADFDB}
+*{box-sizing:border-box}body{margin:0;width:1440px;height:900px;overflow:hidden;background:var(--bg);font-family:Nunito,sans-serif;color:var(--ink);display:flex}
+.rail{width:96px;background:var(--s);border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:22px}
+.add{width:52px;height:52px;border-radius:18px;background:var(--p);color:#fff;font-size:30px;display:grid;place-items:center}
+.nav{display:flex;flex-direction:column;gap:14px;align-items:center}.nav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--soft)}
+.ic{width:56px;height:30px;border-radius:16px;display:grid;place-items:center}.on .ic{background:var(--pc)}.on{color:var(--ink)!important;font-weight:800!important}
+main{flex:1;padding:20px 24px;display:flex;gap:20px;min-width:0}
+.cal{flex:1;display:flex;flex-direction:column;min-width:0}
+.ch{display:flex;align-items:center;gap:12px;margin-bottom:12px}.ch h1{font-family:Fredoka;font-weight:600;font-size:30px;margin:0}
+.seg{display:flex;background:var(--tint);border-radius:999px;padding:4px;gap:4px}.seg span{padding:7px 14px;border-radius:999px;font-weight:800;font-size:13px;color:var(--soft)}.seg .on{background:#fff;color:var(--ink)}
+.sp{flex:1}.arrow{width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:800}
+.grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:28px repeat(5,1fr);gap:8px}
+.dn{font-size:12px;font-weight:800;color:var(--mut);padding-left:6px}
+.d{background:#fff;border-radius:14px;padding:8px;font-size:12px;overflow:hidden;display:flex;flex-direction:column;gap:4px}.d.out{background:transparent;border:1px dashed #C9D3F2}
+.num{font-weight:800;color:var(--mut);font-size:12px}.today{outline:2px solid var(--p)}.today .num{color:var(--p)}
+.e{border-radius:8px;padding:3px 6px;font-weight:700;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me{background:var(--pc);color:var(--opc)}.fr{background:var(--gw);color:var(--good)}.ok{background:var(--ow);color:var(--ok)}.tip{background:var(--tint);color:var(--soft);border:1px dashed #C3CDEE}
+.plan{width:380px;display:flex;flex-direction:column;gap:14px}
+.box{background:#fff;border-radius:24px;padding:18px;box-shadow:0 10px 28px -18px rgba(20,30,50,.35)}
+.box h2{font-family:Fredoka;font-weight:600;font-size:22px;margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{height:32px;padding:0 12px;border-radius:10px;border:1px solid var(--hair);display:flex;align-items:center;font-weight:700;font-size:13px;color:var(--soft)}.chip.s{background:var(--pc);border-color:var(--pc);color:var(--opc)}
+.r{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--hair)}.r:first-of-type{margin-top:12px}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:800;flex:none}
+.rn{font-weight:800;font-size:14.5px}.rs{font-size:12.5px;color:var(--mut);font-weight:600}
+.pill{margin-left:auto;font-size:12px;font-weight:800;border-radius:999px;padding:3px 9px;background:var(--gw);color:var(--good)}
+.paste{background:var(--ink);color:#fff;border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:12px}.paste b{font-family:Fredoka;font-weight:600;font-size:17px}.paste span{font-size:13px;opacity:.8}
+</style></head><body>
+<nav class="rail"><div class="add">+</div><div class="nav"><div class="on"><span class="ic">▦</span>Diary</div><div><span class="ic">⌕</span>Search</div><div><span class="ic">◫</span>Map</div><div><span class="ic">☰</span>Lists</div><div><span class="ic">◉</span>Profile</div></div></nav>
+<main><section class="cal">
+<div class="ch"><h1>October</h1><div class="seg"><span class="on">Everyone</span><span>Just me</span></div><span class="sp"></span><span class="arrow">‹</span><span class="arrow">›</span></div>
+<div class="grid">
+<span class="dn">Mon</span><span class="dn">Tue</span><span class="dn">Wed</span><span class="dn">Thu</span><span class="dn">Fri</span><span class="dn">Sat</span><span class="dn">Sun</span>
+<div class="d out"><span class="num">29</span></div><div class="d out"><span class="num">30</span></div>
+<div class="d"><span class="num">1</span></div><div class="d"><span class="num">2</span><span class="e ok">Chitra · Third Wave</span></div><div class="d"><span class="num">3</span></div>
+<div class="d"><span class="num">4</span><span class="e me">You · Meghana</span><span class="e fr">Test · Toit</span></div><div class="d"><span class="num">5</span></div>
+<div class="d"><span class="num">6</span></div><div class="d"><span class="num">7</span><span class="e tip">Rahul told you · Brik Oven</span></div><div class="d"><span class="num">8</span></div><div class="d"><span class="num">9</span><span class="e fr">Chitra · Glen's</span></div><div class="d"><span class="num">10</span></div>
+<div class="d"><span class="num">11</span><span class="e me">You · Hatti Kaapi</span></div><div class="d"><span class="num">12</span><span class="e fr">Test · Burma Burma</span></div>
+<div class="d"><span class="num">13</span><span class="e fr">Test · Third Wave</span></div><div class="d"><span class="num">14</span><span class="e fr">Test · Shivaji</span></div><div class="d"><span class="num">15</span><span class="e me">You · CTR</span><span class="e fr">Test · CTR</span></div><div class="d"><span class="num">16</span></div><div class="d"><span class="num">17</span></div>
+<div class="d today"><span class="num">18 · Today</span><span class="e me">You · Nagarjuna</span><span class="e me">You · Vidyarthi Bhavan</span><span class="e fr">Test · Meghana</span></div><div class="d"><span class="num">19</span></div>
+<div class="d"><span class="num">20</span></div><div class="d"><span class="num">21</span></div><div class="d"><span class="num">22</span></div><div class="d"><span class="num">23</span></div><div class="d"><span class="num">24</span></div><div class="d"><span class="num">25</span></div><div class="d"><span class="num">26</span></div>
+<div class="d"><span class="num">27</span></div><div class="d"><span class="num">28</span></div><div class="d"><span class="num">29</span></div><div class="d"><span class="num">30</span></div><div class="d"><span class="num">31</span></div><div class="d out"><span class="num">1</span></div><div class="d out"><span class="num">2</span></div>
+</div></section>
+<aside class="plan">
+<div class="paste"><div><b>Paste a friend's message</b><br><span>We'll read it and fill the entry for you</span></div></div>
+<div class="box"><h2>Where tonight?</h2><div class="chips"><span class="chip s">Indiranagar ✕</span><span class="chip">Under ₹500</span><span class="chip">Any type ▾</span></div>
+<div class="r"><span class="av" style="background:#CB4A27">TF</span><div><div class="rn">Hatti Kaapi</div><div class="rs">Test and you liked it · ₹120</div></div><span class="pill">☺ Good</span></div>
+<div class="r"><span class="av" style="background:#567F43">CR</span><div><div class="rn">Glen's Bakehouse</div><div class="rs">Chitra loved the red velvet · ₹280</div></div><span class="pill">☺ Good</span></div>
+<div class="r"><span class="av" style="background:var(--tint);color:var(--ps)">☺</span><div><div class="rn">Brik Oven</div><div class="rs">Rahul told you · on your wishlist</div></div><span class="pill">☺ Good</span></div>
+</div></aside></main></body></html>

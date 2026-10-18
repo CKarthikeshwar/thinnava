@@ -1,6 +1,9 @@
 import { supabase } from '@/lib/supabase';
 import { googleSignIn, googleSignOut } from '@/platform/signin/google';
 import { forgetPushToken } from '@/features/notifications/push';
+import { queryClient, queryPersister } from '@/lib/queryClient';
+import { clearOutbox } from '@/lib/outbox';
+import { clearDrafts } from '@/lib/drafts';
 
 export type MyProfile = { id: string; username: string; display_name: string; avatar_url: string | null; bio: string | null };
 
@@ -18,6 +21,11 @@ export async function signOut() {
   await forgetPushToken();
   await googleSignOut();
   await supabase.auth.signOut();
+  // Nothing of the old account stays on the phone (spec §26.3): cached data, queued changes, drafts, waiting messages.
+  queryClient.clear();
+  queryPersister.removeClient();
+  clearOutbox();
+  clearDrafts();
 }
 
 export async function fetchMyProfile(): Promise<MyProfile | null> {

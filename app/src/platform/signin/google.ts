@@ -1,6 +1,6 @@
 import { GoogleSignin, isErrorWithCode, isSuccessResponse, statusCodes } from '@react-native-google-signin/google-signin';
 
-// Native Google Sign-In (Android). The web version later swaps this file for an OAuth redirect (spec §18.3).
+// Native Google Sign-In (Android). The web version uses google.web.ts (OAuth redirect, spec §18.3).
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, // ID token audience = the web client Supabase checks
   scopes: ['openid', 'email', 'profile'],

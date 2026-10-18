@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { CircleUserRound, House, Map, Plus, Search, type LucideProps } from 'lucide-react-native';
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { interpolateColor, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { create } from 'zustand';
 import type { ComponentType } from 'react';
@@ -47,10 +47,9 @@ export function NavBar({ state, navigation }: BottomTabBarProps) {
 function Tab({ name, focused, onPress }: { name: string; focused: boolean; onPress: () => void }) {
   const { Icon, label } = TAB_META[name];
   const { d } = useMotion();
-  const on = useSharedValue(focused ? 1 : 0);
-  useEffect(() => {
-    on.value = withTiming(focused ? 1 : 0, { duration: d(durations.short + 50), easing: curves.standard, reduceMotion });
-  }, [focused]);
+  // Derived from `focused` itself, so the pill can never stay on a tab that isn't the current one.
+  const dur = d(durations.short + 50);
+  const on = useDerivedValue(() => withTiming(focused ? 1 : 0, { duration: dur, easing: curves.standard, reduceMotion }), [focused, dur]);
   const pill = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(on.value, [0, 1], ['rgba(219,228,255,0)', colors.primaryContainer]),
     transform: [{ scaleX: 0.6 + 0.4 * on.value }],
@@ -59,7 +58,8 @@ function Tab({ name, focused, onPress }: { name: string; focused: boolean; onPre
     <Pressable onPress={onPress} pressScale={0.94} style={styles.tab} accessibilityRole="tab" accessibilityState={{ selected: focused }} accessibilityLabel={label}>
       <View style={styles.pillBox}>
         <Animated.View style={[StyleSheet.absoluteFill, styles.pill, pill]} />
-        <Icon size={22} color={focused ? colors.onPrimaryContainer : colors.inkSoft} strokeWidth={2} />
+        {/* Above the pill: on web a transformed sibling would otherwise paint over the icon. */}
+        <View style={styles.icon}><Icon size={22} color={focused ? colors.onPrimaryContainer : colors.inkSoft} strokeWidth={2} /></View>
       </View>
       <T style={[styles.label, focused && styles.labelOn]} color={focused ? colors.ink : colors.inkSoft}>{label}</T>
     </Pressable>
@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   tab: { width: 64, alignItems: 'center', gap: 4 },
   pillBox: { width: 56, height: 30, alignItems: 'center', justifyContent: 'center' },
   pill: { borderRadius: 16 },
+  icon: { zIndex: 1 },
   label: { fontFamily: fonts.bodyBold, fontSize: 12 },
   labelOn: { fontFamily: fonts.bodyHeavy },
   addWrap: { width: 64, alignItems: 'center' },

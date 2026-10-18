@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLayoutMode } from '@/lib/layout';
+import { FrontPage } from '@/features/web/FrontPage';
 import { BackHandler, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RingsGround } from '@/components';
@@ -10,7 +12,12 @@ import { colors } from '@/theme';
  * Onboarding pager (spec §14 A1b → A2): swipe, Next or Skip between Intro and Welcome.
  * Each page keeps its own dots (the splash is step 1 of 3). Android back on Welcome returns to Intro.
  */
-export default function Onboarding() {
+export default function Welcome() {
+  // Web: the signed-out front page instead of the swipe pages (spec §18.3).
+  return useLayoutMode() === 'app' ? <Onboarding /> : <FrontPage />;
+}
+
+function Onboarding() {
   const { width } = useWindowDimensions();
   const ref = useRef<ScrollView>(null);
   const [page, setPage] = useState(0);
