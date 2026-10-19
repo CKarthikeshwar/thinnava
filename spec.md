@@ -322,7 +322,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - *B1a Empty*: cat peeking over a card, "Hi <first name>! Your feed is empty." / "Start with whichever is easiest." Buttons: **Log a place you've been** (→ D1), **Save what a friend told you** (→ D5 friend), **Find people you know** (→ Search · People). Tip: "Copy a friend's WhatsApp message, then open Thinnava".
   - *Filtered empty*: "No entries from friends yet" + the matching action.
 - **B1b Home filter** sheet "Show" (radio): Everything · Connections ("Reviews they posted") · From friends ("What friends told you") · Internet ("Reels, videos, links") · Mine ("Places you went"). Any filter other than Everything shows as a chip under the top bar ("From friends ×").
-- **B2 Map** `/(tabs)/map` — A map with pins (MapLibre and OpenFreeMap on the web; the Android map is still the list until its MapLibre map ships) (§16.6), clustering and my location dot.
+- **B2 Map** `/(tabs)/map` — A map with pins (MapLibre with OpenFreeMap's free tiles on Android and the web) (§16.6), clustering and my location dot.
   - Top: a "Search places" bar (opens Search · Places; picking a result centres the map on it), a filter button, and **single-select layer chips**: All · Visited · Wishlist · Connections · Friends · Internet. All is the default; the chips scroll sideways.
   - "Locate me" button bottom-right.
   - Panning reloads pins for the visible area (debounced 500 ms).
@@ -335,7 +335,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - *No location permission*: centre on Bengaluru (12.9716, 77.5946). "Locate me" asks via A7.
   - Search bar → D1 in "Find on the map" mode; picking a place centres the map on it.
   - *A connection's map* (E1 → Open map) and *my map* (B5 → Open map) are B2 with a scope: a removable chip "Anand's map ×" leads the chips (only All · Visited · Wishlist then), or the tab's layer is preselected. × returns to the normal map.
-  - *Android, until its MapLibre map ships:* the same top bar, chips, filters and pin card over a plain list of the places around Bengaluru, with the note "The map turns on soon. Until then, here are the same places as a list."
+  - *Map can't load (no network for new tiles):* the same top bar, chips, filters and pin card over a plain list of the places around Bengaluru.
 - **B3 + speed dial** — three circles: **I went somewhere** (→ D1 → D2), **A friend told me** (→ D5 friend), **Found it online** (→ D5 internet).
 - **B4 Search** `/(tabs)/search` — one search box with segments **Places | People**.
   - **Places, while typing** (250 ms debounce): first, places already in Thinnava that match the name and where I can see entries; then Ola name suggestions (Autocomplete, §25.1). Before typing: "Recent" places I opened.
@@ -496,7 +496,7 @@ Every touchable has an accessibility label; rating pills announce "Rating: Good"
  ├─ Offline writes: Outbox (MMKV) → flushed to Supabase when online
  ├─ Share target: expo-share-intent (ACTION_SEND text/*)
  ├─ Auth: Google Sign-In (native) → Supabase signInWithIdToken
- └─ Map: react-native-maps (Android, list until MapLibre ships) / MapLibre + OpenFreeMap (web) + supercluster
+ └─ Map: MapLibre + OpenFreeMap tiles (@maplibre/maplibre-react-native on Android, maplibre-gl on web) + supercluster
             │  HTTPS (supabase-js, JWT)
             ▼
  Supabase (region ap-south-1, Mumbai)
@@ -530,7 +530,7 @@ Principles:
 | Backend client | **@supabase/supabase-js** v2 (session stored in MMKV) |
 | Auth | **@react-native-google-signin/google-signin** → `supabase.auth.signInWithIdToken` |
 | Share target | **expo-share-intent** (config plugin) |
-| Map | **Web:** **maplibre-gl** with OpenFreeMap tiles (no key). **Android:** list mode until `@maplibre/maplibre-react-native` ships (M11). **supercluster** for grouping on both. |
+| Map | **MapLibre** with OpenFreeMap's free "positron" style (no key): `@maplibre/maplibre-react-native` on Android (as a normal view, `androidView="texture"`, so sheets draw above it), `maplibre-gl` on the web. **supercluster** for grouping on both; pins group sooner on phones because they're wide name labels. |
 | Animation | **react-native-reanimated** + **react-native-gesture-handler** |
 | Sheets | **@gorhom/bottom-sheet** |
 | Lists | **@shopify/flash-list** |
@@ -1490,7 +1490,7 @@ Each account is created only when a milestone needs it, so the account-dependent
 2. `places`, `links`: Ola Maps (autocomplete, text search, details) with caps and OpenStreetMap backup; `extract` candidates from OpenStreetMap; "More info" instead of "Google info".
 3. "Add a place yourself" (§25.7) and the place credit line.
 4. Web map: MapLibre + OpenFreeMap.
-5. Android map: `@maplibre/maplibre-react-native` with the same style and pins (needs a new native build, tested on a phone).
+5. Android map: `@maplibre/maplibre-react-native` with the same style and pins (needs a new native build, tested on a phone). Done 2026-10-19.
 6. Production: `OLA_MAPS_API_KEY` secret, migration, functions deploy; release APK.
 
 **Done when:** on production, searching "Vidyarthi Bhavan" or "biryani" finds real places, a place nobody knows can be added and logged, the web and Android maps show pins, and the Ola dashboard still shows ₹0.

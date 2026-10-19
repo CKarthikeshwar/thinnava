@@ -12,6 +12,16 @@ Entry format:
 
 ---
 
+## 2026-10-19 · Android map: MapLibre with free OpenFreeMap tiles (no Google)
+- **What:** `app/src/platform/map/MapView.tsx` now uses `@maplibre/maplibre-react-native` 11.5.0 with OpenFreeMap's "positron" style, with the same props as the web map, so the Map screen is shared. `react-native-maps`, its plugin, the Google Maps key setting (`mapsReady` / `GOOGLE_MAPS_ANDROID_KEY`) and the unused Google map style (`theme/mapStyle.ts`) are gone; the Android project was regenerated. Fixes found on the phone (Galaxy S23 FE):
+  - The map draws as a normal view (`androidView="texture"`), so the pin card and list sheet appear above it (they were hidden behind the map's separate surface).
+  - A tap on a pin no longer also counts as a tap on the map, which had closed the pin's card instantly.
+  - Pins group sooner on phones (they're wide name labels), and the top bar, locate button and list sheet sit above the pins.
+- **Checked on the phone:** map tiles load, the map opens near my location with pins and numbered groups, tapping a pin opens its card (person's note, Open place, Directions). Type-check passes.
+- **Known small issue:** pins aren't dimmed behind an open card like the rest of the map (they're separate native views); the card still sits on top and works.
+- **Also today:** website legal pages updated on the owner's site (place data from Ola Maps and OpenStreetMap).
+- **Spec:** §14 B2, §18.1–18.2, M11 step 5.
+
 ## 2026-10-19 · Places from Ola Maps and OpenStreetMap; real map on the website; add a place yourself
 - **Decision (owner):** Google billing couldn't be set up (a card in the owner's name wasn't available), so Google Places and the Google map are replaced. Options compared: free OpenStreetMap only, Geoapify, Ola Maps. Ola chosen after checking its pricing page (100,000 free calls per API per month, recurring; usage beyond that only from prepaid credits), docs, Platform Terms and Fair Usage Policy, and a live test (12 of 12 well-known Bengaluru places found by autocomplete; OpenStreetMap found 11). The owner created a Krutrim Cloud account and an Ola Maps credential: **no card, payment mandate "Not set", 0 credits**; the usage page shows the free allowance applied (₹0).
 - **What changed:**

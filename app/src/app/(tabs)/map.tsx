@@ -107,7 +107,7 @@ export default function MapTab() {
 
   const q = useQuery({ queryKey: ['map', box, layers, filters], queryFn: () => mapPlaces(box, layers, filters), placeholderData: keepPreviousData });
   const places = q.data ?? [];
-  const items = useClusters(mapsReady ? places : [], region, mode === 'phone' ? 130 : 64);
+  const items = useClusters(mapsReady ? places : [], region, mode === 'laptop' ? 64 : 130);
   const visible = useMemo(() => {
     const b = boxOf(region);
     return places.filter((p) => p.lat >= b.minLat && p.lat <= b.maxLat && p.lng >= b.minLng && p.lng <= b.maxLng);
@@ -236,7 +236,7 @@ export default function MapTab() {
           <View style={[styles.locate, { bottom: navH + 84 }]}>
             <IconButton icon={LocateFixed} label="Locate me" onPress={locate} />
           </View>
-          <BottomSheet index={0} snapPoints={[64, '50%']} bottomInset={navH} enableDynamicSizing={false}
+          <BottomSheet index={0} snapPoints={[64, '50%']} bottomInset={navH} enableDynamicSizing={false} style={{ zIndex: 6, elevation: 6 }}
             backgroundStyle={styles.listBg} handleIndicatorStyle={styles.handle}>
             <View style={styles.listHead}>
               <T variant="title">{q.isLoading ? 'Loading places…' : visible.length === 1 ? '1 place here' : `${visible.length} places here`}</T>
@@ -288,10 +288,11 @@ const Pin = memo(function Pin({ place, selected, onPress }: { place: MapPlace; s
 });
 
 const styles = StyleSheet.create({
-  top: { paddingTop: 12 },
+  // Above the map's pins: Android draws map markers as native views, so panels need a higher elevation.
+  top: { paddingTop: 12, zIndex: 5, elevation: 5 },
   searchRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: space.gutter },
   chips: { gap: 8, paddingHorizontal: space.gutter, paddingTop: 12, paddingBottom: 4 },
-  locate: { position: 'absolute', right: space.gutter },
+  locate: { position: 'absolute', right: space.gutter, zIndex: 5, elevation: 5 },
   listBg: { backgroundColor: colors.surface, borderTopLeftRadius: radii.sheet, borderTopRightRadius: radii.sheet, boxShadow: shadows.card },
   handle: { backgroundColor: colors.hairline, width: 40 },
   listHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.gutter, paddingTop: 2, paddingBottom: 8 },

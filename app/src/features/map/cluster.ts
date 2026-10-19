@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import Supercluster from 'supercluster';
 import type { MapPlace } from './api';
 
-/** A map region in react-native-maps' shape (kept here so shared code doesn't import the Android map). */
+/** A map region (centre and span), the shape both platform maps use (kept here so shared code doesn't import a map). */
 export type Area = { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number };
 
 export type Item =

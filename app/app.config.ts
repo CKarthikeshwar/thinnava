@@ -37,13 +37,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ['expo-share-intent', { androidIntentFilters: ['text/*'], disableIOS: true }],
     '@react-native-google-signin/google-signin',
     ['expo-notifications', { color: '#2350D9' }],
-    ['react-native-maps', { androidGoogleMapsApiKey: process.env.GOOGLE_MAPS_ANDROID_KEY ?? '' }],
+    // Map (spec §26.7, M11): MapLibre with free OpenFreeMap tiles; no Google Maps key.
+    '@maplibre/maplibre-react-native',
     [
       'expo-location',
       { locationWhenInUsePermission: 'Thinnava uses your location to centre the map and list nearby places first.' },
     ],
   ],
   experiments: { typedRoutes: true },
-  // The map screen shows the place list instead of the map until a Maps key exists (the SDK crashes without one).
-  extra: { APP_ENV, mapsReady: !!process.env.GOOGLE_MAPS_ANDROID_KEY, ...(process.env.EAS_PROJECT_ID ? { eas: { projectId: process.env.EAS_PROJECT_ID } } : {}) },
+  extra: { APP_ENV, ...(process.env.EAS_PROJECT_ID ? { eas: { projectId: process.env.EAS_PROJECT_ID } } : {}) },
 });
