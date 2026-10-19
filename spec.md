@@ -35,7 +35,7 @@ Context: IISc course project, team of 2, demo with real users, distributed as an
 
 | Term | Meaning |
 |---|---|
-| **Place** | A real food place that exists on Google Maps, identified by its Google Place ID. Nothing else can be added in v1. |
+| **Place** | A real food place, from Ola Maps or OpenStreetMap, or added by hand when search doesn't know it (§25.7), identified by its place ID. |
 | **Visit** | "I went to this place on this date", with my review. Repeat trips are separate visits. Posted to my chosen audience. |
 | **Review** | The opinion on a visit: rating (Good / Okayish / Bad), loved dishes, didn't-like dishes, price per person, notes. |
 | **Saved entry** | Something I log on someone else's behalf. Two kinds: **Friend entry** (a friend told me about their experience) and **Internet entry** (I found it online). Always private to me. |
@@ -68,7 +68,7 @@ Context: IISc course project, team of 2, demo with real users, distributed as an
 | A | Google Sign-In; profile (name, username, optional bio, Google photo); sign out; delete account |
 | B | Connections: send / cancel / accept / decline requests; remove connection; block / unblock |
 | C | Audience lists: All connections, Only me, custom lists; pick lists when a connection is made |
-| D | Places from Google Places; Google info shown when nobody I know has been |
+| D | Places from Ola Maps (OpenStreetMap as backup), "More info" (hours, phone, website) on tap |
 | E | My visits: add / edit / delete, with rating, loved, didn't like, price, companions, notes, audience |
 | F | Companion tags: tag connections, accept by reviewing or "Same as A's", reject, un-tag, tag after the fact; private companion names |
 | G | Friend entries (manual + AI-assisted); private friend-name list (rename, merge, link to connection) |
@@ -84,7 +84,7 @@ Context: IISc course project, team of 2, demo with real users, distributed as an
 | Q | Offline support for manual entries |
 
 ### 4.2 v2 (later, not now)
-Screenshot import (OCR) · YouTube metadata import · Zomato and District buttons (§11.3) · custom (non-Google) places · place collections · revisit nudges. (The web version moved into v1 as M10 on 2026-10-17, see §18.3.)
+Screenshot import (OCR) · YouTube metadata import · Zomato and District buttons (§11.3) · place collections · revisit nudges. (Adding a place yourself moved into v1 on 2026-10-19, §25.7. The web version moved into v1 as M10 on 2026-10-17, see §18.3.)
 
 ### 4.3 Never (unless the spec is changed)
 Photos on entries · veg info/filters · dishes as entities (no dish pages, counts, search) · rating summaries · stars as our own rating · in-app "send a recommendation" · groups · people nearby · contact-based friend finding · invite links · taste matching / recommendation algorithms / AI chatbot · in-app ordering or payments · creator features · a native iOS app (iPhone users use the web version, §18.3) · dark mode · languages other than English.
@@ -126,7 +126,7 @@ Removing a connection keeps past accepted tags (names stay on both visits). Each
 
 | Field | Rule |
 |---|---|
-| Place | **Required.** Must be a Google place (Place ID). |
+| Place | **Required.** A place from search, or one added by hand (§25.7). |
 | Rating | `good` · `okayish` · `bad`. **Required on my visits.** Optional (may be none) on friend and internet entries. |
 | Loved | List of free-text dish names. 0–10 items, each 1–40 chars, trimmed, case-insensitive duplicates removed. |
 | Didn't like | Same rules as Loved. |
@@ -322,7 +322,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - *B1a Empty*: cat peeking over a card, "Hi <first name>! Your feed is empty." / "Start with whichever is easiest." Buttons: **Log a place you've been** (→ D1), **Save what a friend told you** (→ D5 friend), **Find people you know** (→ Search · People). Tip: "Copy a friend's WhatsApp message, then open Thinnava".
   - *Filtered empty*: "No entries from friends yet" + the matching action.
 - **B1b Home filter** sheet "Show" (radio): Everything · Connections ("Reviews they posted") · From friends ("What friends told you") · Internet ("Reels, videos, links") · Mine ("Places you went"). Any filter other than Everything shows as a chip under the top bar ("From friends ×").
-- **B2 Map** `/(tabs)/map` — Google map with pins (§16.6), clustering and my location dot.
+- **B2 Map** `/(tabs)/map` — A map with pins (MapLibre and OpenFreeMap on the web; the Android map is still the list until its MapLibre map ships) (§16.6), clustering and my location dot.
   - Top: a "Search places" bar (opens Search · Places; picking a result centres the map on it), a filter button, and **single-select layer chips**: All · Visited · Wishlist · Connections · Friends · Internet. All is the default; the chips scroll sideways.
   - "Locate me" button bottom-right.
   - Panning reloads pins for the visible area (debounced 500 ms).
@@ -335,17 +335,17 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - *No location permission*: centre on Bengaluru (12.9716, 77.5946). "Locate me" asks via A7.
   - Search bar → D1 in "Find on the map" mode; picking a place centres the map on it.
   - *A connection's map* (E1 → Open map) and *my map* (B5 → Open map) are B2 with a scope: a removable chip "Anand's map ×" leads the chips (only All · Visited · Wishlist then), or the tab's layer is preselected. × returns to the normal map.
-  - *No Maps key yet* (dev, before `thinnava-maps` has billing; the Maps SDK crashes without a key): the same top bar, chips, filters and pin card over a plain list of the places around Bengaluru, with the note "The map turns on once Google Maps is set up."
+  - *Android, until its MapLibre map ships:* the same top bar, chips, filters and pin card over a plain list of the places around Bengaluru, with the note "The map turns on soon. Until then, here are the same places as a list."
 - **B3 + speed dial** — three circles: **I went somewhere** (→ D1 → D2), **A friend told me** (→ D5 friend), **Found it online** (→ D5 internet).
 - **B4 Search** `/(tabs)/search` — one search box with segments **Places | People**.
-  - **Places, while typing** (250 ms debounce): first, places already in Thinnava that match the name and where I can see entries; then Google name suggestions (Autocomplete). Before typing: "Recent" places I opened.
-  - **Places, on search** (keyboard Search key, or tapping "See all results for 'biryani'"): Google keyword search (Text Search) near me, or near the map centre. A food word like "biryani" finds biryani places; we never search our own dish text.
+  - **Places, while typing** (250 ms debounce): first, places already in Thinnava that match the name and where I can see entries; then Ola name suggestions (Autocomplete, §25.1). Before typing: "Recent" places I opened.
+  - **Places, on search** (keyboard Search key, or tapping "See all results for 'biryani'"): Ola keyword search (Text Search, a single food word gets "restaurant" added) near me, or near the map centre. A food word like "biryani" finds biryani places; we never search our own dish text.
     - Results start with places where someone I know has been, showing their faces and "3 went" / "You went".
     - Then a "Nobody you know has been" section with area · category.
   - **Filter chips:**
     - "Someone I know went": a toggle that hides the second section.
     - Category: multi-select.
-    - ₹ Price: same buckets and rule as B2a. Places with only Google info are hidden while a price filter is on.
+    - ₹ Price: same buckets and rule as B2a. Places nobody I can see has priced are hidden while a price filter is on.
   - **People**: username search (prefix match, at least 2 chars, debounced).
     - Rows: photo, name, "@username" (plus " · Connected" or " · wants to connect").
     - One button showing the status: Connect · Requested · Accept · Connected.
@@ -364,12 +364,12 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 - **C1 Place page** `/place/[placeId]`
   - Top bar: back and **♡** (wishlist toggle; hidden once I've visited, §9).
   - Title (Fredoka). Meta line: category · area.
-  - A small **Google info** row: tapping it loads Google's rating, price level and opening hours (§25.5). In "off" mode, the row reads "See rating and hours on Google Maps" and opens the Directions link instead.
+  - A small **More info** row: tapping it loads opening hours, phone and website from Ola Maps (§25.5). In "off" mode, the row reads "See hours on Google Maps" and opens the free Maps link.
   - Action row: **Directions** · **Swiggy**.
   - **Your visits**: date + pill for each; tap → C2.
   - **People who've been**: connections' visits I can see plus my own friend/internet entries, newest first. Each shows: avatar or source mark; name or "Rahul told you" / "From a reel" (avatar and name open the person's profile, as on B1); "with …"; pill; loved / didn't-like lines; ₹/person · date; "Only you" on my private entries.
   - Primary FAB **Add visit**. ⋮ menu: Open in Google Maps.
-  - *C1a Nobody you know has been*: "Nobody you know has been yet." The address shows straight away (basic info). A **Show Google's rating, hours and price** button loads the rest. Tapping ♡ shows the snackbar "Added to your wishlist · Who sees it" (→ D4 for the wishlist).
+  - *C1a Nobody you know has been*: "Nobody you know has been yet." The address shows straight away (basic info). A **More info** button loads hours, phone and website (§25.5). Tapping ♡ shows the snackbar "Added to your wishlist · Who sees it" (→ D4 for the wishlist).
   - *C1b Closed*: "Permanently closed" label. History stays. Swiggy is hidden; Directions stays.
 - **C2 Entry detail** `/entry/[type]/[id]`
   - Title: "Rahul's experience" / "Ananya's visit" / "Your visit" / "Found online".
@@ -496,7 +496,7 @@ Every touchable has an accessibility label; rating pills announce "Rating: Good"
  ├─ Offline writes: Outbox (MMKV) → flushed to Supabase when online
  ├─ Share target: expo-share-intent (ACTION_SEND text/*)
  ├─ Auth: Google Sign-In (native) → Supabase signInWithIdToken
- └─ Map: react-native-maps (Google provider) + supercluster
+ └─ Map: react-native-maps (Android, list until MapLibre ships) / MapLibre + OpenFreeMap (web) + supercluster
             │  HTTPS (supabase-js, JWT)
             ▼
  Supabase (region ap-south-1, Mumbai)
@@ -530,7 +530,7 @@ Principles:
 | Backend client | **@supabase/supabase-js** v2 (session stored in MMKV) |
 | Auth | **@react-native-google-signin/google-signin** → `supabase.auth.signInWithIdToken` |
 | Share target | **expo-share-intent** (config plugin) |
-| Map | **react-native-maps** (Google provider, custom style JSON from the DESIGN.md map colours) + **supercluster** |
+| Map | **Web:** **maplibre-gl** with OpenFreeMap tiles (no key). **Android:** list mode until `@maplibre/maplibre-react-native` ships (M11). **supercluster** for grouping on both. |
 | Animation | **react-native-reanimated** + **react-native-gesture-handler** |
 | Sheets | **@gorhom/bottom-sheet** |
 | Lists | **@shopify/flash-list** |
@@ -547,7 +547,7 @@ Principles:
 |---|---|
 | Database / Auth / Functions | **Supabase** (free plan), Postgres, Edge Functions on Deno |
 | AI | **Google Gemini, Flash-tier model, free tier only**: the API key comes from a Google Cloud project with **no billing account**, so it can never be charged (§27.5). JSON output with a response schema. Model ids in env: `GEMINI_MODEL` = **`gemini-3.5-flash-lite`** and `GEMINI_FALLBACK_MODEL` = `gemini-flash-lite-latest` (separate free allowance). Not `gemini-3.5-flash`: its free tier allows only 20 requests a day per project (measured 2026-10-16). Called only from the `extract` function. |
-| Places | **Google Places API (New)**: Autocomplete, Place Details, Text Search, Nearby Search. Called only from Edge Functions. |
+| Places | **Ola Maps Places API** (Autocomplete, Place Details, Text Search) and **OpenStreetMap Photon** (AI candidates, backup), called only from Edge Functions (§25). |
 | Push | **expo-notifications** + **Expo Push Service** (FCM v1 credentials uploaded to EAS) |
 | Scheduled jobs | pg_cron + pg_net |
 | Migrations | Supabase CLI (`supabase migration new`, `supabase db push`) |
@@ -557,7 +557,7 @@ Principles:
 
 **How:** the same Expo app runs on `react-native-web` and is exported as a static site (`expo export -p web`), hosted free on Cloudflare Pages (no card; GitHub Pages needs a paid plan for a private repo). Same Supabase backend. Web versions of `src/platform/` (`*.web.ts(x)` files):
 - **Sign-in:** Supabase `signInWithOAuth({ provider: 'google' })` redirect (the same `thinnava-free` Web OAuth client, with the site's origins and redirect URLs added).
-- **Map:** the B2 list mode until `thinnava-maps` has a key; then `@vis.gl/react-google-maps` (Maps JavaScript API, its own free monthly amount, capped like Places, §27.5).
+- **Map:** MapLibre (`maplibre-gl`, loaded only on the Map page) with OpenFreeMap's free "positron" style. Its worker is served from `app/public/maplibre/` and must match the installed version. Pins and groups are our own React views.
 - **Share:** none. A **"Paste a message"** button on Home and D5 replaces the automatic "You copied a message" card (browsers can't check the clipboard without asking).
 - **Notification settings, push, offline outbox:** not on web at first (rows hidden; the in-app 🔔 list works).
 - Edge Functions answer browser preflight (CORS). `Access-Control-Allow-Origin: *` is safe here: requests are authorised by the user's bearer token, never cookies.
@@ -566,7 +566,7 @@ Principles:
 
 **Compared with Android:**
 - *Browser limits:* no automatic copied-message card (one extra tap); no "Share to Thinnava" on iPhone (paste the link); push on iPhone only after "Add to Home Screen"; no vibration; Back is the browser's.
-- *Postponed (can be added later, free):* web push, offline saving, the real map (waits for Google billing, same as Android), some animations simpler.
+- *Postponed (can be added later, free):* web push, offline saving, some animations simpler.
 - *Same:* everything else, on the same account.
 
 **Web layout (owner-approved design, `design/web.html`, 2026-10-18).** The same four pages (Home · Search · Map · Profile), the same tokens, fonts and words, laid out the way a website works. The Android app does not change.
@@ -580,7 +580,7 @@ Principles:
 *Laptop (≥ 1024 px wide):* content is centred, max ≈ 1160 px.
 - **Home:** the feed in a main column with the B1b filters as a segmented control in its heading ("What your people ate": Everything · Connections · From friends · Internet · Mine) and day headings (Today · This week · Earlier). Hovering a card shows three small actions on it: **♡ Wishlist** (not on my own visits; adds the place, same rules as C1), **Directions** and **Swiggy** (§11.1 links). Clicking elsewhere on the card still opens it. A side column (≈ 360 px): **Got a tip from a friend?** paste box (with the Ctrl+V hint) → **Notifications** (newest 3, inline Accept / Add your review, "See all" → F1; reading them here does not mark them read) → **Your wishlist** (newest 3, "See all" → Profile · Wishlist).
 - **Search:** one large search box, Places | People under it, then a left filter sidebar (Someone I know went · Type · Price per person, same rules as B4) and the results as a table (Place · Who went · Area · Price), "Your people went" first, then "Nobody you know has been". The search area shows as "Near you" / "Near Bengaluru"; tapping it asks for location (A7).
-- **Map:** a left panel (≈ 420 px) with the layer chips, filters and the list of places; the map fills the rest. Until `thinnava-maps` has a key the right side shows the "The map turns on once Google Maps is set up" note and the list stays in the panel.
+- **Map:** a left panel (≈ 420 px) with the layer chips, filters and the list of the places in view; the map fills the rest (pins, groups, a pin card on click, the credit line in the corner).
 - **Profile:** a tinted cover band with Rings, then photo, name, @username, bio and counts (Visited · Wishlist · Connections) on one row with **Connections** and **Settings** buttons; the three tabs (Visited · Wishlist · Saved) as underlined tabs with "Open on map"; entries as a 3-column grid of cards.
 
 *Phone browsers (< 1024 px):* the app's screens, with three differences that mark it as the website:
@@ -707,7 +707,7 @@ create table list_members (
 
 -- Places --------------------------------------------------------------------
 create table places (                     -- written only by Edge Functions (service role)
-  place_id        text primary key,       -- Google Place ID (kept indefinitely)
+  place_id        text primary key,       -- ola-platform:… / osm:… / custom:<uuid> (kept indefinitely)
   name            text not null,          -- cached ≤ 30 days, refreshed (§25.4)
   lat             double precision not null,
   lng             double precision not null,
@@ -1004,7 +1004,7 @@ Every function verifies the JWT, except `push`, which checks the webhook secret.
 
    Temperature 0, minimal thinking. Hedged request: if the main model hasn't answered in 5 s, or answers 5xx/429, the fallback model is asked too and the first good answer wins; everything stops at 14 s (the app's D7 limit is 15 s).
 3. Validate with zod. If the response is invalid, return `{foodRelated: false, items: []}`; the app then opens the manual form.
-4. For each item, run a Places **Text Search** for `"<name> <area> <city>"` (through `consume_google_quota`; if paused, return the item with no candidates and the user picks the place by hand).
+4. For each item, search **OpenStreetMap** for `"<name> <area>"` (then the name alone), food places only, up to 3 candidates (§25.1: not Ola, because of its AI clause). If it's down, return the item with no candidates and the user picks the place.
    - Location bias: the device location if it was given, otherwise Bengaluru with a 50 km radius.
    - Keep up to 3 results, upsert them into `places`, and attach them as `candidates` (the first is the best match).
 5. Post-process:
@@ -1064,27 +1064,34 @@ The eval set has 30+ realistic messages:
 
 Run the eval after any prompt or model change, and record the results in `changelog.md`.
 
-## 25. Google Places integration
+## 25. Places: Ola Maps and OpenStreetMap
 
-### 25.1 Calls and field masks
-| Use | API | Field mask |
+**Decision (owner, 2026-10-19):** Google billing couldn't be set up, so places come from **Ola Maps** (India-built, Google-style responses, 100,000 free calls per API per month, prepaid-only billing with no credit added) and **OpenStreetMap** (Photon search, free, no key). Ola's Platform Terms and Fair Usage Policy were read on 2026-10-19; what they require is in §25.4. The map is drawn from **OpenFreeMap** (free, no key, no limits).
+
+### 25.1 Calls
+| Use | Provider and call | Notes |
 |---|---|---|
-| D1 / Search typing | Autocomplete (New); one session token per picker session; `regionCode: in`; location bias (device or Bengaluru) | (suggestions) |
-| Selecting a place | Place Details (New) with the same session token | `id,displayName,location,shortFormattedAddress,addressComponents,primaryType,types,businessStatus` |
-| "Google info" tap (C1, C1a) | Place Details | `rating,userRatingCount,priceLevel,regularOpeningHours,currentOpeningHours` (rich tier; counted as `details_rich`) |
-| Search tab keyword search (on submit) | Text Search (New), `maxResultCount: 20`, location bias | same as AI candidates (never rich fields) |
-| AI / link candidates | Text Search (New), `maxResultCount: 3` | `places.id,places.displayName,places.location,places.shortFormattedAddress,places.addressComponents,places.primaryType,places.types,places.businessStatus` |
-| D1 Nearby | Nearby Search (New), `includedTypes: restaurant, cafe, bakery, bar, meal_takeaway`, ranked by distance, 10 results | same as Text Search |
+| D1 / Search typing | Ola **Autocomplete** (`location` = device or Bengaluru, 30 km) | Suggestions already carry location and full address, so they're saved to `places` straight away and picking one costs no further call. |
+| Selecting a place | Our own `places` row; Ola **Place Details** only if we've never seen the ID | |
+| "More info" tap (C1, C1a) | Ola **Place Details** (counted as `details_rich`) | Opening hours, phone, website; rating only when Ola has one (rare in Bengaluru). Never stored on the server. |
+| Search tab keyword search (on submit) | Ola **Text Search** near me or the map centre | Ola needs "what + kind", so a single food word gets "restaurant" added ("biryani" → "biryani restaurant"). |
+| D1 Nearby | Ola **Text Search** "restaurant" within 2 km, nearest first, 10 results | |
+| Google Maps links (§10.1) | Ola **Autocomplete** on the place name from the link | A link names one place, so name matching, not keyword search. |
+| AI candidates (§24) | **OpenStreetMap** (Photon), food places only, up to 3 | Not Ola: Ola's terms rule out using its products "in connection with" AI systems, and this step follows Gemini's reading. |
+| Backup | **OpenStreetMap** | When an Ola cap is reached or Ola is down, autocomplete and text search fall back to OpenStreetMap. |
+
+Place IDs: `ola-platform:…` (Ola), `osm:N…` (OpenStreetMap), `custom:<uuid>` (added by hand), `practice:…` (development). Existing Google-era IDs keep working from our own table.
 
 ### 25.2 Cost control
 Every rule here serves the zero-cost guarantee (§27.5):
-- Debounce autocomplete by 250 ms and use session tokens.
-- Rich fields (rating, price level, hours) are requested **only** when a user taps "Google info", never automatically and never in search results or pin cards.
-- The device caches each "Google info" result for 24 h.
-- Per-user daily limits, plus the global monthly caps per SKU (§27.5).
+- Debounce autocomplete by 250 ms; reuse saved places instead of calling details.
+- "More info" is fetched **only** when a user taps it, never in search results or pin cards; the device caches it for 24 h.
+- Per-user daily limits (300 place calls, 20 added places), plus the global monthly caps per Ola API (§27.5).
 
-### 25.3 Category mapping (`primaryType` → category)
-| Google `primaryType` (or rule) | Category |
+### 25.3 Category mapping
+Ola returns Google-style `types`; the first type that maps decides the category, using the table below. OpenStreetMap `amenity` values map the same way (`fast_food` → fast_food, `pub` → bar, `ice_cream` → dessert, `pastry` → bakery, `tea` → tea_shop, `coffee` → cafe).
+
+| Type (or rule) | Category |
 |---|---|
 | cafe, coffee_shop | cafe |
 | bakery | bakery |
@@ -1095,29 +1102,35 @@ Every rule here serves the zero-cost guarantee (§27.5):
 | meal_delivery | delivery_only |
 | restaurant, any other `*_restaurant`, food | restaurant |
 | name contains "dhaba" | dhaba |
-| name contains "chaat" or "street" | street_food (otherwise street food can't be detected) |
+| name contains "chaat" or "street" | street_food |
 | anything non-food | null (the place is still allowed) |
 
-### 25.4 Terms compliance
-- The Place ID is kept indefinitely.
-- Name, coordinates and address are cached for at most 30 days:
-  - `details` refreshes a row on access if it is older than 30 days;
-  - a weekly pg_cron job calls `places` `refresh_stale` for rows older than 25 days.
-- "Google info" (rating, hours, price) is never stored on the server.
-- "Google" attribution is shown wherever Google content appears.
+### 25.4 Terms compliance (Ola Platform Terms, Fair Usage Policy; OpenStreetMap ODbL)
+- **Credit:** "Places from Ola Maps and © OpenStreetMap contributors" under place search results (D1, Search), linking to openstreetmap.org/copyright as Ola asks; the web map's attribution corner credits Ola Maps, OpenFreeMap and OpenStreetMap and is never hidden.
+- **Mixing sources is allowed** when each source can be told apart and is credited (Terms §6 VIII); place IDs keep the source.
+- **No AI with Ola data:** Ola results never go into Gemini, and AI reading uses OpenStreetMap (§25.1).
+- We keep only the basics (name, area, address, coordinates, type); "More info" isn't stored.
+- Rate limits (e.g. 2,000 autocompletes or 400 text searches a minute) are far above our use.
+- The Ola account closes after 6 months without use; the release keeper signs in at least every few months.
+- No reselling or commercial use of Ola's APIs.
 
-### 25.5 Google info modes
+### 25.5 "More info" modes
 | Mode | When | What users see |
 |---|---|---|
-| `tap` (default) | `details_rich` is under its monthly cap | A "Google info" row on C1, and a "Show Google's rating, hours and price" button on C1a. Tapping loads the details. |
-| `off` | `details_rich` has reached its monthly cap | No Google rating, hours or price. The row reads "See rating and hours on Google Maps" and opens the free Maps link. Back to `tap` on the 1st of next month (UTC). |
+| `tap` (default) | `details_rich` is under its monthly cap | A "More info" row (hours, phone, website) on C1, and on C1a. Tapping loads the details; "Ola Maps has no extra details for this place yet" when it has none. |
+| `off` | `details_rich` has reached its monthly cap | The row reads "See hours on Google Maps" and opens the free Maps link. Back to `tap` on the 1st of next month (UTC). |
 
-If *basic* Places calls (autocomplete, details, search, nearby) reach their caps, place search pauses: D1 and Search show "Place search is resting until <date>. You can still pick places already in Thinnava." The app keeps working with places already in the database.
+If an Ola cap is reached, search keeps working from OpenStreetMap; if both are unavailable, D1 and Search show "Place search is resting until <date>. You can still pick places already in Thinnava."
 
 ### 25.6 Practice mode (development only)
-- When the `places` function has **no `GOOGLE_PLACES_KEY`** (local sandbox before the Google setup), it answers every action from a fixed list of about 30 real Bengaluru food places in `supabase/functions/_shared/practicePlaces.ts`, with the same response shapes. Their place IDs start with `practice:`.
-- It never calls Google and never counts quota. Adding the key switches to real data without any app change.
+- When the `places` function has **no `OLA_MAPS_API_KEY`**, it answers every action from a fixed list of about 30 real Bengaluru food places in `supabase/functions/_shared/practicePlaces.ts`, with the same response shapes. Their place IDs start with `practice:`.
+- It never calls Ola and never counts quota. Adding the key switches to real data without any app change.
 - It can't run in production: `thinnava-prod` always has the key set, and the function refuses practice mode when `APP_ENV=prod`.
+
+### 25.7 Add a place yourself
+- When search doesn't know a place, D1 offers **"Can't find it? Add "<typed>" yourself"**. A short sheet asks for the name (prefilled), an optional area and the kind (Restaurant · Café · Bakery · Street food · Fast food · Dessert · Bar · Tea shop).
+- The `places` function saves it as `custom:<uuid>`, placed at its area's location (OpenStreetMap lookup of "<area>, Bengaluru", else the city centre), so it shows on the map near the right place.
+- Anyone on Thinnava can then find and log it like any other place. Limit: 20 added places per person per day.
 
 ## 26. Frontend architecture
 
@@ -1210,7 +1223,7 @@ src/app/
 - `/import`: if a URL is present, call `links` first and branch on `kind` (§10.1); otherwise call `extract`. The motion follows the share-import sequence in §16.7.
 
 ### 26.7 Map
-- `platform/map/MapView.tsx` wraps `react-native-maps` with `provider={PROVIDER_GOOGLE}` and `customMapStyle` from `theme/mapStyle.ts` (built from the colour tokens; JSON styling only, never a Map ID). It exports `mapsReady`, true only when the build had `GOOGLE_MAPS_ANDROID_KEY` (`extra.mapsReady`).
+- `platform/map/MapView.tsx` wraps `react-native-maps` with `provider={PROVIDER_GOOGLE}` and `customMapStyle` from `theme/mapStyle.ts` (built from the colour tokens; JSON styling only, never a Map ID). It exports `mapsReady`, true only when the build had `GOOGLE_MAPS_ANDROID_KEY` (`extra.mapsReady`). Web: `platform/map/MapView.web.tsx` is MapLibre with the same props (`GoogleMap`, `Marker`, `animateToRegion`), so the Map screen is shared.
 - When the region changes (debounced 500 ms):
   1. call the `map_places` RPC for the visible area;
   2. cluster the results with `supercluster` in JS;
@@ -1255,7 +1268,7 @@ src/app/
 | Service | Plan / card | Setup |
 |---|---|---|
 | Google Cloud project **`thinnava-free`** | **No billing account, ever** | OAuth consent screen (External, basic scopes, published, with the §27.4 links). OAuth clients: **Web** (for Supabase) and one **Android** client per SHA-1 (P1's laptop, P2's laptop, EAS). Firebase (Spark plan) for push: Android app `com.thinnava.app` → `google-services.json`; upload the FCM v1 service account to EAS. **Gemini API key** created in Google AI Studio *on this project*. |
-| Google Cloud project **`thinnava-maps`** | **Pay-as-you-go billing account** (owner's decision, 2026-10-14): created through the free trial and **upgraded immediately**, keeping the $300 trial credit for its 90 days. No subscription or fee; only usage beyond Google's free monthly amounts is billed, and our caps stop at 80% of them | Enable Places API (New) and Maps SDK for Android, nothing else. Keys: a **Maps Android key** restricted to `com.thinnava.app` + all SHA-1s and to Maps SDK for Android only; a **Places server key** restricted to Places API (New) only. Zero-cost locks 2–4 from §27.5. |
+| **Ola Maps** (Krutrim Cloud account, owner's Gmail) | **No card, no payment mandate, no credits — ever** (owner's decision, 2026-10-19, after Google billing couldn't be set up) | Maps Credentials → one credential `thinnava`; its API key lives only in Edge Function secrets (`OLA_MAPS_API_KEY`). Never set up the Razorpay mandate or add credits. Sign in at least every few months (accounts close after 6 months unused). |
 | GitHub | Free | Private repo `thinnava` (both owners). The legal pages live on the owner's own GitHub Pages site (§27.4). Branch protection on `main` (§33). |
 | Supabase | **Free plan, no payment method** | **Development: a local sandbox on each laptop** (Supabase CLI in Docker, `npm run backend`, see `docs/dev-setup.md`), so migrations never collide and no free hosted slot is used. **Hosted (ap-south-1 Mumbai): only `thinnava-prod`**, in the owner's organisation (both owners as members), created before the first APK for other people (§33.4). **Google provider:** Web client ID + secret; "Skip nonce check" on; every Android client ID in the authorized client IDs. |
 | Expo / EAS | **Free plan, no payment method** | One Expo organisation with both owners; project linked to the repo. Android keystore managed by EAS; add its SHA-1 to `thinnava-free` (OAuth) and `thinnava-maps` (Maps key). |
@@ -1268,10 +1281,10 @@ src/app/
 | `EXPO_PUBLIC_SUPABASE_URL` | |
 | `EXPO_PUBLIC_SUPABASE_KEY` | Publishable key |
 | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` | |
-| `GOOGLE_MAPS_ANDROID_KEY` | Build time only, injected by `app.config.ts` |
+| `GOOGLE_MAPS_ANDROID_KEY` | Not used since 2026-10-19 (no Google billing); the Android map moves to MapLibre (M11). |
 | `APP_ENV` | `dev` or `prod` |
 
-**Edge Function secrets:** `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_FALLBACK_MODEL`, `GOOGLE_PLACES_KEY`, `PUSH_WEBHOOK_SECRET`, and optionally `EXPO_ACCESS_TOKEN`.
+**Edge Function secrets:** `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_FALLBACK_MODEL`, `OLA_MAPS_API_KEY`, `PUSH_WEBHOOK_SECRET`, and optionally `EXPO_ACCESS_TOKEN`.
 
 `.env*` files, `google-services.json` and keystores are git-ignored. `.env.example` lists every variable. Each person's `.env` points at their own dev project; real values are shared privately (never in git or chat logs that are public).
 
@@ -1300,35 +1313,27 @@ src/app/
 | Firebase Cloud Messaging (push) | No | Lives on `thinnava-free`, which has no billing account. FCM is free. |
 | Gemini | No | The key belongs to `thinnava-free`, which has no billing account, so only the free tier exists. Over the limit, Google answers "rate limited" and the app opens the manual form. **Never attach billing to `thinnava-free`.** |
 | Directions and Swiggy links | No | Plain links, no API. |
-| Maps SDK for Android (map display) | Billing account on `thinnava-maps` | Displaying maps in the Android SDK is free and unlimited, as far as we know. **Verify on Google's pricing page in M0.** If it isn't free, it gets a cap like Places, and the map shows "Map is resting" when the cap is reached. |
-| Places API (New) | Billing account on `thinnava-maps` | The four locks below. |
+| Ola Maps (places) | No | No card, no payment mandate and **0 prepaid credits**; Ola only deducts usage beyond the free allowance from prepaid credits, so there is nothing to charge. Plus our own caps below. |
+| OpenStreetMap search (Photon) and OpenFreeMap (map tiles) | No | Free public services, no account or key. Fair use; our server caches places and limits calls per user. |
 
-**The four locks for `thinnava-maps`** (all four are in place before the first real API call):
+**Ola Maps locks:**
 1. **Our hard cap (primary).**
-   - Only the `places`, `extract` and `links` functions call Places, using a secret server key restricted to Places API (New).
-   - Before **every** call they run `consume_google_quota(sku)`, which atomically counts the call for the month (UTC) and **refuses** once the SKU reaches its cap in `usage_caps`.
-   - Caps are **80% of each SKU's free monthly amount**, checked on Google's official pricing page on 2026-10-14:
+   - Only the `places` and `links` functions call Ola, with a server-side key (`OLA_MAPS_API_KEY`, Edge Function secret).
+   - Before **every** call they run `consume_google_quota(sku)` (historical name), which atomically counts the call for the month (UTC) and **refuses** once the SKU reaches its cap in `usage_caps`.
+   - Caps are **90% of each API's free monthly amount** (100,000 per API per month on Ola's pricing page, 2026-10-19):
 
      | SKU | Free | Cap |
      |---|---|---|
-     | Autocomplete Requests | 10,000 | 8,000 |
-     | Place Details Pro (`details`) | 5,000 | 4,000 |
-     | Place Details Enterprise (`details_rich`) | 1,000 | 800 |
-     | Text Search Pro | 5,000 | 4,000 |
-     | Nearby Search Pro | 5,000 | 4,000 |
+     | `ola_autocomplete` | 100,000 | 90,000 |
+     | `ola_text_search` | 100,000 | 90,000 |
+     | `ola_details` | 100,000 | 90,000 |
+     | `details_rich` ("More info") | 100,000 | 20,000 |
 
-     Maps SDK for Android is free and unlimited **as long as no Map ID is used**, so we style the map with JSON only.
-   - When a cap is reached, the feature pauses (§25.5) until the 1st of next month.
-2. **Google-side quota limits (backstop).** Places API (New) only offers per-minute limits. Lowering them slows a runaway bug or a leaked key, but can't cap a whole month.
-3. **Automatic billing shut-off (backstop, built before the first key is used).**
-   - A budget on `thinnava-maps` counts **gross cost, before credits**, so any usage beyond the free amounts shows up even while trial credit would cover it.
-   - The budget publishes to a Pub/Sub topic. A small Cloud Run function (`infra/billing-killswitch/`) **detaches billing from the project** once gross cost passes **₹50**. That stops every paid API at once, and billing has to be re-linked by hand.
-   - The budget also emails alerts at ₹50 and ₹100.
-   - Cloud Run, Pub/Sub, Cloud Build and Artifact Registry all stay inside their own free tiers at this scale.
-4. **Trial credit cushion.** For the first 90 days the leftover $300 trial credit absorbs any charge before it reaches the card.
+   - When a cap is reached, search falls back to OpenStreetMap (§25.5) until the 1st of next month.
+2. **Nothing to charge (backstop).** Ola's billing is prepaid credits only; the account has no card, no Razorpay mandate and 0 credits, and none are ever added.
+3. **Map tiles never touch Ola.** The map uses OpenFreeMap, so map views can't use up Ola's allowance.
 
-
-What would have to go wrong for a real charge: lock 1 fails (a bug, or a leaked server key bypasses it) **and** the shut-off doesn't fire in time (Google's budget data can lag by hours) **and**, in the first 90 days, the $300 credit is used up. Each lock is tested in M0, by temporarily setting a cap to 1 and checking that the feature pauses.
+The old Google Cloud project `thinnava-maps` (pay-as-you-go plan, four locks) was never set up and isn't used.
 
 ## 28. Testing
 
@@ -1377,7 +1382,7 @@ Each account is created only when a milestone needs it, so the account-dependent
 
 **Account-dependent spikes, now at the start of each milestone:**
 - **M2:** Google Cloud `thinnava-free` (OAuth) and publish the legal pages → **sign-in spike** (Google sign-in → Supabase session).
-- **M3:** Google Cloud `thinnava-maps`, set up and test all four zero-cost locks (§27.5), record each SKU's free allowance and the Maps SDK pricing → **Places spike**.
+- **M3:** places provider set up with its zero-cost locks (§27.5). Originally Google Cloud `thinnava-maps`; replaced by Ola Maps on 2026-10-19 (§25).
 - **M5:** Gemini key (on `thinnava-free`) → **Gemini spike** (first prompt + 10 messages in `tools/extraction-eval`).
 - **M7 or the first APK:** Expo account, Firebase. **Hosted Supabase** before the first APK for other people.
 
@@ -1480,6 +1485,16 @@ Each account is created only when a milestone needs it, so the account-dependent
 
 **Done when:** on a laptop browser and an iPhone browser, a new user signs in with Google, logs a visit, pastes a WhatsApp message into a friend entry, connects with an Android user and sees each other's visits, and the laptop and phone-browser layouts match `design/web.html`.
 
+### M11 · Places without Google (owner decision 2026-10-19; see §25)
+1. Spec and changelog.
+2. `places`, `links`: Ola Maps (autocomplete, text search, details) with caps and OpenStreetMap backup; `extract` candidates from OpenStreetMap; "More info" instead of "Google info".
+3. "Add a place yourself" (§25.7) and the place credit line.
+4. Web map: MapLibre + OpenFreeMap.
+5. Android map: `@maplibre/maplibre-react-native` with the same style and pins (needs a new native build, tested on a phone).
+6. Production: `OLA_MAPS_API_KEY` secret, migration, functions deploy; release APK.
+
+**Done when:** on production, searching "Vidyarthi Bhavan" or "biryani" finds real places, a place nobody knows can be added and logged, the web and Android maps show pins, and the Ola dashboard still shows ₹0.
+
 ## 31. Demo script and success criteria
 
 1. **Message to entry:** copy a WhatsApp message → open Thinnava → Read it (or + → A friend told me → Use copied text) → confirm → add the friend's name → the entry appears on Home and on the place page. Also share an Instagram link → it becomes an internet entry.
@@ -1497,7 +1512,7 @@ Each account is created only when a milestone needs it, so the account-dependent
 | Zomato and District buttons wanted | v2 (§11.3). |
 | Swiggy search URL changes | It's one constant in `handoff/urls.ts`. Re-test it before each release. |
 | The Gemini free tier may use prompts for training | Accepted for the course demo and disclosed in the privacy policy. The paid tier is **not** an option (§27.5). |
-| Any charge on a card | Not allowed. The zero-cost guarantee (§27.5): no card anywhere except the `thinnava-maps` free trial, which has four locks. |
+| Any charge on a card | Not allowed. The zero-cost guarantee (§27.5): no card anywhere; Ola Maps has no card, no mandate and no credits. |
 | Card charged on the paid account | Very unlikely: 80% caps (lock 1), the billing shut-off at ₹50 gross (lock 3), and the trial credit for the first 90 days (lock 4). |
 | Free limits too small for the demo | Features pause rather than bill. Reduce use (fewer test searches), or wait for the monthly reset. |
 | expo-share-intent / map library vs the chosen Expo SDK | Checked in the M0 spikes before anything else is built. |

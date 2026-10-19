@@ -1,8 +1,8 @@
 // links (spec §10.1, §23): resolves a shared or copied link.
-// maps → the place (text search through consume_google_quota) · instagram / youtube → kind only (the user pastes the caption)
+// maps → the place (Ola text search through consume_google_quota) · instagram / youtube → kind only (the user pastes the caption)
 // · other (incl. Zomato / District / Swiggy) → page title + description for extract. GET, browser user agent, 5 s.
 import { fail, ok, requireUser, preflight } from '../_shared/http.ts';
-import { fromPractice, PRACTICE, textSearch, upsertMany, userQuota, type PlaceDTO } from '../_shared/placesCore.ts';
+import { autocompletePlaces, fromPractice, PRACTICE, upsertMany, userQuota, type PlaceDTO } from '../_shared/placesCore.ts';
 import { practiceByName } from '../_shared/practicePlaces.ts';
 
 const UA = 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36';
@@ -146,7 +146,7 @@ function meta(html: string) {
   return { title, description };
 }
 
-/** A Maps link → the best Google place: the name from /maps/place/<name>/ or ?q=, biased to @lat,lng when present. */
+/** A Google Maps link → the best matching place: the name from /maps/place/<name>/ or ?q=, biased to @lat,lng when present. */
 async function mapsPlace(finalUrl: string): Promise<PlaceDTO | null> {
   const u = new URL(finalUrl);
   const fromPath = u.pathname.match(/\/maps\/place\/([^/]+)/)?.[1];
@@ -155,5 +155,6 @@ async function mapsPlace(finalUrl: string): Promise<PlaceDTO | null> {
   const at = u.pathname.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
   const near = at ? { latitude: Number(at[1]), longitude: Number(at[2]) } : null;
   if (PRACTICE) return (await upsertMany(practiceByName(name.split(',')[0]).slice(0, 1).map(fromPractice)))[0] ?? null;
-  return (await textSearch(name, near, 1, near ? 2000 : 50000))[0] ?? null;
+  // A link names one place, so match the name (autocomplete), not a keyword search.
+  return (await autocompletePlaces(name.split(',')[0], near))[0] ?? null;
 }

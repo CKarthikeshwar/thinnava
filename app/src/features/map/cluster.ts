@@ -13,13 +13,16 @@ export type Item =
 export const zoomOf = (r: Area) => Math.max(0, Math.min(20, Math.log2(360 / Math.max(r.longitudeDelta, 1e-6))));
 export const deltaFor = (zoom: number) => 360 / 2 ** zoom;
 
-/** Clusters pins in JS with supercluster (spec §26.7). Busy areas become one numbered circle. */
-export function useClusters(places: MapPlace[], region: Area): Item[] {
+/**
+ * Clusters pins in JS with supercluster (spec §26.7). Busy areas become one numbered circle. `radius` is how close (in
+ * screen units) pins may sit before grouping; phone browsers use a larger one because pins are wide name labels.
+ */
+export function useClusters(places: MapPlace[], region: Area, radius = 64): Item[] {
   const index = useMemo(() => {
-    const sc = new Supercluster<{ place: MapPlace }>({ radius: 64, maxZoom: 17 });
+    const sc = new Supercluster<{ place: MapPlace }>({ radius, maxZoom: 17 });
     sc.load(places.map((p) => ({ type: 'Feature', properties: { place: p }, geometry: { type: 'Point', coordinates: [p.lng, p.lat] } })));
     return sc;
-  }, [places]);
+  }, [places, radius]);
   const zoom = Math.round(zoomOf(region));
   return useMemo(() => {
     const w = region.longitude - region.longitudeDelta / 2, e = region.longitude + region.longitudeDelta / 2;

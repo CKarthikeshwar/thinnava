@@ -1,8 +1,8 @@
-// extract (spec §23, §24): reads a copied or shared message with Gemini and matches each place to Google places.
+// extract (spec §23, §24): reads a copied or shared message with Gemini and matches each place to OpenStreetMap places.
 // The message text is never stored or logged; only counts and latency are logged.
 import { fail, ok, requireUser, preflight } from '../_shared/http.ts';
 import { extract as runGemini, GeminiError, todayIST, type ExtractItem } from '../_shared/gemini.ts';
-import { PRACTICE, textSearch, upsertMany, fromPractice, userQuota, type LatLng, type PlaceDTO } from '../_shared/placesCore.ts';
+import { PRACTICE, osmSearch, upsertMany, fromPractice, userQuota, type LatLng, type PlaceDTO } from '../_shared/placesCore.ts';
 import { practiceByName } from '../_shared/practicePlaces.ts';
 
 const USER_DAILY_LIMIT = 40;
@@ -66,14 +66,17 @@ function clean(it: ExtractItem, today: string) {
   };
 }
 
-/** §24.1 step 4: up to 3 Google places for "<name> <area> <city>", biased to the device or Bengaluru (50 km). */
+/**
+ * §24.1 step 4: up to 3 candidate places for "<name> <area>", near the device or Bengaluru. Uses OpenStreetMap, not Ola:
+ * Ola's terms rule out using its products "in connection with" AI systems, and this step follows Gemini's reading.
+ */
 async function candidates(it: ReturnType<typeof clean>, near: LatLng | null): Promise<PlaceDTO[]> {
   try {
     if (PRACTICE) return await upsertMany(practiceByName(it.place.name, it.place.area).slice(0, 3).map(fromPractice));
-    const q = [it.place.name, it.place.area, it.place.city ?? 'Bengaluru'].filter(Boolean).join(' ');
-    return await textSearch(q, near, 3, 50000);
+    const withArea = await osmSearch([it.place.name, it.place.area].filter(Boolean).join(' '), near, 3);
+    return await upsertMany(withArea.length ? withArea : await osmSearch(it.place.name, near, 3));
   } catch (e) {
-    // Quota paused or Google down: the user picks the place by hand.
+    // OpenStreetMap down: the user picks the place by hand.
     if ((e as Error).message !== 'quota_paused') console.log(JSON.stringify({ fn: 'extract', candidates_error: (e as Error).message.slice(0, 80) }));
     return [];
   }

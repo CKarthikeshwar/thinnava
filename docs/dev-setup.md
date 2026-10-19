@@ -18,14 +18,14 @@ Both files are git-ignored. Never paste their values into chat, issues, commits 
    - `EXPO_PUBLIC_SUPABASE_KEY=` the **Publishable** key printed by `npm run backend`
    - `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=1062640067839-stmra6machv6emfj837ui0pe6im3nenl.apps.googleusercontent.com`
    - `EAS_PROJECT_ID=` the Expo project id (push notifications, spec §26.9)
-   - `GOOGLE_MAPS_ANDROID_KEY=` leave empty until Google billing is set up; the Map tab shows a list instead (spec §27.5)
+   - `GOOGLE_MAPS_ANDROID_KEY=` leave empty (not used since 2026-10-19; the Android Map tab shows a list until its MapLibre map ships)
 2. `app/google-services.json`: the Firebase config for push (project `thinnava-f44c7`, Spark plan, no billing). Download it from the Firebase console (Project settings → Android app `com.thinnava.app`) or get it from the other owner. Without it the app still builds; push just stays off.
 3. `supabase/.env` (read by the local Edge Functions):
    - `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET=` the web client's secret (`GOCSPX-…`, from the JSON downloaded from Google Cloud)
    - `GEMINI_API_KEY=` a key made in Google AI Studio **on the `thinnava-free` project** (no billing, so it can never charge)
    - `GEMINI_MODEL=gemini-3.5-flash-lite` and `GEMINI_FALLBACK_MODEL=gemini-flash-lite-latest`
    - `PUSH_WEBHOOK_SECRET=` any long random string (the sandbox's push trigger uses it)
-   - No `GOOGLE_PLACES_KEY` locally: place search runs on practice data (spec §25.6).
+   - `OLA_MAPS_API_KEY=` the Ola Maps key (Krutrim Cloud → Ola Maps → Maps Credentials → `thinnava`). Optional locally: without it, place search runs on practice data (spec §25.6). With it, local searches use the real free allowance, which is fine.
 
 ## 3. Install and run
 ```
@@ -54,6 +54,7 @@ npm run web                # opens http://localhost:8081 in the browser
 - Google sign-in on `localhost` needs `http://localhost:8081` in the sandbox's allowed redirects (already in `supabase/config.toml`).
 - After adding a new `*.web.ts(x)` file, restart with `npx expo start --web --clear` so it's picked up.
 - Check a production build the way Cloudflare builds it: `npx expo export -p web` (output in `app/dist`, git-ignored).
+- The web map's worker is a copied file, `app/public/maplibre/worker-<version>.mjs`. After upgrading `maplibre-gl`, copy `node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs` there with the new version in the name and update `WORKER` in `src/platform/map/MapView.web.tsx`.
 
 ### Before committing
 `npm run typecheck`, `npm test` and `npm run backend:test` must all pass.
@@ -71,6 +72,8 @@ Nothing below is needed for day-to-day development. Only the release keeper touc
 |---|---|---|
 | Database, auth, Edge Functions | Supabase `thinnava-prod` (Mumbai), project ref `vfkxwxhocelfvlpsqtwc` | Free plan, no card. Secrets are set in the Supabase dashboard (Edge Functions → Secrets), never in files. |
 | Website | Cloudflare Pages project `thinnava` → https://thinnava.pages.dev | Free, no card. Builds `app` with `npx expo export -p web` on every push to `main`. Build variables: `APP_ENV=prod`, `NODE_VERSION=22`, prod Supabase URL and publishable key. |
+| Places | Ola Maps (Krutrim Cloud, owner's Gmail) | Free monthly allowance; **no card, no Razorpay mandate, 0 credits — never add any**. Key in Supabase Edge Function secrets as `OLA_MAPS_API_KEY`. Sign in every few months (accounts close after 6 months unused). |
+| Map tiles | OpenFreeMap | Free, no account. |
 | Google sign-in | Google Cloud `thinnava-free` → Google Auth Platform | Published (In production). The web client lists the site as a JavaScript origin and the Supabase callback as a redirect URI. Prod Supabase → Authentication → URL Configuration has the site as Site URL and redirect. |
 | Push | Firebase `thinnava-f44c7` (Spark) + Expo push | Free. |
 | Legal pages | `CKarthikeshwar.github.io` (GitHub Pages) | Free. |

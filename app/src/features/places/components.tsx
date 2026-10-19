@@ -52,7 +52,7 @@ export const SearchField = forwardRef<TextInput, FieldProps>(function SearchFiel
 
 /** Small grey note under results in practice mode, so made-up data is never mistaken for Google's. */
 export function PracticeNote() {
-  return <T variant="meta" style={styles.practice}>Practice data · real Google results arrive after the Google Cloud setup</T>;
+  return <T variant="meta" style={styles.practice}>Practice data · real places come from Ola Maps once its key is set</T>;
 }
 
 const styles = StyleSheet.create({

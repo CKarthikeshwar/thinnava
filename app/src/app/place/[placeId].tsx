@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Svg, { Path } from 'react-native-svg';
-import { ChevronDown, Clock, Heart, ThumbsDown, IndianRupee, MapPin, MoreVertical, Navigation, Plus, Star, Store, UsersRound, Globe, Lock, UserRound } from 'lucide-react-native';
+import { ChevronDown, Clock, Heart, ThumbsDown, IndianRupee, MapPin, MoreVertical, Navigation, Plus, Star, Store, UsersRound, Globe, Lock, UserRound, Phone } from 'lucide-react-native';
 import { Avatar, IconButton, Panel, Pressable, ReviewPill, T, TopBar, showSnack } from '@/components';
 import { ENTRY_KEYS, placePage, setWishlist } from '@/features/visits/api';
 import { internetLabel } from '@/features/saved/labels';
@@ -175,14 +175,14 @@ function useGoogleInfo(placeId: string) {
 function GoogleInfoRow({ placeId, name, mode }: { placeId: string; name: string; mode: 'tap' | 'off' }) {
   const { asked, ask, q } = useGoogleInfo(placeId);
   if (mode === 'off') {
-    return <Pressable onPress={() => open(directionsUrl(name, placeId))} style={styles.gRow} accessibilityRole="link"><T variant="label">See rating and hours on Google Maps</T></Pressable>;
+    return <Pressable onPress={() => open(directionsUrl(name, placeId))} style={styles.gRow} accessibilityRole="link"><T variant="label">See hours on Google Maps</T></Pressable>;
   }
   if (asked && q.data?.info) return <View style={{ marginTop: 10 }}><InfoRows info={q.data.info} practice={!!q.data.practice} compact /></View>;
   return (
-    <Pressable onPress={ask} style={styles.gRow} accessibilityRole="button" accessibilityLabel="Google info: rating, hours, price">
+    <Pressable onPress={ask} style={styles.gRow} accessibilityRole="button" accessibilityLabel="More info: hours, phone, website">
       <Star size={16} color={colors.primary} strokeWidth={2} />
-      <T style={styles.gTitle}>Google info</T>
-      <T variant="meta">{asked ? 'Loading…' : 'rating, hours, price'}</T>
+      <T style={styles.gTitle}>More info</T>
+      <T variant="meta">{asked ? 'Loading…' : 'hours, phone, website'}</T>
       <ChevronDown size={16} color={colors.inkMuted} strokeWidth={2} />
     </Pressable>
   );
@@ -194,7 +194,7 @@ function InfoRows({ info, practice, compact }: { info: GoogleInfo; practice: boo
     <View>
       {info.rating != null ? (
         <View style={styles.grow}><Bubble><Star size={18} color={colors.primaryStrong} strokeWidth={2} /></Bubble>
-          <View><T variant="body" color={colors.ink}>{info.rating} on Google</T>{info.userRatingCount ? <T variant="meta">{info.userRatingCount.toLocaleString('en-IN')} reviews</T> : null}</View></View>
+          <View><T variant="body" color={colors.ink}>{info.rating} on Ola Maps</T>{info.userRatingCount ? <T variant="meta">{info.userRatingCount.toLocaleString('en-IN')} reviews</T> : null}</View></View>
       ) : null}
       {info.hours.length ? (
         <View style={styles.grow}><Bubble><Clock size={18} color={colors.primaryStrong} strokeWidth={2} /></Bubble>
@@ -204,7 +204,18 @@ function InfoRows({ info, practice, compact }: { info: GoogleInfo; practice: boo
           </View></View>
       ) : null}
       {price ? <View style={styles.grow}><Bubble><IndianRupee size={18} color={colors.primaryStrong} strokeWidth={2} /></Bubble><T variant="body" color={colors.ink}>Price level {price}</T></View> : null}
-      {practice ? <T variant="meta" style={styles.practice}>Practice data, not from Google</T> : null}
+      {info.phone ? (
+        <Pressable onPress={() => open(`tel:${info.phone!.replace(/[^\d+]/g, '')}`)} style={styles.grow} accessibilityRole="link" accessibilityLabel={`Call ${info.phone}`}>
+          <Bubble><Phone size={18} color={colors.primaryStrong} strokeWidth={2} /></Bubble><T variant="body" color={colors.primary}>{info.phone}</T>
+        </Pressable>
+      ) : null}
+      {info.website && /^https?:\/\//i.test(info.website) ? (
+        <Pressable onPress={() => open(info.website!)} style={styles.grow} accessibilityRole="link" accessibilityLabel="Open website">
+          <Bubble><Globe size={18} color={colors.primaryStrong} strokeWidth={2} /></Bubble><T variant="body" color={colors.primary} numberOfLines={1} style={{ flex: 1 }}>{info.website.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')}</T>
+        </Pressable>
+      ) : null}
+      {info.rating == null && !info.hours.length && !price && !info.phone && !info.website ? <T variant="meta" style={styles.practice}>Ola Maps has no extra details for this place yet.</T> : null}
+      {practice ? <T variant="meta" style={styles.practice}>Practice data</T> : <T variant="meta" style={styles.practice}>From Ola Maps</T>}
     </View>
   );
 }

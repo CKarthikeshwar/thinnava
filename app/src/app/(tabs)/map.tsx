@@ -56,6 +56,8 @@ export default function MapTab() {
   const params = useLocalSearchParams<{ person?: string; name?: string; layers?: string; scope?: string }>();
   const insets = useSafeAreaInsets();
   const mode = useLayoutMode();
+  // Room for the Android bottom bar; the web has none (spec §18.3).
+  const navH = mode === 'app' ? NAV_HEIGHT + insets.bottom : 0;
   const map = useRef<MapRef>(null);
   const pinSheet = useRef<BottomSheetModal>(null);
   const filterSheet = useRef<BottomSheetModal>(null);
@@ -105,7 +107,7 @@ export default function MapTab() {
 
   const q = useQuery({ queryKey: ['map', box, layers, filters], queryFn: () => mapPlaces(box, layers, filters), placeholderData: keepPreviousData });
   const places = q.data ?? [];
-  const items = useClusters(mapsReady ? places : [], region);
+  const items = useClusters(mapsReady ? places : [], region, mode === 'phone' ? 130 : 64);
   const visible = useMemo(() => {
     const b = boxOf(region);
     return places.filter((p) => p.lat >= b.minLat && p.lat <= b.maxLat && p.lng >= b.minLng && p.lng <= b.maxLng);
@@ -197,7 +199,7 @@ export default function MapTab() {
               <View style={styles.noMap}>
                 <View style={styles.noMapBox}>
                   <MapPinned size={30} color={colors.primaryStrong} strokeWidth={2} />
-                  <T variant="title" style={{ textAlign: 'center' }}>The map turns on once Google Maps is set up</T>
+                  <T variant="title" style={{ textAlign: 'center' }}>The map is coming soon</T>
                   <T variant="body" style={{ textAlign: 'center' }}>Until then, your places and your people's places are in the list on the left.</T>
                 </View>
               </View>
@@ -220,7 +222,7 @@ export default function MapTab() {
         <>
           <GoogleMap ref={map} style={StyleSheet.absoluteFill} initialRegion={BENGALURU} showsUserLocation={locOk}
             onRegionChangeComplete={onRegion} onPress={() => pinSheet.current?.dismiss()}
-            mapPadding={{ top: 120, bottom: NAV_HEIGHT + insets.bottom + 70, left: 0, right: 0 }}>
+            mapPadding={{ top: 120, bottom: navH + 70, left: 0, right: 0 }}>
             {items.map((it) => it.kind === 'cluster' ? (
               <Marker key={it.id} coordinate={{ latitude: it.lat, longitude: it.lng }} tracksViewChanges={false}
                 onPress={() => focus(it.lat, it.lng, deltaFor(it.zoomTo))}>
@@ -231,10 +233,10 @@ export default function MapTab() {
             ))}
           </GoogleMap>
           {top}
-          <View style={[styles.locate, { bottom: NAV_HEIGHT + insets.bottom + 84 }]}>
+          <View style={[styles.locate, { bottom: navH + 84 }]}>
             <IconButton icon={LocateFixed} label="Locate me" onPress={locate} />
           </View>
-          <BottomSheet index={0} snapPoints={[64, '50%']} bottomInset={NAV_HEIGHT + insets.bottom} enableDynamicSizing={false}
+          <BottomSheet index={0} snapPoints={[64, '50%']} bottomInset={navH} enableDynamicSizing={false}
             backgroundStyle={styles.listBg} handleIndicatorStyle={styles.handle}>
             <View style={styles.listHead}>
               <T variant="title">{q.isLoading ? 'Loading places…' : visible.length === 1 ? '1 place here' : `${visible.length} places here`}</T>
@@ -248,10 +250,10 @@ export default function MapTab() {
         // No Maps key yet (spec §27.5): the same layers, filters and pin card over a plain list.
         <>
           {top}
-          <ScrollView contentContainerStyle={{ paddingBottom: NAV_HEIGHT + insets.bottom + 24 }}>
+          <ScrollView contentContainerStyle={{ paddingBottom: navH + 24 }}>
             <View style={styles.notice}>
               <MapPinned size={22} color={colors.primaryStrong} strokeWidth={2} />
-              <T variant="body" style={{ flex: 1 }}>The map turns on once Google Maps is set up. Until then, here are the same places as a list.</T>
+              <T variant="body" style={{ flex: 1 }}>The map is coming soon. Until then, here are the same places as a list.</T>
             </View>
             <View style={styles.listHead}>
               <T variant="title">{q.isLoading ? 'Loading places…' : places.length === 1 ? '1 place' : `${places.length} places`}</T>

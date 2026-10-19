@@ -17,8 +17,9 @@ export type Place = {
   distanceM?: number;
 };
 
-export type Suggestion = { placeId: string; name: string; secondary: string };
-export type GoogleInfo = { rating: number | null; userRatingCount: number | null; priceLevel: string | null; openNow: boolean | null; hours: string[] };
+export type Suggestion = { placeId: string; name: string; secondary: string; category?: Category | null };
+/** "More info" on a place page (§25.5), from Ola Maps. Ratings are rare for Bengaluru places; phone and website when known. */
+export type GoogleInfo = { rating: number | null; userRatingCount: number | null; priceLevel: string | null; openNow: boolean | null; hours: string[]; phone?: string | null; website?: string | null };
 export type Near = { lat: number; lng: number } | null;
 
 export const CATEGORY_LABEL: Record<Category, string> = {
@@ -28,6 +29,7 @@ export const CATEGORY_LABEL: Record<Category, string> = {
 
 export const isClosed = (p: Pick<Place, 'businessStatus'>) => p.businessStatus === 'CLOSED_PERMANENTLY';
 export const isPractice = (placeId: string) => placeId.startsWith('practice:');
+export const isCustom = (placeId: string) => placeId.startsWith('custom:');
 
 // ---- places Edge Function (spec §23) ----
 export async function autocomplete(input: string, sessionToken: string, near: Near) {
@@ -50,6 +52,12 @@ export async function searchPlaces(query: string, near: Near) {
   return r.places;
 }
 
+/** "Add a place yourself" (spec §25.7): a place no search knows. Placed roughly at its area for the map. */
+export async function addCustomPlace(name: string, area: string, category: Category) {
+  const r = await callFunction<{ place: Place }>('places', { action: 'add_custom', name, area, category });
+  return r.place;
+}
+
 export async function googleInfo(placeId: string) {
   return await callFunction<{ mode: 'tap' | 'off'; practice?: boolean; info?: GoogleInfo }>('places', { action: 'google_info', placeId });
 }
@@ -59,7 +67,7 @@ export async function googleInfoMode(): Promise<'tap' | 'off'> {
   return data === 'off' ? 'off' : 'tap';
 }
 
-/** A place from our own table (no Google call); falls back to the places function if we've never seen it. */
+/** A place from our own table (no provider call); falls back to the places function if we've never seen it. */
 export async function getPlace(placeId: string): Promise<Place> {
   // A stand-in place typed offline (spec §13) only exists on this device.
   if (isDraftPlace(placeId)) return { placeId, name: draftPlaceName(placeId), area: null, address: null, lat: 0, lng: 0, category: null, businessStatus: null };
@@ -72,7 +80,7 @@ export async function getPlace(placeId: string): Promise<Place> {
   };
 }
 
-/** Places already in Thinnava matching a name (for typing in Search before Google suggestions). */
+/** Places already in Thinnava matching a name (for typing in Search before Ola suggestions). */
 export async function knownPlacesByName(q: string): Promise<Place[]> {
   if (q.trim().length < 2) return [];
   const { data } = await supabase.from('places').select('*').ilike('name', `%${q.trim()}%`).limit(5);

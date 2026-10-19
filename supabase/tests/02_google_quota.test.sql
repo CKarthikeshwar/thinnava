@@ -9,13 +9,15 @@ select plan(8);
 
 -- Shrink one cap to 2 for the test (rolled back at the end).
 update public.usage_caps set monthly_cap = 2 where sku = 'details_rich';
+-- Start this month's count at zero, whatever real use there has been (also rolled back).
+delete from public.monthly_usage where sku = 'details_rich';
 
 select is(public.consume_google_quota('details_rich'), true,  'call 1 allowed');
 select is(public.google_info_mode(), 'tap', 'mode is tap below the cap');
 select is(public.consume_google_quota('details_rich'), true,  'call 2 allowed');
 select is(public.consume_google_quota('details_rich'), false, 'call 3 refused at the cap');
 select is((select count from public.monthly_usage where sku = 'details_rich' and month = date_trunc('month', now() at time zone 'utc')::date), 2, 'refused call was not counted');
-select is(public.google_info_mode(), 'off', 'Google info switches off at the cap');
+select is(public.google_info_mode(), 'off', 'More info switches off at the cap');
 select throws_ok($$ select public.consume_google_quota('nonsense') $$, 'P0001', 'unknown_sku', 'unknown SKU is rejected');
 
 -- Signed-in app users must not be able to call the counter or read the caps.

@@ -11,6 +11,7 @@ import { getNear } from '@/lib/location';
 import { PRICE_BUCKETS, searchPeople, whoWent, type PriceKey, type WhoWent } from '@/features/people/api';
 import { PersonRow, RelationButton, useRelationAction } from '@/features/people/components';
 import { PAGE_MAX, useLayoutMode } from '@/lib/layout';
+import { PlaceCredit } from '@/features/places/AddPlaceSheet';
 import { colors, fonts, radii, shadows, space } from '@/theme';
 
 /**
@@ -101,7 +102,7 @@ export default function Search() {
       <ListRow leading={<Thumb><SearchIcon size={20} color={colors.primaryStrong} /></Thumb>} title={`See all results for "${typed}"`} onPress={() => setSubmitted(typed)} />
       {suggestions.isLoading ? <Loading /> : null}
       {suggestions.data?.filter((s) => !known.data?.some((k) => k.placeId === s.placeId)).map((s) => (
-        <ListRow key={s.placeId} leading={<CategoryThumb category={null} />} title={s.name} subtitle={s.secondary} onPress={() => open(s.placeId)} />
+        <ListRow key={s.placeId} leading={<CategoryThumb category={s.category ?? null} />} title={s.name} subtitle={s.secondary} onPress={() => open(s.placeId)} />
       ))}
     </>
   );
@@ -187,7 +188,7 @@ export default function Search() {
                     </>
                   )
                 ) : null}
-                {practice ? <PracticeNote /> : null}
+                {practice ? <PracticeNote /> : seg === 'places' && (typed.length >= 2 || submitted) ? <PlaceCredit /> : null}
               </View>
             </View>
           ) : (
@@ -241,7 +242,7 @@ export default function Search() {
               </>
             ) : typed.length >= 2 ? typing : recentList('Search a place by name, or a dish like "biryani".')}
           </ListSurface>
-          {practice ? <PracticeNote /> : null}
+          {practice ? <PracticeNote /> : seg === 'places' && (typed.length >= 2 || submitted) ? <PlaceCredit /> : null}
         </ScrollView>
       )}
     </Screen>

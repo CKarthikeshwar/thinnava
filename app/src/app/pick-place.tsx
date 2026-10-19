@@ -13,12 +13,14 @@ import { newDraftPlace } from '@/lib/drafts';
 import { queryClient } from '@/lib/queryClient';
 import { FnError } from '@/lib/functions';
 import { getNear } from '@/lib/location';
-import { History, PencilLine } from 'lucide-react-native';
+import { History, PencilLine, Plus } from 'lucide-react-native';
+import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { AddPlaceSheet, PlaceCredit } from '@/features/places/AddPlaceSheet';
 import { colors, space } from '@/theme';
 
 /**
- * D1 Place picker (spec §14): search Google places, "Near you" first if location is allowed, then "Recently used".
- * Only Google places can be picked. ?for=visit continues to Add visit; ?for=select hands the place back to the
+ * D1 Place picker (spec §14): search places (Ola Maps, §25), "Near you" first if location is allowed, then "Recently used".
+ * A place no search knows can be added by hand ("Add a place yourself", §25.7). ?for=visit continues to Add visit; ?for=select hands the place back to the
  * form that opened it (features/places/picked.ts); ?for=map centres the map; ?for=draft gives an F6 draft its place;
  * otherwise it opens the place page. Offline it lists places already on the phone and offers "Use '<typed>' for now".
  */
@@ -28,6 +30,7 @@ export default function PickPlace() {
   const [debounced, setDebounced] = useState('');
   const [near, setNear] = useState<{ lat: number; lng: number } | null>(null);
   const [picking, setPicking] = useState<string | null>(null);
+  const addSheet = useRef<BottomSheetModal>(null);
   const session = useRef(randomUUID()); // one autocomplete session per visit to this screen (cost control, §25.2)
   const recent = useMemo(recentPlaces, []);
   const online = useNet((s) => s.online);
@@ -116,10 +119,14 @@ export default function PickPlace() {
               {suggestions.error ? <Message text={(suggestions.error as Error).message} /> : null}
               {suggestions.data?.length === 0 ? <Message text={`No places found for "${debounced}".`} /> : null}
               {suggestions.data?.map((s: Suggestion) => (
-                <ListRow key={s.placeId} leading={<CategoryThumb category={null} />} title={s.name} subtitle={s.secondary}
+                <ListRow key={s.placeId} leading={<CategoryThumb category={s.category ?? null} />} title={s.name} subtitle={s.secondary}
                   trailing={picking === s.placeId ? <ActivityIndicator color={colors.primary} /> : null}
                   onPress={() => pick(s.placeId, s.name)} />
               ))}
+              {suggestions.isSuccess || suggestions.error ? (
+                <ListRow leading={<Thumb><Plus size={22} color={colors.primaryStrong} strokeWidth={2} /></Thumb>} title={`Can't find it? Add "${debounced}" yourself`}
+                  subtitle="For a place search doesn't know yet" onPress={() => addSheet.current?.present()} />
+              ) : null}
             </>
           ) : (
             <>
@@ -145,8 +152,9 @@ export default function PickPlace() {
             </>
           )}
         </ListSurface>
-        {practice ? <PracticeNote /> : null}
+        {practice ? <PracticeNote /> : online ? <PlaceCredit /> : null}
       </ScrollView>
+      <AddPlaceSheet ref={addSheet} initialName={debounced} onAdded={(place) => { rememberPlace({ placeId: place.placeId, name: place.name, area: place.area }); take(place); }} />
     </SafeAreaView>
   );
 }

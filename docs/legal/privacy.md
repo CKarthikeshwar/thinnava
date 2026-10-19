@@ -1,6 +1,6 @@
 # Thinnava Privacy Policy
 
-_Last updated: 18 October 2026. Contact: distilledwater.ck@gmail.com_
+_Last updated: 19 October 2026. Contact: distilledwater.ck@gmail.com_
 
 Thinnava ("Thinnava", "we") is a student project built at the Indian Institute of Science (IISc). It helps you remember where you and the people you know have eaten. This policy explains what we collect and why, in plain words.
 
@@ -19,7 +19,7 @@ Thinnava ("Thinnava", "we") is a student project built at the Indian Institute o
 When you share a message or link into Thinnava, its text is sent to **Google's Gemini** service to pick out the place, dishes and price. You check everything before saving. **Thinnava does not store the original message.** For internet finds, the link you shared is saved with your entry. Google may process the text under its own terms.
 
 ## Place information
-Place names, addresses and locations come from **Google Maps**. Google's ratings and opening hours are only fetched when you ask for them, and aren't stored by us.
+Place names, addresses and locations come from **Ola Maps** and **OpenStreetMap** (© OpenStreetMap contributors). When you search for a place, what you type is sent to Ola Maps from our server, not from your phone. Place names picked out of a shared message are looked up on OpenStreetMap. Opening hours and contact details are only fetched when you ask for them. The map on the website is drawn by **OpenFreeMap**, which sees the area of the map you're looking at, like any map website. If you add a place yourself, its name and area can be found by everyone on Thinnava.
 
 ## What we don't do
 No ads. We don't sell or share your data with anyone for marketing. No tracking or analytics.
