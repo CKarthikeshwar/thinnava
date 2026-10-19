@@ -12,6 +12,60 @@ Entry format:
 
 ---
 
+## 2026-10-19 · Shared links: paste box for unreadable pages, Reddit titles
+- **Why (owner):** sharing an Instagram reel didn't find the place by itself. The owner asked about Reddit posts and Google reviews. Tested from the laptop:
+  - Reddit returns an empty page to the server and refuses its data feed.
+  - TripAdvisor answers 403.
+  - Google Maps review links already resolve to the place, but without the review's text.
+- **What (app only, no server deploy):**
+  1. When a shared link gives nothing usable (blocked page, or no place found), the confirmation form opens with the link kept and a **"Paste the text"** box. Its hint reads "We couldn't read this page. Copy the post, comment or review and paste it here", and **Read text** runs AI on it. This used to land on "Couldn't find a place in that". Instagram and YouTube keep their caption box (`app/import.tsx`, `PasteFor`).
+  2. **Reddit:** `redditHint()` (`features/saved/api.ts`) takes the post title words and subreddit from the link (`/r/<sub>/comments/<id>/<title_words>`) and adds them to what the AI reads. Unit tests added (22/22 pass).
+- **Not done, on purpose:** Reddit's official API (needs Reddit's approval) and scraping Instagram, Reddit or TripAdvisor (fragile, against their terms).
+- **Considered and declined by the owner:**
+  - Reading Instagram captions by posing as a link-preview robot (against Instagram's terms, unreliable from cloud servers).
+  - "Share a downloaded reel" so Gemini watches the video.
+- **Spec:** §10.1.
+
+## 2026-10-19 · Release testing fixes: map panel, notification permission
+- **Map (owner, release APK):** the "N places here" panel floated one bar-height above the bottom bar, with a strip of map showing under it; the locate button sat too high as well. The tab screen already ends above the bottom bar, but `map.tsx` added the bar's height again. `navH` is now 0, and the unused inset and `NAV_HEIGHT` imports were removed. Checked on the phone: the panel now sits on the bar.
+- **Notifications (owner):** a follow request showed in the 🔔 list but not as a phone notification. Permission was only asked after you *send* a request or tag someone, so someone who receives a request first was never asked.
+  - Now the A7 explainer ("Turn on notifications?" / "Get a ping when friends send you a request or tag you.") also shows 1.5 s after Home first opens signed in. It's still once per install, and the request/tag trigger stays.
+  - F1 shows a "Notifications are off · Turn on" row while push is off. It asks Android, or opens the app's system settings once Android won't ask again (`PushOffRow` in `features/notifications/push.tsx`; a no-op on web).
+  - On the owner's phone, notification permission turned out to be already granted (`USER_SET`), probably after the request arrived. An end-to-end push check on production is still to do.
+- **Also:** an edit script had turned four files' line endings into CRLF; they're back to LF.
+- **Spec:** §12 (permission rule), §14 A7, F1, §26.9.
+
+## 2026-10-19 · Onboarding dots: 2 pages, not 3
+- **Bug (owner, release APK):** the intro page showed dot 2 of 3. The first dot meant the splash, which can't be swiped back to, so it looked like a page was missing.
+- **What:** the intro is now dot 1 of 2 and the sign-in page dot 2 of 2 (`IntroPage.tsx`, `WelcomePage.tsx`, comment in `app/welcome.tsx`). Swiping between the two pages already worked (checked on the phone).
+- **Shipped:** the release APK was rebuilt with this fix, updated on the owner's phone (`adb install -r`, same key, data kept), and copied to the owner's Desktop as `Thinnava.apk` for sharing with friends.
+- **Spec:** §14 A1b, A2.
+
+## 2026-10-19 · Release APK: built locally in Android Studio (in progress)
+- **Decision (owner):** build the release APK on the laptop with Android Studio, not Expo's cloud build service. The cloud build that had started was cancelled; `app/eas.json` and the Expo file variable `GOOGLE_SERVICES_JSON` were deleted.
+- **What:**
+  - `app/.env.production` now also holds the production values the release app needs: `APP_ENV=prod`, the prod Supabase URL and publishable key, and the Google web client ID. All of these are public by design.
+  - The Expo project ID is in `app.config.ts` as a fallback (not a secret; push tokens need it).
+  - The Android project was regenerated for production (`APP_ENV=prod npx expo prebuild --platform android --clean`), so the app is named "Thinnava".
+  - The owner signs the APK with their own new keystore through Android Studio's "Generate Signed APK". The keystore is kept outside the repo, and its passwords are never shared.
+- **Fix:** the generated `android/gradle/gradle-daemon-jvm.properties` forced Gradle onto Java 25. Android's native (CMake) step treats Java 25's "restricted method in java.lang.System" warning as an error, which made sync fail in `react-native-worklets`. It's set to `toolchainVersion=17` (installed, and the version React Native supports). `android/` is generated and git-ignored, so **redo this after every `prebuild --clean`**.
+- **Built from the terminal (owner's choice), not Android Studio:**
+  - The owner made the key with `keytool` at `D:\IISc\keys\thinnava-release.jks` (alias `thinnava`).
+  - The path, alias and passwords live in the owner's `~/.gradle/gradle.properties`, outside the repo. Claude never read the passwords.
+  - `android/app/build.gradle` gained a `release` signing config that reads `THINNAVA_STORE_FILE`, `THINNAVA_STORE_PASSWORD`, `THINNAVA_KEY_ALIAS` and `THINNAVA_KEY_PASSWORD`, and falls back to the debug key when they're missing.
+  - `android/gradle.properties` builds arm64 only (`reactNativeArchitectures=arm64-v8a`): every current phone, a smaller APK and a much faster build.
+  - Build command: `cd app/android; $env:NODE_ENV='production'; .\gradlew.bat assembleRelease`. Output: `app/android/app/build/outputs/apk/release/app-release.apk`.
+  - The `build.gradle`, `gradle.properties` and Java 17 edits are all inside the generated `android/` folder, so redo them after every `prebuild --clean`.
+- **Built and installed (2026-10-19):**
+  - The APK is 66 MB and signed with the owner's key.
+  - Release SHA-1 `6E:AA:9D:F6:37:B2:34:C3:A5:91:87:37:91:6E:2C:CA:B3:B1:B9:D8`, registered by the owner as Google Cloud `thinnava-free` → Clients → "Thinnava Android (release)", package `com.thinnava.app`.
+  - With the owner's OK, the dev build was uninstalled from the phone (different key) and the release APK installed. It opens to the welcome screens with no crash.
+- **Next:**
+  - Install the APK on the owner's phone.
+  - Register the release key's SHA-1 as an Android OAuth client in Google Cloud `thinnava-free`.
+  - Test sign-in, search and the map on production.
+- **Spec:** §27.2, §29.
+
 ## 2026-10-19 · Android map: MapLibre with free OpenFreeMap tiles (no Google)
 - **What:** `app/src/platform/map/MapView.tsx` now uses `@maplibre/maplibre-react-native` 11.5.0 with OpenFreeMap's "positron" style, with the same props as the web map, so the Map screen is shared. `react-native-maps`, its plugin, the Google Maps key setting (`mapsReady` / `GOOGLE_MAPS_ANDROID_KEY`) and the unused Google map style (`theme/mapStyle.ts`) are gone; the Android project was regenerated. Fixes found on the phone (Galaxy S23 FE):
   - The map draws as a normal view (`androidView="texture"`), so the pin card and list sheet appear above it (they were hidden behind the map's separate surface).

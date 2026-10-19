@@ -1,12 +1,11 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Layers, LocateFixed, MapPinned, SlidersHorizontal } from 'lucide-react-native';
-import { Avatar, Chip, Cluster, IconButton, ListRow, MapPin, NAV_HEIGHT, OfflineStrip, Screen, SearchBar, Sheet, T, type Glyph } from '@/components';
+import { Avatar, Chip, Cluster, IconButton, ListRow, MapPin, OfflineStrip, Screen, SearchBar, Sheet, T, type Glyph } from '@/components';
 import { CategoryThumb } from '@/features/places/components';
 import { CATEGORY_LABEL } from '@/features/places/api';
 import { useTakePicked } from '@/features/places/picked';
@@ -54,10 +53,9 @@ function whoLine(p: MapPlace) {
  */
 export default function MapTab() {
   const params = useLocalSearchParams<{ person?: string; name?: string; layers?: string; scope?: string }>();
-  const insets = useSafeAreaInsets();
   const mode = useLayoutMode();
-  // Room for the Android bottom bar; the web has none (spec §18.3).
-  const navH = mode === 'app' ? NAV_HEIGHT + insets.bottom : 0;
+  // The tab screen already ends above the Android bottom bar, so panels need no extra room for it; the web has none.
+  const navH = 0;
   const map = useRef<MapRef>(null);
   const pinSheet = useRef<BottomSheetModal>(null);
   const filterSheet = useRef<BottomSheetModal>(null);

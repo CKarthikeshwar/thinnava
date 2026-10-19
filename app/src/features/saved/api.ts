@@ -101,3 +101,19 @@ export const LOW_CONFIDENCE = 0.6;
 export function findUrl(text: string): string | null {
   return text.match(/https?:\/\/[^\s<>"']+/i)?.[0]?.replace(/[).,!?]+$/, '') ?? null;
 }
+
+/**
+ * Reddit blocks the server from reading posts, but a post link carries its title: reddit.com/r/<sub>/comments/<id>/<title_words>/
+ * (spec §10.1). Returns "title words (r/sub)", or null for other links and Reddit share links that weren't expanded.
+ */
+export function redditHint(url: string): string | null {
+  let u: URL;
+  try { u = new URL(url); } catch { return null; }
+  if (!/(^|\.)reddit\.com$/i.test(u.hostname)) return null;
+  const m = u.pathname.match(/^\/r\/([^/]+)\/comments\/[^/]+\/([^/]+)/i);
+  if (!m) return null;
+  let words = m[2];
+  try { words = decodeURIComponent(words); } catch {}
+  words = words.replace(/_/g, ' ').trim();
+  return words ? `${words} (r/${m[1]})` : null;
+}

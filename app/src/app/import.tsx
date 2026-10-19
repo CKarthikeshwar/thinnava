@@ -17,7 +17,7 @@ import { useTakePicked } from '@/features/places/picked';
 import { CategoryThumb } from '@/features/places/components';
 import { markClipboardHandled } from '@/features/import/clipboard';
 import {
-  extractText, findUrl, LOW_CONFIDENCE, myFriendNames, resolveLink, SAVED_KEYS, saveSaved,
+  extractText, findUrl, LOW_CONFIDENCE, myFriendNames, redditHint, resolveLink, SAVED_KEYS, saveSaved,
   type ExtractedItem, type SavedKind,
 } from '@/features/saved/api';
 import { toFeedItem, toInput } from '@/features/saved/draft';
@@ -63,7 +63,7 @@ function Import() {
   const names = useQuery({ queryKey: ['friendNames'], queryFn: myFriendNames });
   const [phase, setPhase] = useState<Phase>({ kind: 'reading' });
   const [caption, setCaption] = useState('');
-  const [captionFor, setCaptionFor] = useState<'instagram' | 'youtube' | null>(null);
+  const [captionFor, setCaptionFor] = useState<PasteFor | null>(null);
   const [alsoWishlist, setAlsoWishlist] = useState(false);
   const [busy, setBusy] = useState(false);
   const started = useRef(false);
@@ -187,9 +187,9 @@ function Import() {
         <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
           {captionFor ? (
             <View style={styles.captionBox}>
-              <TextField label="Paste the caption" optional value={caption} onChangeText={(t) => setCaption(t.slice(0, 4000))} multiline
-                placeholder={captionFor === 'instagram' ? 'Copy the caption from Instagram and paste it here' : 'Paste the video description here'} />
-              {caption.trim() ? <Button label="Read caption" variant="tonal" small onPress={readCaption} style={{ alignSelf: 'flex-start' }} /> : null}
+              <TextField label={captionFor === 'page' ? 'Paste the text' : 'Paste the caption'} optional value={caption} onChangeText={(t) => setCaption(t.slice(0, 4000))} multiline
+                placeholder={PASTE_HINT[captionFor]} />
+              {caption.trim() ? <Button label={captionFor === 'page' ? 'Read text' : 'Read caption'} variant="tonal" small onPress={readCaption} style={{ alignSelf: 'flex-start' }} /> : null}
             </View>
           ) : null}
           <SavedFields value={current.draft} onChange={patch} names={names.data ?? []} flags={current.flags} fillIn
@@ -222,7 +222,14 @@ function Import() {
 
 // ---------- reading ----------
 
-type ReadResult = { items: Item[]; partial: Item | null; message: string; caption?: 'instagram' | 'youtube' };
+/** Which paste box the form shows when a link can't be read by itself (§10.1). */
+type PasteFor = 'instagram' | 'youtube' | 'page';
+const PASTE_HINT: Record<PasteFor, string> = {
+  instagram: 'Copy the caption from Instagram and paste it here',
+  youtube: 'Paste the video description here',
+  page: "We couldn't read this page. Copy the post, comment or review and paste it here",
+};
+type ReadResult = { items: Item[]; partial: Item | null; message: string; caption?: PasteFor };
 const blank = (kind: SavedKind): Item => ({ draft: emptyDraft(kind), flags: {}, candidates: [], askWhich: false });
 const findUrlOnly = (t: string) => { const u = findUrl(t); return !!u && t.replace(u, '').trim().length === 0; };
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -269,13 +276,15 @@ async function read(text: string, url: string | null, source?: SavedKind): Promi
         item.draft = { ...item.draft, link: link.resolvedUrl };
         return { items: [item], partial: null, message: failMsg, caption: link.kind };
       }
-      const forAi = [rest, link.meta?.hint, link.meta?.title, link.meta?.description].filter(Boolean).join('\n');
-      const partial = { ...blank('internet'), draft: { ...emptyDraft('internet'), link: link.resolvedUrl } };
-      if (!forAi) return { items: [], partial, message: failMsg };
+      const hint = link.meta?.hint ?? redditHint(link.resolvedUrl) ?? redditHint(url);
+      const forAi = [rest, hint, link.meta?.title, link.meta?.description].filter(Boolean).join('\n');
+      // Nothing usable (a blocked page like Reddit or TripAdvisor, or no place in it): the form with the link kept and a paste box.
+      const pasteForm: ReadResult = { items: [{ ...blank('internet'), draft: { ...emptyDraft('internet'), link: link.resolvedUrl } }], partial: null, message: failMsg, caption: 'page' };
+      if (!forAi) return pasteForm;
       const r = await extractText(forAi, near);
       return r.foodRelated && r.items.length
         ? { items: r.items.map((it) => toItem(it, 'internet', link.resolvedUrl)), partial: null, message: failMsg }
-        : { items: [], partial, message: failMsg };
+        : pasteForm;
     }
     const kind = source ?? 'friend';
     const r = await extractText(text, near);

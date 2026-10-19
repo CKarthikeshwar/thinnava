@@ -10,7 +10,7 @@ import { colors } from '@/theme';
 
 /**
  * Onboarding pager (spec §14 A1b → A2): swipe, Next or Skip between Intro and Welcome.
- * Each page keeps its own dots (the splash is step 1 of 3). Android back on Welcome returns to Intro.
+ * Each page keeps its own dots (2 pages; the splash is not counted). Android back on Welcome returns to Intro.
  */
 export default function Welcome() {
   // Web: the signed-out front page instead of the swipe pages (spec §18.3).

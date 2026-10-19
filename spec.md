@@ -213,7 +213,8 @@ Both end in the same D7 reading → D8 confirmation (§10.2–10.3).
 | Zomato / District / Swiggy restaurant link | Treated as an internet find: link kept; the restaurant name in the shared text goes to the AI. |
 | Instagram link | Confirmation with source **Internet**, link kept, plus a field "Paste the caption (optional)". Running AI on a pasted caption is one tap ("Read caption"). |
 | YouTube link | v1: same as Instagram (link kept, paste text). v2: metadata import. |
-| Any other URL | Server fetches the page's title and description (best effort, 5 s timeout) and runs AI on it with source **Internet**, link kept. |
+| Reddit post link | Reddit blocks reading the post, so the app takes the post title from the link (`/r/<sub>/comments/<id>/<title_words>`) and runs AI on it. If no place comes out, it falls back to the paste box (next row). |
+| Any other URL | Server fetches the page's title and description (best effort, 5 s timeout) and runs AI on it with source **Internet**, link kept. When the page can't be read (blocked, like TripAdvisor) or no place is found, the confirmation opens anyway with the link kept and a **"Paste the text"** box ("We couldn't read this page. Copy the post, comment or review and paste it here"); **Read text** runs AI on it, like Instagram's caption. |
 | Not signed in (share only; copying happens inside the app) | Share is kept on the device; after sign-in the import continues. |
 | Offline | The text or link is kept as a draft "Waiting for internet" (F6) and processed when back online. |
 
@@ -279,7 +280,7 @@ Neither app can be searched by name, so a Zomato or District button needs that r
 
 - Activity notifications are sent only if the visit is visible to the recipient. One notification per visit per recipient (the wishlist variant wins).
 - All notifications appear in F1 (newest first, unread dot). Push notifications are sent for all of them.
-- Notification permission is asked in context (first time I send a request or tag someone), A7.
+- Notification permission is asked once per install: the first time Home opens after sign-in (so a request that arrives before I've sent any still reaches me), or earlier if I send a request or tag someone first (A7). While it's off, F1 shows a "Notifications are off · Turn on" row.
 - No notification for: declines, rejects, un-tags, wishlist adds, list changes, removals, blocks.
 
 ## 13. Offline
@@ -305,8 +306,8 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 
 ### A. Launch and onboarding
 - **A1 Splash** `/` — chef cat, wordmark and "Did you eat?" while the session loads. Signed in with profile → Home. Signed in without profile → A3. Otherwise → A1b.
-- **A1b Intro** (first page of `/welcome`) — one page; **swipe left**, **Next** or **Skip** goes to A2, with three-dot progress (2 of 3) and a **Skip** link (→ A2). The cat offering a dessert, "Remember every place your friends tell you about" / "No more scrolling chats to find 'that biryani place Rahul said'.", then a small map with two friends' pins and the caption "See where your people ate. No strangers, no ads." **Next** → A2.
-- **A2 Welcome** (second page of `/welcome`; swipe right or Android back returns to A1b) — the last of the three onboarding screens (dots, 3 of 3): "Every place your friends rave about, in one spot." with three lines (Save what friends tell you · Log where you ate · See where your people have been) and **Continue with Google**. How to save a friend's message isn't taught here; the "Use copied text?" chip (§10.4) and the B1a tip do that when it's useful.
+- **A1b Intro** (first page of `/welcome`) — one page; **swipe left**, **Next** or **Skip** goes to A2, with two-dot progress (1 of 2; the splash is not counted, since it can't be swiped back to) and a **Skip** link (→ A2). The cat offering a dessert, "Remember every place your friends tell you about" / "No more scrolling chats to find 'that biryani place Rahul said'.", then a small map with two friends' pins and the caption "See where your people ate. No strangers, no ads." **Next** → A2.
+- **A2 Welcome** (second page of `/welcome`; swipe right or Android back returns to A1b) — the last onboarding page (dots, 2 of 2): "Every place your friends rave about, in one spot." with three lines (Save what friends tell you · Log where you ate · See where your people have been) and **Continue with Google**. How to save a friend's message isn't taught here; the "Use copied text?" chip (§10.4) and the B1a tip do that when it's useful.
   - Under the button: "By continuing you agree to the Terms and Privacy Policy", with both linked (§27.4).
   - *Sign-in error* → snackbar "Couldn't sign in. Try again."
 - **A3 Set up profile** `/setup` — "Set up your profile" / "This is how friends find you."
@@ -314,7 +315,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
   - Username: required. Live check 400 ms after typing stops: "Checking…" → "@x is available" ✓ or "@x is taken. Try another." ✗. Hint: "Letters, numbers, . and _ only. 3–20 characters."
   - Bio: optional, 150 chars.
   - **Let's eat** button, disabled until everything is valid.
-- **A7 Permission explainers** — dialogs before the system prompt. Location: first open of Map or D1 ("Show places near you?"). Notifications: first request or tag ("Know when Anand says yes?"). Denial never blocks anything.
+- **A7 Permission explainers** — dialogs before the system prompt. Location: first open of Map or D1 ("Show places near you?"). Notifications: the first time Home opens after sign-in ("Turn on notifications?" / "Get a ping when friends send you a request or tag you."), or at the first request or tag if that comes first ("Know when Anand says yes?"); once per install. Denial never blocks anything.
 
 ### B. Main tabs (bottom nav: Home · Search · + · Map · Profile)
 - **B1 Home** `/(tabs)` — top bar: wordmark, filter icon (hidden on a new user's empty feed), 🔔 (dot if unread). Timeline cards (one per entry, newest first by creation time), infinite scroll (20 per page), pull to refresh. Card: avatar or source mark; header "**Anu** went to" / "**You** went to" / "**Rahul** told you about", or for internet entries "From a reel" (Instagram link), "From a video" (YouTube), "From a link" (other link) or "Found online" (no link); place (Fredoka); meta line: area · "with Arjun" (visits with companions) or "went Oct 10" (friend entries with a date); time ago; ❤ loved line, 👎 didn't-like line; footer: rating pill, ₹/person, "Only you" lock for private entries, "with X" when tagged. Tap card → C2 (title glide motion). Tap the **avatar or name** → that person's profile (E1/E2); on my own cards → my Profile tab; on a friend entry → the profile of the connection that friend name is linked to (F4), and nothing if it isn't linked; internet entries have no person.
@@ -410,7 +411,7 @@ Routes are Expo Router paths (§26.2). States in italics. IDs match `idea.md` §
 - **E9 Remove / Block** dialogs — Block: "Block Anand?" / "Anand won't be able to find you, send you requests or tag you. If you're connected, you'll be disconnected. They won't be told." Remove connection uses the same dialog with softer wording.
 
 ### F. Notifications, settings, housekeeping
-- **F1 Notifications** `/notifications` — grouped Today / Earlier. Rows follow §12, with inline actions (Accept / Decline, Add your review). Opening the screen marks everything read.
+- **F1 Notifications** `/notifications` — grouped Today / Earlier. Rows follow §12, with inline actions (Accept / Decline, Add your review). Opening the screen marks everything read. On Android, while push is off, a "Notifications are off · Turn on" row sits on top: it asks Android, or opens the app's system settings once Android won't ask again.
 - **F2 Settings** `/settings`
   - Profile card: photo, name, @username, Edit (→ F3).
   - Group 1: Connections · My lists · Blocked people.
@@ -1235,7 +1236,7 @@ src/app/
 `features/handoff/urls.ts` builds the Directions and Swiggy URLs per §11.1 and opens them with `Linking.openURL`. Both are plain links: free, no API.
 
 ### 26.9 Push
-- On first need (right after the user first sends a request or tags someone), show the A7 notifications explainer once per install ("Know when Anand says yes?"); on "Turn on" request permission, get a token with `Notifications.getExpoPushTokenAsync({ projectId })`, and upsert it with `register_push_token`. "Not now" is respected.
+- Show the A7 notifications explainer once per install: 1.5 s after Home first opens signed in ("Turn on notifications?"), or right after the user first sends a request or tags someone if that comes first ("Know when Anand says yes?"); on "Turn on" request permission, get a token with `Notifications.getExpoPushTokenAsync({ projectId })`, and upsert it with `register_push_token`. "Not now" is respected.
 - Sign-out unregisters this device's token.
 - `projectId` comes from `EAS_PROJECT_ID` (free Expo account); FCM config is `app/google-services.json` from the Firebase project `thinnava-f44c7` (Spark plan, no billing; git-ignored).
 - Refresh the token on every app start.

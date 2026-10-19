@@ -6,7 +6,8 @@ import type { ExpoConfig, ConfigContext } from 'expo/config';
 // Secrets/keys come from env (app/.env, never committed). See .env.example.
 const APP_ENV = process.env.APP_ENV ?? 'dev';
 // Push (spec §26.9): Firebase config from the free `thinnava-f44c7` project (Spark) (git-ignored) and the Expo project id.
-const GOOGLE_SERVICES = './google-services.json';
+// Cloud release builds get the file from an EAS file variable (GOOGLE_SERVICES_JSON); local builds use the git-ignored copy.
+const GOOGLE_SERVICES = process.env.GOOGLE_SERVICES_JSON ?? './google-services.json';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -45,5 +46,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   ],
   experiments: { typedRoutes: true },
-  extra: { APP_ENV, ...(process.env.EAS_PROJECT_ID ? { eas: { projectId: process.env.EAS_PROJECT_ID } } : {}) },
+  // The Expo project (push tokens, cloud builds). Not a secret.
+  extra: { APP_ENV, eas: { projectId: process.env.EAS_PROJECT_ID ?? 'c147a7cc-4198-43f4-977d-250a9dd63aac' } },
 });

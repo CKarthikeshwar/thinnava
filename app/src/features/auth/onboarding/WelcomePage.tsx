@@ -23,7 +23,7 @@ export function WelcomePage() {
   return (
     <View style={styles.page}>
       <T variant="display" style={styles.word}>Thinnava</T>
-      <View style={{ marginTop: 14 }}><Dots count={3} active={2} /></View>
+      <View style={{ marginTop: 14 }}><Dots count={2} active={1} /></View>
       <View style={{ flex: 1 }} />
       <CatPeek width={230} />
       <View style={styles.card}>

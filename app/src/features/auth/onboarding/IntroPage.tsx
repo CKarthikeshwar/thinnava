@@ -37,7 +37,7 @@ export function IntroPage({ onNext }: { onNext: () => void }) {
       </View>
 
       <View style={{ flex: 1 }} />
-      <Dots count={3} active={1} />
+      <Dots count={2} active={0} />
       <Button style={{ marginTop: 18 }} label="Next" variant="strong" trailingIcon={ArrowRight} onPress={onNext} />
     </View>
   );

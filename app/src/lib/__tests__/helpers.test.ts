@@ -4,7 +4,7 @@ jest.mock('@/lib/supabase', () => ({ supabase: {} }));
 jest.mock('@/lib/outbox', () => ({ runWrite: jest.fn() }));
 jest.mock('@/lib/functions', () => ({ callFunction: jest.fn(), FnError: class extends Error {} }));
 
-import { findUrl } from '@/features/saved/api';
+import { findUrl, redditHint } from '@/features/saved/api';
 import { directionsUrl, swiggyUrl } from '@/features/handoff/urls';
 import { internetLabel } from '@/features/saved/labels';
 import { dotJoin, formatDistance, priceMarks } from '@/lib/format';
@@ -78,4 +78,13 @@ describe('dates in IST (§18.1)', () => {
     expect(timeAgo('2026-10-14T06:00:00Z')).toBe('3d');
     expect(timeAgo('2026-10-01T06:00:00Z')).toBe('Oct 1');
   });
+});
+
+describe('redditHint (§10.1)', () => {
+  test('post link → title words and subreddit', () =>
+    expect(redditHint('https://www.reddit.com/r/bangalore/comments/1b3k3xg/best_biryani_in_koramangala/?share_id=x')).toBe('best biryani in koramangala (r/bangalore)'));
+  test('old.reddit and encoded words', () =>
+    expect(redditHint('https://old.reddit.com/r/Bengaluru/comments/abc/caf%C3%A9_noir_review/')).toBe('café noir review (r/Bengaluru)'));
+  test('share link that was not expanded → null', () => expect(redditHint('https://www.reddit.com/r/bangalore/s/AbC123')).toBeNull());
+  test('not Reddit → null', () => expect(redditHint('https://notreddit.com/r/x/comments/1/y')).toBeNull());
 });

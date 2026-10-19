@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ListSurface, Screen, T, TopBar } from '@/components';
 import { markNotificationsRead, notificationsPage, type Notif } from '@/features/notifications/api';
 import { NotifRow, useAnswerRequest } from '@/features/notifications/NotifRow';
+import { PushOffRow } from '@/features/notifications/push';
 import { todayIST } from '@/lib/dates';
 import { colors, fonts, space } from '@/theme';
 
@@ -27,6 +28,7 @@ export default function Notifications() {
     <Screen header={<TopBar title="Notifications" onBack={() => router.back()} />} scroll={false}>
       <ListSurface style={{ flex: 1, paddingTop: 4 }}>
         <ScrollView refreshControl={<RefreshControl refreshing={false} onRefresh={() => list.refetch()} colors={[colors.primary]} />} contentContainerStyle={{ paddingBottom: 32 }}>
+          <PushOffRow />
           {list.isLoading ? <ActivityIndicator color={colors.primary} style={{ margin: 24 }} /> : null}
           {list.data && !rows.length ? (
             <T variant="body" style={styles.empty}>Nothing yet. Requests, tags, and visits from people whose 🔔 you turned on show up here.</T>
