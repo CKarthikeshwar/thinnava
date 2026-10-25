@@ -89,7 +89,63 @@ npx supabase functions deploy <name> --project-ref vfkxwxhocelfvlpsqtwc
 ```
 The website needs nothing: pushing to `main` redeploys it.
 
-## 7. Second laptop checklist
+## 7. Release APK (built on this laptop, release keeper only)
+The release APK is built locally with Gradle, not with EAS cloud builds (spec §29). It talks to production, using the public values in `app/.env.production`.
+
+### One-time setup
+1. **Release key.** The key file is `D:\IISc\keys\thinnava-release.jks` (alias `thinnava`). It lives **outside the repo** and is never committed. **Back it up somewhere safe** (e.g. a private cloud folder): if it's lost, friends must uninstall and lose their offline queue before they can install a new build. Only if starting from scratch, create one with:
+   ```
+   keytool -genkeypair -v -keystore D:\IISc\keys\thinnava-release.jks -alias thinnava -keyalg RSA -keysize 2048 -validity 10000
+   ```
+2. **Signing settings.** Add these to `C:\Users\<you>\.gradle\gradle.properties` (outside the repo; fill the two passwords in yourself, never paste them into chat):
+   ```
+   THINNAVA_STORE_FILE=D:/IISc/keys/thinnava-release.jks
+   THINNAVA_KEY_ALIAS=thinnava
+   THINNAVA_STORE_PASSWORD=
+   THINNAVA_KEY_PASSWORD=
+   ```
+3. **Google sign-in.** The key's SHA-1 must be registered as an Android OAuth client in Google Cloud `thinnava-free` (package `com.thinnava.app`). The current key is already registered as "Thinnava Android (release)", SHA-1 `6E:AA:9D:F6:37:B2:34:C3:A5:91:87:37:91:6E:2C:CA:B3:B1:B9:D8`. A new key needs a new client, or sign-in fails with a developer error.
+4. `app/google-services.json` must be present (§2), or push stays off in the APK.
+
+### Generate the Android folder (only when native settings or packages change)
+`app/android` is generated and git-ignored. Regenerate it after changing `app.config.ts`, adding a native package or upgrading Expo:
+```
+cd app
+$env:APP_ENV='prod'; npx expo prebuild --platform android --clean
+```
+`--clean` wipes **three hand edits**, so redo them every time:
+1. `android/gradle/gradle-daemon-jvm.properties`: set `toolchainVersion=17`. Java 25 makes the worklets CMake step fail with "A restricted method in java.lang.System has been called".
+2. `android/gradle.properties`: set `reactNativeArchitectures=arm64-v8a`. Every phone from the last ~8 years is arm64; this halves build time and APK size.
+3. `android/app/build.gradle`: in `signingConfigs { … }`, after `debug { … }`, add:
+   ```
+   // Thinnava release key: path and passwords come from ~/.gradle/gradle.properties (outside the repo).
+   if (findProperty('THINNAVA_STORE_FILE')) {
+       release {
+           storeFile file(findProperty('THINNAVA_STORE_FILE'))
+           storePassword findProperty('THINNAVA_STORE_PASSWORD')
+           keyAlias findProperty('THINNAVA_KEY_ALIAS')
+           keyPassword findProperty('THINNAVA_KEY_PASSWORD')
+       }
+   }
+   ```
+   and in `buildTypes { release { … } }` replace `signingConfig signingConfigs.debug` with
+   `signingConfig findProperty('THINNAVA_STORE_FILE') ? signingConfigs.release : signingConfigs.debug`.
+   Save the file as UTF-8 **without** BOM (a BOM breaks Gradle with "Unexpected character '?'").
+
+### Build, check, install (PowerShell)
+```
+cd app\android
+$env:NODE_ENV='production'; .\gradlew.bat assembleRelease --console=plain *> build\release-build.log
+```
+- Takes ~10–20 min the first time, a few minutes after. Output: `app\android\app\build\outputs\apk\release\app-release.apk` (~66 MB). If it fails, read the end of `build\release-build.log`.
+- Check it's signed with the release key (SHA-1 must match step 3 above):
+  `& "$env:LOCALAPPDATA\Android\Sdk\build-tools\36.0.0\apksigner.bat" verify --print-certs app\build\outputs\apk\release\app-release.apk`
+- Install on a USB phone, keeping its data: `adb install -r app\build\outputs\apk\release\app-release.apk`
+- To share, copy it to e.g. `Desktop\Thinnava.apk`. Friends install it over the old one; same key means their data stays.
+
+Before sharing: `npm run typecheck` and `npm test` pass, and `changelog.md` has the entry (spec §29).
+
+## 8. Second laptop checklist
 1. Install the tools (§1) and clone.
 2. Create `app/.env`, `supabase/.env` and `app/google-services.json` (§2).
 3. `npm install`, `npm run backend`, `npm run backend:reset`, `npm run backend:test`.

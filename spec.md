@@ -523,7 +523,7 @@ Principles:
 | Concern | Choice |
 |---|---|
 | Framework | **Expo** (latest stable SDK at M0; exact versions recorded in `changelog.md`), React Native New Architecture, **TypeScript strict** |
-| Build | Expo **development builds** (Expo Go can't load our native modules); **EAS Build** for APKs |
+| Build | Expo **development builds** (Expo Go can't load our native modules); release APKs built **locally with Gradle** (§29) |
 | Navigation | **Expo Router** (file-based; Stack + custom tab bar) |
 | Server state | **@tanstack/react-query** v5, cache persisted to MMKV |
 | Local storage | **react-native-mmkv** (query cache, outbox, drafts, pending shares, small settings) |
@@ -1268,11 +1268,11 @@ src/app/
 ### 27.2 Accounts to create (M0)
 | Service | Plan / card | Setup |
 |---|---|---|
-| Google Cloud project **`thinnava-free`** | **No billing account, ever** | OAuth consent screen (External, basic scopes, published, with the §27.4 links). OAuth clients: **Web** (for Supabase) and one **Android** client per SHA-1 (P1's laptop, P2's laptop, EAS). Firebase (Spark plan) for push: Android app `com.thinnava.app` → `google-services.json`; upload the FCM v1 service account to EAS. **Gemini API key** created in Google AI Studio *on this project*. |
+| Google Cloud project **`thinnava-free`** | **No billing account, ever** | OAuth consent screen (External, basic scopes, published, with the §27.4 links). OAuth clients: **Web** (for Supabase) and one **Android** client per SHA-1 (the shared Expo debug key for dev builds, and the release key). Firebase (Spark plan) for push: Android app `com.thinnava.app` → `google-services.json`; upload the FCM v1 service account to Expo (push only). **Gemini API key** created in Google AI Studio *on this project*. |
 | **Ola Maps** (Krutrim Cloud account, owner's Gmail) | **No card, no payment mandate, no credits — ever** (owner's decision, 2026-10-19, after Google billing couldn't be set up) | Maps Credentials → one credential `thinnava`; its API key lives only in Edge Function secrets (`OLA_MAPS_API_KEY`). Never set up the Razorpay mandate or add credits. Sign in at least every few months (accounts close after 6 months unused). |
 | GitHub | Free | Private repo `thinnava` (both owners). The legal pages live on the owner's own GitHub Pages site (§27.4). Branch protection on `main` (§33). |
 | Supabase | **Free plan, no payment method** | **Development: a local sandbox on each laptop** (Supabase CLI in Docker, `npm run backend`, see `docs/dev-setup.md`), so migrations never collide and no free hosted slot is used. **Hosted (ap-south-1 Mumbai): only `thinnava-prod`**, in the owner's organisation (both owners as members), created before the first APK for other people (§33.4). **Google provider:** Web client ID + secret; "Skip nonce check" on; every Android client ID in the authorized client IDs. |
-| Expo / EAS | **Free plan, no payment method** | One Expo organisation with both owners; project linked to the repo. Android keystore managed by EAS; add its SHA-1 to `thinnava-free` (OAuth) and `thinnava-maps` (Maps key). |
+| Expo / EAS | **Free plan, no payment method** | One Expo organisation with both owners; the Expo project gives push tokens their project id. Not used for builds: the release APK is built locally (§29) and signed with the owners' own key `thinnava-release.jks`, kept outside the repo and backed up privately. Its SHA-1 is registered in `thinnava-free` as the "Thinnava Android (release)" OAuth client. |
 
 ### 27.3 Environment variables
 **App** (`app/.env`; `EXPO_PUBLIC_*` values are bundled into the APK):
@@ -1308,7 +1308,7 @@ src/app/
 | Service | Card on file? | Why it can't charge |
 |---|---|---|
 | Supabase | No | Free plan with no payment method. Going over a limit restricts the project; it doesn't bill. |
-| Expo EAS | No | Free plan. Builds just queue longer. |
+| Expo (push) | No | Free plan. Builds are local, so there is no build queue. |
 | GitHub, GitHub Pages | No | Free. |
 | Cloudflare Pages (web version, §18.3) | No | Free plan with no payment method; static files only, no Workers or paid add-ons. Over a limit, builds or requests stop; nothing bills. |
 | Firebase Cloud Messaging (push) | No | Lives on `thinnava-free`, which has no billing account. FCM is free. |
@@ -1349,11 +1349,12 @@ The old Google Cloud project `thinnava-maps` (pay-as-you-go plan, four locks) wa
 
 ## 29. Build and release
 
-- **Dev:** `npx expo run:android` (a dev build on a USB phone or emulator), or an EAS `development` APK used with Metro.
-- **Release:**
-  - Build with `eas build -p android --profile preview`, which produces an APK with an internal distribution link.
-  - `eas.json` profiles: `development` (developmentClient, apk) and `preview` (apk, `APP_ENV=prod`).
-  - Version `0.MINOR.PATCH`; EAS auto-increments `versionCode`.
+- **Dev:** `npx expo run:android` (a dev build on a USB phone or emulator).
+- **Release (owner's decision, 2026-10-19: local builds, not EAS):**
+  - `APP_ENV=prod npx expo prebuild --platform android --clean`, then `gradlew assembleRelease` with `NODE_ENV=production`; arm64 only. The production values come from `app/.env.production` (public by design).
+  - Signed with the owners' key `thinnava-release.jks` (outside the repo; path and passwords in `~/.gradle/gradle.properties`). Every APK must use this key so friends can install updates over the old one.
+  - Shared as an APK file (WhatsApp, Drive). Exact steps, including the three edits to redo after `prebuild --clean`: `docs/dev-setup.md` §7.
+  - Version `0.MINOR.PATCH`. `eas.json` stays for an optional cloud build later.
 - **Backend:**
   - Each person applies migrations to **their own** local sandbox while working (`npm run backend:reset`). Only code merged into `main` is ever pushed to `thinnava-prod` (§33.4).
   - Deploy functions with `supabase functions deploy <name>`.
@@ -1502,7 +1503,7 @@ Each account is created only when a milestone needs it, so the account-dependent
 2. **Connections:** send a request → accept it → add them to a list → open their profile and map → tap a place → see their review.
 3. **Collab tag:** A tags B → B taps "Same as A's" → C, who is connected only to B, sees "B went with A" but none of A's content.
 4. **Audience:** a visit shared with "Close friends" is invisible to a connection outside that list.
-5. **Fallback:** search a place nobody has visited → its page shows basic info, and tapping shows Google's rating and hours.
+5. **Fallback:** search a place nobody has visited → its page shows basic info, and tapping **More info** shows its hours, phone and website (from Ola Maps).
 6. **Act:** from a place page, open Google Maps directions and a Swiggy search in one tap each.
 7. **Offline:** in airplane mode, log a visit → it appears immediately → turn data on → it syncs and a connection can see it.
 

@@ -12,6 +12,51 @@ Entry format:
 
 ---
 
+## 2026-10-25 · Release 0.1.0 ✅
+- **What:** Thinnava 0.1.0 is out. The Android APK (signed with `thinnava-release.jks`) is shared with friends, and the website is live at https://thinnava.pages.dev, both on the free production backend `thinnava-prod`.
+- **Checks (owner, 2026-10-25):** the owner considers the remaining release checks done: the demo script (§31) on the release APK with friends' phones, the website on an iPhone browser, push notifications on production, the on-phone accessibility checks, and the Ola Maps dashboard still at ₹0. M9, M10 and M11 are complete.
+- **Also:** spec §31 item 5 now says "More info" (hours, phone, website from Ola Maps) instead of "Google's rating and hours", which was left over from before Google Places was dropped.
+- **Still open (not blocking):** final app name and logo (§32); pins aren't dimmed behind an open pin card on the Android map; Zomato and District stay v2.
+- **Upkeep:** open the app at least weekly (free Supabase projects pause when unused); sign in to Ola Maps every few months; keep the release key backed up.
+- **Spec:** §31.
+
+## 2026-10-24 · Local sandbox removed from this laptop (to free disk space)
+- **What the sandbox is:** a private copy of the Thinnava backend (Supabase: database, sign-in, Edge Functions) running in Docker on the laptop. Development and testing talk to it instead of the real server (`thinnava-prod`), so experiments never touch real users' data (spec §33, `docs/dev-setup.md`).
+- **What was removed (owner asked):**
+  - the 12 `supabase_*_thinnava` containers;
+  - the sandbox data: database, Edge Function cache, storage. It was test data only; nothing real lived there;
+  - the 12 Supabase program images (`public.ecr.aws/supabase/*`, about 8.1 GB).
+  - Command used: `npx supabase stop --no-backup`, then `docker rmi` of the Supabase images. Docker Desktop was then quit.
+- **Not affected:** the production backend, the website, the released APK and everyone's real data. Nothing in the repo changed: migrations, privacy tests, seed files and `supabase/config.toml` are all still there, and they rebuild the sandbox exactly.
+- **When it's needed again:**
+  - any change to the database, privacy rules (RLS), RPCs or Edge Functions. These must pass the privacy tests on the sandbox before going to prod (CLAUDE.md, spec §21.3);
+  - running the **dev app** (`npm run phone`, `npm run web`). `app/.env` points at the sandbox (`http://127.0.0.1:54321`), so without it the dev app can't sign in or load data. Release APKs aren't affected; they use prod;
+  - running `npm run backend:test` before committing backend changes.
+- **What to do next time:**
+  1. Open Docker Desktop and wait until it says it's running.
+  2. In `app/`: `npm run backend`. The first run re-downloads the images (about 8 GB, ~5 min).
+  3. `npm run backend:reset` rebuilds the database from the migrations, then `npm run backend:test` runs the privacy tests (all must pass).
+  4. The sandbox's **Publishable key** may change: copy it from the `npm run backend` output into `EXPO_PUBLIC_SUPABASE_KEY` in `app/.env`.
+  5. `npm run backend:functions` for places, links and AI reading (uses `supabase/.env`, which is still on the laptop).
+  6. Optional practice places for the map: `docker exec -i supabase_db_thinnava psql -U postgres -v ON_ERROR_STOP=1 < tools/sandbox-seed/map_seed.sql`.
+  7. Sign in again in the dev app. The old test accounts were in the deleted data.
+- **Docker's disk file:** `%LOCALAPPDATA%\Docker\wsl\disk\docker_data.vhdx` stayed at 12.8 GB after the removal, because Windows doesn't shrink it. With the owner's OK, Docker was fully quit (empty: 0 images, containers, volumes) and the file was deleted, freeing the 12.8 GB. Docker Desktop creates a fresh, small one the next time it starts; nothing else to do.
+- **Spec:** none.
+
+## 2026-10-19 · Release build steps written down
+- **What:** new `docs/dev-setup.md` §7 "Release APK":
+  - one-time setup: the key file and its backup, `~/.gradle/gradle.properties` signing settings, the Google sign-in SHA-1, `google-services.json`;
+  - regenerating `app/android`, and the three hand edits to redo after `prebuild --clean` (Java 17, arm64 only, release signing);
+  - build, signature check, install and share commands.
+  The old §7 "Second laptop checklist" is now §8.
+- **Spec:** §29 now describes local Gradle release builds signed with the owners' key, not `eas build`. §27.2 (Google Cloud and Expo rows), the stack table and §27.5's Expo row no longer say EAS holds the keystore or builds APKs.
+- **Why:** owner asked. The steps existed only in a chat; without them, rebuilding later or on another laptop means working it out again. **Important:** back up `thinnava-release.jks` privately; losing it means friends must uninstall before installing a new build. The owner has backed it up (2026-10-19).
+
+## 2026-10-19 · Housekeeping after the release commit
+- **What:** committed and pushed today's release fixes (`f645f98`). Then deleted two untracked leftovers: an empty `gradle.properties` at the repo root (created by mistake) and the design tool's scratch folder `.impeccable/questions/`.
+- **Why:** owner asked; neither was needed.
+- **Spec:** none.
+
 ## 2026-10-19 · Shared links: paste box for unreadable pages, Reddit titles
 - **Why (owner):** sharing an Instagram reel didn't find the place by itself. The owner asked about Reddit posts and Google reviews. Tested from the laptop:
   - Reddit returns an empty page to the server and refuses its data feed.
