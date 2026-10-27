@@ -7,8 +7,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useFonts } from 'expo-font';
-import { Fredoka_600SemiBold } from '@expo-google-fonts/fredoka';
-import { Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { NAV_HEIGHT, SnackbarHost } from '@/components';
 import { LocationExplainer } from '@/features/places/LocationExplainer';
@@ -31,12 +29,14 @@ startOutbox();
 
 // Root layout (spec §26.2–26.3): fonts, providers and the auth gate.
 export default function RootLayout() {
+  // Font files live in assets/fonts (copies of the @expo-google-fonts ones): Cloudflare Pages drops any folder named
+  // node_modules from a deploy, so fonts served from there never reached the website.
   const [fontsLoaded, fontError] = useFonts({
-    Fredoka_600SemiBold,
-    Nunito_400Regular,
-    Nunito_600SemiBold,
-    Nunito_700Bold,
-    Nunito_800ExtraBold,
+    Fredoka_600SemiBold: require('../../assets/fonts/Fredoka_600SemiBold.ttf'),
+    Nunito_400Regular: require('../../assets/fonts/Nunito_400Regular.ttf'),
+    Nunito_600SemiBold: require('../../assets/fonts/Nunito_600SemiBold.ttf'),
+    Nunito_700Bold: require('../../assets/fonts/Nunito_700Bold.ttf'),
+    Nunito_800ExtraBold: require('../../assets/fonts/Nunito_800ExtraBold.ttf'),
   });
 
   useEffect(() => {

@@ -12,6 +12,11 @@ Entry format:
 
 ---
 
+## 2026-10-27 · Website fonts fixed (they never loaded on the live site)
+- **What:** the website showed a plain serif font instead of Fredoka and Nunito. The font files were served from `/assets/node_modules/...`, and Cloudflare Pages drops every folder named `node_modules` from a deploy, so those URLs returned the home page instead of the font. The five font files are now copied into `app/assets/fonts/` and loaded from there in `_layout.tsx` (the Android app uses the same files, so nothing changes there).
+- **Why:** owner saw the wrong font on https://thinnava.pages.dev after the redesign went live.
+- **Spec:** none (fonts are unchanged in design: Fredoka + Nunito, §16).
+
 ## 2026-10-27 · Website redesign: new front page with APK download
 - **What:** added `design/website-draft.html`, a standalone draft of a redesigned front page with an APK download section and a font switcher (font switcher later removed: owner kept Fredoka + Nunito). Nothing in the app or spec changed.
 - **Why:** owner dislikes the current font and wants an APK download link on the site; they will pick one font and approve the layout before it is built.
