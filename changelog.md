@@ -12,6 +12,11 @@ Entry format:
 
 ---
 
+## 2026-10-27 · Website phone layout: hero buttons centred
+- **What:** on phone-width browsers, "Download for Android" and "Use on iPhone or laptop" now span the full width with centred labels (the stacked button row was still set to wrap, so the buttons shrank to their content and sat on the left).
+- **Why:** owner asked for them centred on mobile.
+- **Spec:** none.
+
 ## 2026-10-27 · Website fonts fixed (they never loaded on the live site)
 - **What:** the website showed a plain serif font instead of Fredoka and Nunito. The font files were served from `/assets/node_modules/...`, and Cloudflare Pages drops every folder named `node_modules` from a deploy, so those URLs returned the home page instead of the font. The five font files are now copied into `app/assets/fonts/` and loaded from there in `_layout.tsx` (the Android app uses the same files, so nothing changes there).
 - **Why:** owner saw the wrong font on https://thinnava.pages.dev after the redesign went live.

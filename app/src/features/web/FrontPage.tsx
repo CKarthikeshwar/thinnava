@@ -84,7 +84,7 @@ export function FrontPage() {
           ? 'No more scrolling chats to find "that biryani place Rahul said". Save what friends tell you, log where you ate, and see where your people have been. No strangers, no ads.'
           : 'Save what friends tell you, log where you ate, see where your people have been.'}
       </T>
-      <View style={[styles.cta, !laptop && { flexDirection: 'column', alignItems: 'stretch' }]}>
+      <View style={[styles.cta, !laptop && styles.ctaSmall]}>
         <Pressable onPress={() => go('download')} pressScale={0.98} style={[styles.btn, styles.btnPri, !laptop && styles.btnFull]} accessibilityRole="button" accessibilityLabel="Download for Android">
           <Download size={20} color={colors.onPrimary} strokeWidth={2.2} />
           <T style={styles.btnPriText}>Download for Android</T>
@@ -234,12 +234,13 @@ const styles = StyleSheet.create({
   lead: { fontFamily: fonts.body, fontSize: 19, lineHeight: 29, color: colors.inkSoft, marginBottom: 28 },
   leadSmall: { fontSize: 15.5, lineHeight: 23, textAlign: 'center', marginBottom: 0 },
   cta: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, alignItems: 'center' },
+  ctaSmall: { flexDirection: 'column', flexWrap: 'nowrap', alignItems: 'stretch', alignSelf: 'stretch' },
   btn: { height: 54, paddingHorizontal: 24, borderRadius: radii.pill, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10 },
   btnFull: { alignSelf: 'stretch' },
   btnPri: { backgroundColor: colors.primary },
-  btnPriText: { fontFamily: fonts.bodyHeavy, fontSize: 16.5, color: colors.onPrimary },
+  btnPriText: { fontFamily: fonts.bodyHeavy, fontSize: 16.5, color: colors.onPrimary, textAlign: 'center' },
   btnOut: { backgroundColor: colors.surface, boxShadow: `inset 0px 0px 0px 1.5px ${colors.hairline}` },
-  btnOutText: { fontFamily: fonts.bodyHeavy, fontSize: 16.5, color: colors.ink },
+  btnOutText: { fontFamily: fonts.bodyHeavy, fontSize: 16.5, color: colors.ink, textAlign: 'center' },
   btnLight: { backgroundColor: colors.surface, alignSelf: 'flex-start' },
   btnLightText: { fontFamily: fonts.bodyHeavy, fontSize: 16.5, color: colors.primaryStrong },
   btnInk: { backgroundColor: colors.ink, alignSelf: 'flex-start' },
