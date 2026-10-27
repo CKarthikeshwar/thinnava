@@ -12,6 +12,15 @@ Entry format:
 
 ---
 
+## 2026-10-27 · Website redesign: new front page with APK download
+- **What:** added `design/website-draft.html`, a standalone draft of a redesigned front page with an APK download section and a font switcher (font switcher later removed: owner kept Fredoka + Nunito). Nothing in the app or spec changed.
+- **Why:** owner dislikes the current font and wants an APK download link on the site; they will pick one font and approve the layout before it is built.
+- **Round 2 (owner feedback):** keep Fredoka + Nunito. "Use on iPhone or laptop" now scrolls to a single "works in your browser" card whose button goes straight to Google sign-in. The separate welcome page goes away: this front page becomes the home page.
+- **Built (owner approved the draft):** `FrontPage.tsx` rewritten to match; on the web a signed-out visitor now sees it directly at `/` (the root layout renders it instead of the navigator), so the web has no welcome page. `welcome.tsx` is Android onboarding only. New `APK_URL` / `APK_VERSION` in `lib/links.ts`. Fonts unchanged (Fredoka + Nunito), so `DESIGN.md` is unchanged.
+- **Release APK rebuilt and published (2026-10-27):** fresh `assembleRelease` build (release, not debug), arm64-v8a only, `com.thinnava.app` 0.1.0, signed with `thinnava-release.jks` (SHA-1 `6E:AA:9D:F6…`, same key as before so it installs over the old one), 66 MB. Attached as `Thinnava.apk` to GitHub release `v0.1.0`, which the website's Download button opens. Copy also at `Desktop\Thinnava.apk`.
+- **APK hosting:** GitHub Release asset on this repo, `CKarthikeshwar/thinnava`, which the owner made **public on 2026-10-27** so the link works (checked first: no secrets in the tree or history; `.env.production` holds only the public publishable key and OAuth client ID) (free; Cloudflare Pages caps files at 25 MB, free Supabase Storage at 50 MB, R2 needs a card).
+- **Spec:** §18.3 (signed-out front page, hosting of the APK).
+
 ## 2026-10-25 · Release 0.1.0 ✅
 - **What:** Thinnava 0.1.0 is out. The Android APK (signed with `thinnava-release.jks`) is shared with friends, and the website is live at https://thinnava.pages.dev, both on the free production backend `thinnava-prod`.
 - **Checks (owner, 2026-10-25):** the owner considers the remaining release checks done: the demo script (§31) on the release APK with friends' phones, the website on an iPhone browser, push notifications on production, the on-phone accessibility checks, and the Ola Maps dashboard still at ₹0. M9, M10 and M11 are complete.

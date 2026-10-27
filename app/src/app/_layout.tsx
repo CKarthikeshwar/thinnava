@@ -19,7 +19,8 @@ import { useAuth, useAuthBootstrap } from '@/features/auth/session';
 import { useShareImport } from '@/features/import/useShareImport';
 import { PushExplainer, usePush } from '@/features/notifications/push';
 import { colors, shadows } from '@/theme';
-import { COLUMN_MAX, useLayoutMode } from '@/lib/layout';
+import { COLUMN_MAX, IS_WEB, useLayoutMode } from '@/lib/layout';
+import { FrontPage } from '@/features/web/FrontPage';
 import { WebTopBar, isTabPath } from '@/features/web/TopBar';
 import { usePathname } from 'expo-router';
 import { View } from 'react-native';
@@ -76,6 +77,8 @@ function Gate() {
   useShareImport(status === 'ready');
   usePush(status === 'ready');
   if (status === 'loading') return <Splash />;
+  // Web (spec §18.3): signed out, the front page is the site's home page; there is no welcome page.
+  if (IS_WEB && status === 'signedOut') return <FrontPage />;
   return (
     <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background }, animation: 'slide_from_right' }}>
       <Stack.Protected guard={status === 'ready'}>
@@ -123,11 +126,13 @@ function Frame({ children }: { children: React.ReactNode }) {
   const status = useAuth((s) => s.status);
   const path = usePathname();
   // Each page gets its own browser-tab title ("Search · Thinnava"), for tabs, history and screen readers.
-  useEffect(() => { if (mode !== 'app') document.title = pageTitle(path); }, [mode, path]);
+  useEffect(() => {
+    if (mode !== 'app') document.title = status === 'signedOut' ? 'Thinnava · Every place your friends rave about' : pageTitle(path);
+  }, [mode, path, status]);
   if (mode === 'app') return <>{children}</>;
   const tab = isTabPath(path);
   const bar = status === 'ready' && (mode === 'laptop' || tab);
-  const column = mode === 'laptop' && !tab && path !== '/welcome' && status !== 'loading';
+  const column = mode === 'laptop' && !tab && status !== 'signedOut' && status !== 'loading';
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       {bar ? <WebTopBar mode={mode} /> : null}
@@ -145,7 +150,6 @@ const TITLES: [RegExp, string][] = [
   [/^\/import/, 'Check what we found'], [/^\/tag\//, 'Tagged visit'], [/^\/setup/, 'Set up your profile'],
 ];
 function pageTitle(path: string) {
-  if (path === '/welcome') return 'Thinnava · Every place your friends rave about';
   const hit = TITLES.find(([re]) => re.test(path));
   return hit ? `${hit[1]} · Thinnava` : 'Thinnava';
 }
